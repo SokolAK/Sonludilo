@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import pl.sokolak.sonludilo.ui.player.PlayerViewModel;
-
 public class PlayerViewModelFactory implements ViewModelProvider.Factory {
     private Context context;
 

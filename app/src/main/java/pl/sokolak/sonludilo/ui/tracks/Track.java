@@ -3,6 +3,8 @@ package pl.sokolak.sonludilo.ui.tracks;
 import android.content.Context;
 import android.net.Uri;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,11 @@ public class Track {
         this.year = year;
     }
 
+    @NotNull
+    public String toString() {
+        return artist + " - " + title;
+    }
+
     public String toMultiLineString(Context context) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(addStringItem(context.getString(R.string.artist), artist));
@@ -37,46 +44,5 @@ public class Track {
             return prefix + ": " + item.trim() + "\n";
         }
         return "";
-    }
-
-
-    public String getArtist() {
-        return artist;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(String album) {
-        this.album = album;
-    }
-
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    public Uri getUri() {
-        return uri;
-    }
-
-    public void setUri(Uri uri) {
-        this.uri = uri;
     }
 }

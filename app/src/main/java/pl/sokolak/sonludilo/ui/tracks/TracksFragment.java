@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.util.List;
+
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
 
@@ -36,7 +38,7 @@ public class TracksFragment extends Fragment {
 
         sharedModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         trackList.setOnItemClickListener((parent, view, position, id) -> {
-            sharedModel.select(tracksViewModel.getTrackList().get(position));
+            sharedModel.setCurrentTrackList(List.of(tracksViewModel.getTrackList().get(position)));
             NavHostFragment.findNavController(this).navigate(R.id.action_tracks_to_player);
 
         });

@@ -4,18 +4,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
-import pl.sokolak.sonludilo.ui.notifications.NotificationsViewModel;
-
-import pl.sokolak.sonludilo.ui.tracks.TracksViewModel;
-import pl.sokolak.sonludilo.ui.tracks.TracksViewModelFactory;
+import pl.sokolak.sonludilo.ui.tracks.Track;
 
 public class PlayerFragment extends Fragment {
 
@@ -24,15 +26,25 @@ public class PlayerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         playerViewModel = new ViewModelProvider(this, new PlayerViewModelFactory(getContext())).get(PlayerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_player, container, false);
-        final TextView textView = root.findViewById(R.id.text_player);
-        playerViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        //final TextView textView = root.findViewById(R.id.text_player);
+        //playerViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        ListView trackList = root.findViewById(R.id.track_list);
 
         SharedViewModel model = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        model.getSelected().observe(getViewLifecycleOwner(), item -> {
-            textView.setText(item.getTitle());
+        model.getCurrentTrackList().observe(getViewLifecycleOwner(), item -> {
+            //textView.setText(item.getTitle());
+            trackList.setAdapter(new ArrayAdapter<>(
+                    getContext(),
+                    android.R.layout.simple_list_item_1,
+                    item));
         });
 
 
+        ImageView imageView = root.findViewById(R.id.imageView);
+        Glide.with(this).load(R.raw.tape80).into(imageView);
+
         return root;
     }
+
 }

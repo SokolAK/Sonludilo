@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Sonludilo</string>
-    <string name="title_home">Home</string>
+    <string name="title_player">Player</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_tracks">Tracks</string>
+
+    <string name="artist">Artist</string>
+    <string name="title">Title</string>
+    <string name="album">Album</string>
+    <string name="year">Year</string>
+
 </resources>

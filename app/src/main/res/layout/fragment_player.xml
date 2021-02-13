@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,10 +7,38 @@
     android:orientation="vertical"
     tools:context=".ui.notifications.NotificationsFragment">
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/track_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        app:layout_constraintBottom_toTopOf="@+id/line" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/text_player"
+        android:background="@color/yellow"/>
+
+    <TextView
+        android:id="@+id/text_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        tools:layout_editor_absoluteX="8dp" />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/seek_bar">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -19,19 +47,9 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:orientation="vertical">
-
-
-                <ImageButton
-                    android:id="@+id/button_vol_down"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/yellow"
-                    android:tint="@color/pink"
-                    android:src="@drawable/ic_baseline_volume_down_24" />
 
                 <ImageButton
                     android:id="@+id/button_vol_up"
@@ -39,8 +57,17 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:backgroundTint="#FEF15E"
-                    android:tint="@color/pink"
-                    android:src="@drawable/ic_baseline_volume_up_24" />
+                    android:src="@drawable/ic_baseline_volume_up_24"
+                    android:tint="@color/pink" />
+
+                <ImageButton
+                    android:id="@+id/button_vol_down"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/yellow"
+                    android:src="@drawable/ic_baseline_volume_down_24"
+                    android:tint="@color/pink" />
 
                 <ImageButton
                     android:id="@+id/button_repeat"
@@ -48,8 +75,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:backgroundTint="#FEF15E"
-                    android:tint="@color/pink"
-                    android:src="@drawable/ic_baseline_repeat_24" />
+                    android:src="@drawable/ic_baseline_repeat_24"
+                    android:tint="@color/pink" />
 
 
             </LinearLayout>
@@ -58,15 +85,13 @@
             <ImageView
                 android:id="@+id/image_view"
                 android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content" />
-
-
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <ImageButton
@@ -75,8 +100,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:backgroundTint="@color/yellow"
-                    android:tint="@color/pink"
-                    android:src="@drawable/ic_baseline_play_arrow_24" />
+                    android:src="@drawable/ic_baseline_play_arrow_24"
+                    android:tint="@color/pink" />
 
                 <ImageButton
                     android:id="@+id/button_pause"
@@ -84,8 +109,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:backgroundTint="@color/yellow"
-                    android:tint="@color/pink"
-                    android:src="@drawable/ic_baseline_pause_24" />
+                    android:src="@drawable/ic_baseline_pause_24"
+                    android:tint="@color/pink" />
 
                 <ImageButton
                     android:id="@+id/button_stop"
@@ -93,9 +118,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:backgroundTint="@color/yellow"
-                    android:tint="@color/pink"
-                    android:src="@drawable/ic_baseline_stop_24" />
-
+                    android:src="@drawable/ic_baseline_stop_24"
+                    android:tint="@color/pink" />
 
 
             </LinearLayout>
@@ -113,71 +137,54 @@
                 android:id="@+id/textView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:text="TextView" />
+                android:text="01:22" />
 
             <ImageButton
-                android:id="@+id/button_back2"
+                android:id="@+id/button_back"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:backgroundTint="@color/yellow"
-                android:tint="@color/pink"
-                android:src="@drawable/ic_baseline_skip_previous_24" />
+                android:src="@drawable/ic_baseline_skip_previous_24"
+                android:tint="@color/pink" />
 
 
             <ImageButton
-                android:id="@+id/button_forw2"
+                android:id="@+id/button_forw"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:backgroundTint="@color/yellow"
-                android:tint="@color/pink"
                 android:src="@drawable/ic_baseline_skip_next_24"
-                 />
+                android:tint="@color/pink" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:text="TextView" />
+                android:text="-04:21" />
 
 
         </LinearLayout>
     </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/text_player"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp" />
-
     <SeekBar
         android:id="@+id/seek_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:progressTint="@color/pink"
-        android:thumbTint="@color/pink" />
+        android:thumbTint="@color/pink"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 
 
 
-    <ListView
-        android:id="@+id/track_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

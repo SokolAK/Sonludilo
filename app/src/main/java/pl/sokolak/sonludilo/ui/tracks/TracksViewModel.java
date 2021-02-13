@@ -12,7 +12,7 @@ import java.util.List;
 public class TracksViewModel extends ViewModel {
 
     private final MutableLiveData<List<String>> mTracks = new MutableLiveData<>();
-    private List<Track> trackList;
+    private final List<Track> trackList;
 
     public TracksViewModel(Context context) {
         TracksRepository tracksRepository = new TracksRepository(context);

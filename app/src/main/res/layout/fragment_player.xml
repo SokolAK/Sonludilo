@@ -7,10 +7,150 @@
     android:orientation="vertical"
     tools:context=".ui.notifications.NotificationsFragment">
 
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/imageView"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <ImageButton
+                    android:id="@+id/button_vol_down"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/yellow"
+                    android:tint="@color/pink"
+                    android:src="@drawable/ic_baseline_volume_down_24" />
+
+                <ImageButton
+                    android:id="@+id/button_vol_up"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FEF15E"
+                    android:tint="@color/pink"
+                    android:src="@drawable/ic_baseline_volume_up_24" />
+
+                <ImageButton
+                    android:id="@+id/button_repeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FEF15E"
+                    android:tint="@color/pink"
+                    android:src="@drawable/ic_baseline_repeat_24" />
+
+
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content" />
+
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/button_play"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/yellow"
+                    android:tint="@color/pink"
+                    android:src="@drawable/ic_baseline_play_arrow_24" />
+
+                <ImageButton
+                    android:id="@+id/button_pause"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/yellow"
+                    android:tint="@color/pink"
+                    android:src="@drawable/ic_baseline_pause_24" />
+
+                <ImageButton
+                    android:id="@+id/button_stop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/yellow"
+                    android:tint="@color/pink"
+                    android:src="@drawable/ic_baseline_stop_24" />
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="TextView" />
+
+            <ImageButton
+                android:id="@+id/button_back2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="@color/yellow"
+                android:tint="@color/pink"
+                android:src="@drawable/ic_baseline_skip_previous_24" />
+
+
+            <ImageButton
+                android:id="@+id/button_forw2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="@color/yellow"
+                android:tint="@color/pink"
+                android:src="@drawable/ic_baseline_skip_next_24"
+                 />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="TextView" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/text_player"
@@ -22,8 +162,22 @@
         android:textAlignment="center"
         android:textSize="20sp" />
 
+    <SeekBar
+        android:id="@+id/seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progressTint="@color/pink"
+        android:thumbTint="@color/pink" />
+
+
+
+
+
     <ListView
         android:id="@+id/track_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+
+
 </LinearLayout>

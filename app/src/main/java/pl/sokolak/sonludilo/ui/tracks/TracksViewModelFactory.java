@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 public class TracksViewModelFactory implements ViewModelProvider.Factory {
-    private Context context;
+    private final Context context;
 
     public TracksViewModelFactory(Context context) {
         this.context = context;

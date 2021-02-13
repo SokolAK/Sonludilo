@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TracksRepository {
 
-    private Context context;
+    private final Context context;
 
     public TracksRepository(Context context) {
         this.context = context;
@@ -20,7 +20,6 @@ public class TracksRepository {
 
     public List<Track> getAll() {
 
-        List<String> list = new ArrayList<>();
         List<Track> trackList = new ArrayList<>();
         final String track_id = MediaStore.Audio.Media._ID;
         final String track_no = MediaStore.Audio.Media.TRACK;
@@ -59,6 +58,8 @@ public class TracksRepository {
         //Uri contentUri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, 187537);
         //MediaPlayer mediaPlayer = MediaPlayer.create(context, contentUri);
         //mediaPlayer.start();
+
+        cursor.close();
 
         return trackList;
     }

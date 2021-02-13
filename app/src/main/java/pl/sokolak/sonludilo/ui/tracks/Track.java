@@ -31,12 +31,10 @@ public class Track {
     }
 
     public String toMultiLineString(Context context) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(addStringItem(context.getString(R.string.artist), artist));
-        stringBuilder.append(addStringItem(context.getString(R.string.title), title));
-        stringBuilder.append(addStringItem(context.getString(R.string.album), album));
-        stringBuilder.append(addStringItem(context.getString(R.string.year), year));
-        return stringBuilder.toString();
+        return addStringItem(context.getString(R.string.artist), artist) +
+                addStringItem(context.getString(R.string.title), title) +
+                addStringItem(context.getString(R.string.album), album) +
+                addStringItem(context.getString(R.string.year), year);
     }
 
     private String addStringItem(String prefix, String item) {

@@ -45,4 +45,8 @@ public class Track {
         }
         return "";
     }
+
+    public Uri getUri() {
+        return uri;
+    }
 }

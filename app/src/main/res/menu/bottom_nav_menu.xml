@@ -7,7 +7,7 @@
         android:title="@string/title_player" />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_albums"
         android:icon="@drawable/ic_baseline_album_24"
         android:title="@string/title_albums" />
 

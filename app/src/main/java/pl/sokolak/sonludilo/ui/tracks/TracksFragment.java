@@ -18,10 +18,8 @@ import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
 
 public class TracksFragment extends Fragment {
-
     private TracksViewModel tracksViewModel;
     private SharedViewModel sharedModel;
-
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         tracksViewModel = new ViewModelProvider(this, new TracksViewModelFactory(getContext())).get(TracksViewModel.class);
@@ -35,14 +33,11 @@ public class TracksFragment extends Fragment {
                 list))
         );
 
-
         sharedModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         trackList.setOnItemClickListener((parent, view, position, id) -> {
             sharedModel.setCurrentTrackList(List.of(tracksViewModel.getTrackList().get(position)));
             NavHostFragment.findNavController(this).navigate(R.id.action_tracks_to_player);
-
         });
-
 
         return root;
     }

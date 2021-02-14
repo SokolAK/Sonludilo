@@ -18,9 +18,11 @@ public class TracksRepository {
         this.context = context;
     }
 
-    public List<Track> getAll() {
+    public List<Track> getAll(String selection) {
 
         List<Track> trackList = new ArrayList<>();
+//        String selection = "album_id = ?";
+//        String[] selectionArgs = new String[] {"12"};
         final String track_id = MediaStore.Audio.Media._ID;
         final String track_no = MediaStore.Audio.Media.TRACK;
         final String track_name = MediaStore.Audio.Media.TITLE;
@@ -34,21 +36,12 @@ public class TracksRepository {
 
         ContentResolver cr = context.getContentResolver();
         final String[] columns = {track_id, track_no, artist, track_name, album, duration, path, year, composer};
-        Cursor cursor = cr.query(uri, columns, null, null, null);
+        Cursor cursor = cr.query(uri, columns, selection, null, null);
 
         while (cursor.moveToNext()) {
-//            StringBuilder stringBuilder = new StringBuilder();
-//
-//            stringBuilder.append(addStringItem(context.getString(R.string.artist), cursor.getString(2)));
-//            stringBuilder.append(addStringItem(context.getString(R.string.title), cursor.getString(3)));
-//            stringBuilder.append(addStringItem(context.getString(R.string.album), cursor.getString(4)));
-//            stringBuilder.append(addStringItem(context.getString(R.string.year), cursor.getString(7)));
-//
-//            list.add(stringBuilder.toString());
-            //System.out.println(cursor.getString(0) + " --- " + cursor.getString(6));
-
             Uri contentUri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, cursor.getInt(0));
             trackList.add(new Track(contentUri,
+                    cursor.getInt(1),
                     cursor.getString(2),
                     cursor.getString(3),
                     cursor.getString(4),

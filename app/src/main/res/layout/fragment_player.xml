@@ -10,8 +10,13 @@
     <ListView
         android:id="@+id/track_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/line" />
+        android:layout_height="0dp"
+        android:divider="@color/yellow"
+        android:dividerHeight="1dp"
+        android:choiceMode="singleChoice"
+        android:listSelector="@color/pink"
+        app:layout_constraintBottom_toTopOf="@+id/line"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/line"
@@ -19,21 +24,24 @@
         android:layout_height="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/text_player"
+        app:layout_constraintBottom_toTopOf="@+id/current_track"
         android:background="@color/yellow"/>
 
     <TextView
-        android:id="@+id/text_player"
+        android:id="@+id/current_track"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        app:layout_constraintBottom_toTopOf="@+id/player_section"
         tools:layout_editor_absoluteX="8dp" />
 
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/player_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -140,6 +148,8 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:text="01:22" />
 
             <ImageButton

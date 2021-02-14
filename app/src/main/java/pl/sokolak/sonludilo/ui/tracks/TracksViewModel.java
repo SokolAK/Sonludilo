@@ -16,8 +16,7 @@ public class TracksViewModel extends ViewModel {
 
     public TracksViewModel(Context context) {
         TracksRepository tracksRepository = new TracksRepository(context);
-        //List<String> tracks = tracksRepository.getAll();
-        trackList = tracksRepository.getAll();
+        trackList = tracksRepository.getAll(null);
 
         List<String> list = new ArrayList<>();
         for(Track track : trackList) {

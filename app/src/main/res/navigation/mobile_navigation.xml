@@ -12,10 +12,13 @@
         tools:layout="@layout/fragment_player" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="pl.sokolak.sonludilo.ui.dashboard.DashboardFragment"
+        android:id="@+id/navigation_albums"
+        android:name="pl.sokolak.sonludilo.ui.albums.AlbumsFragment"
         android:label="@string/title_albums"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_albums"/>
+        <action
+            android:id="@+id/action_albums_to_player"
+            app:destination="@id/navigation_player" />
 
     <fragment
         android:id="@+id/navigation_tracks"

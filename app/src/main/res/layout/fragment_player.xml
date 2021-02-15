@@ -75,27 +75,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="#FEF15E"
+                    android:backgroundTint="@drawable/button_color"
                     android:src="@drawable/ic_baseline_volume_up_24"
-                    android:tint="@color/pink" />
+                    android:tint="@drawable/button_color_negative" />
 
                 <ImageButton
                     android:id="@+id/button_vol_down"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/yellow"
+                    android:backgroundTint="@drawable/button_color"
                     android:src="@drawable/ic_baseline_volume_down_24"
-                    android:tint="@color/pink" />
+                    android:tint="@drawable/button_color_negative" />
 
                 <ImageButton
                     android:id="@+id/button_repeat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="#FEF15E"
+                    android:backgroundTint="@drawable/button_color"
                     android:src="@drawable/ic_baseline_repeat_24"
-                    android:tint="@color/pink" />
+                    android:tint="@drawable/button_color_negative" />
 
             </LinearLayout>
 <!--            <ImageView-->
@@ -123,27 +123,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/yellow"
+                    android:backgroundTint="@drawable/button_color"
                     android:src="@drawable/ic_baseline_play_arrow_24"
-                    android:tint="@color/pink" />
+                    android:tint="@drawable/button_color_negative" />
 
                 <ImageButton
                     android:id="@+id/button_pause"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/yellow"
+                    android:backgroundTint="@drawable/button_color"
                     android:src="@drawable/ic_baseline_pause_24"
-                    android:tint="@color/pink" />
+                    android:tint="@drawable/button_color_negative" />
 
                 <ImageButton
                     android:id="@+id/button_stop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/yellow"
+                    android:backgroundTint="@drawable/button_color"
                     android:src="@drawable/ic_baseline_stop_24"
-                    android:tint="@color/pink" />
+                    android:tint="@drawable/button_color_negative" />
 
             </LinearLayout>
         </LinearLayout>
@@ -170,18 +170,18 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="@color/yellow"
+                android:backgroundTint="@drawable/button_color"
                 android:src="@drawable/ic_baseline_skip_previous_24"
-                android:tint="@color/pink" />
+                android:tint="@drawable/button_color_negative" />
 
             <ImageButton
                 android:id="@+id/button_forw"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="@color/yellow"
+                android:backgroundTint="@drawable/button_color"
                 android:src="@drawable/ic_baseline_skip_next_24"
-                android:tint="@color/pink" />
+                android:tint="@drawable/button_color_negative" />
 
             <TextView
                 android:id="@+id/elapsed_time"

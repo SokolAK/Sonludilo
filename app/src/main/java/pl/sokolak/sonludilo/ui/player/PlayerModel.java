@@ -64,7 +64,7 @@ public enum PlayerModel {
 
     public int[] getTime() {
         int[] time = new int[]{0,0};
-        if (mediaPlayer != null) {
+        if (mediaPlayer != null && currentTrack != null) {
             time[0] = mediaPlayer.getCurrentPosition();
             time[1] = mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition();
             if (time[1] <= 10) {

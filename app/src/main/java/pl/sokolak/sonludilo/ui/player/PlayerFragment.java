@@ -1,7 +1,9 @@
 package pl.sokolak.sonludilo.ui.player;
 
+import android.content.Context;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -34,6 +37,7 @@ public class PlayerFragment extends Fragment {
         //ImageView gifView = root.findViewById(R.id.image_view);
 
         playerViewModel = new ViewModelProvider(this, new PlayerViewModelFactory(getContext(), root)).get(PlayerViewModel.class);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         ListView trackListView = root.findViewById(R.id.track_list);
         ImageButton bPlay = root.findViewById(R.id.button_play);
@@ -43,7 +47,6 @@ public class PlayerFragment extends Fragment {
         ImageButton bVolDown = root.findViewById(R.id.button_vol_down);
 
 
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         sharedViewModel.getCurrentTrackList().observe(getViewLifecycleOwner(), item -> {
             trackListView.setAdapter(new ArrayAdapter<>(
                     getContext(),
@@ -56,7 +59,7 @@ public class PlayerFragment extends Fragment {
             List<Track> currentTrackList = sharedViewModel.getCurrentTrackList().getValue();
             boolean isOnList = false;
             for (int i = 0; i < currentTrackList.size(); ++i) {
-                System.out.println(currentTrackList.get(i).getUri() + " / " +n);
+                System.out.println(currentTrackList.get(i).getUri() + " / " + n);
                 if (currentTrackList.get(i).getUri().equals(n)) {
                     trackListView.setItemChecked(i, true);
                     isOnList = true;
@@ -84,11 +87,28 @@ public class PlayerFragment extends Fragment {
         bPlay.setOnClickListener(l -> playerViewModel.bPlayClicked());
         bPause.setOnClickListener(l -> playerViewModel.bPauseClicked());
         bStop.setOnClickListener(l -> playerViewModel.bStopClicked());
-        bVolUp.setOnClickListener(l -> playerViewModel.bVolUpClicked());
-        bVolDown.setOnClickListener(l -> playerViewModel.bVolDownClicked());
+        bVolUp.setOnClickListener(l -> {
+                    playerViewModel.bVolUpClicked();
+                    updateVolume();
+                }
+        );
+        bVolDown.setOnClickListener(l -> {
+                    playerViewModel.bVolDownClicked();
+                    updateVolume();
+                }
+        );
+
+
+        ProgressBar volumeBar = root.findViewById(R.id.volume_bar);
+        sharedViewModel.getCurrentVolume().observe(getViewLifecycleOwner(), volumeBar::setProgress);
 
 
         return root;
     }
 
+
+    private void updateVolume() {
+        AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        sharedViewModel.setCurrentVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+    }
 }

@@ -1,12 +1,16 @@
 package pl.sokolak.sonludilo;
 
 import android.Manifest;
+import android.content.Context;
+import android.database.ContentObserver;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -14,9 +18,13 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import pl.sokolak.sonludilo.ui.SharedViewModel;
+import pl.sokolak.sonludilo.ui.player.PlayerFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int STORAGE_PERMISSION_CODE = 101;
+    private SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +43,12 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+
+        getContentResolver().registerContentObserver(android.provider.Settings.System.CONTENT_URI, true, new VolumeObserver(this, sharedViewModel, null) );
     }
+
 
     public void checkPermission(String permission, int requestCode) {
         ActivityCompat

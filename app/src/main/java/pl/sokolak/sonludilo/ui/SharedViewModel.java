@@ -12,8 +12,8 @@ import pl.sokolak.sonludilo.ui.tracks.Track;
 
 public class SharedViewModel extends ViewModel {
     private final MutableLiveData<List<Track>> currentTrackList = new MutableLiveData<>();
-    private final MutableLiveData<Integer> currentTrackNo = new MutableLiveData<>();
     private final MutableLiveData<Uri> currentTrackUri = new MutableLiveData<>();
+    private final MutableLiveData<Integer> currentVolume = new MutableLiveData<>();
 
     public void setCurrentTrackList(List<Track> currentTrackList) {
         this.currentTrackList.setValue(currentTrackList);
@@ -22,18 +22,18 @@ public class SharedViewModel extends ViewModel {
         return currentTrackList;
     }
 
-    public void setCurrentTrackNo(int currentTrackNo) {
-        this.currentTrackNo.setValue(currentTrackNo);
-    }
-    public LiveData<Integer> getCurrentTrackNo() {
-        return currentTrackNo;
-    }
-
     public void setCurrentTrackUri(Uri currentTrackUri) {
         this.currentTrackUri.setValue(currentTrackUri);
     }
     public LiveData<Uri> getCurrentTrackUri() {
         return currentTrackUri;
+    }
+
+    public void setCurrentVolume(int currentVolume) {
+        this.currentVolume.postValue(currentVolume);
+    }
+    public LiveData<Integer> getCurrentVolume() {
+        return currentVolume;
     }
 }
 

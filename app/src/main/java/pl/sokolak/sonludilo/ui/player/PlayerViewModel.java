@@ -7,12 +7,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.sokolak.sonludilo.R;
+import pl.sokolak.sonludilo.ui.SharedViewModel;
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
 public class PlayerViewModel extends ViewModel {
@@ -89,6 +91,7 @@ public class PlayerViewModel extends ViewModel {
         if (weakContext != null) {
             AudioManager audioManager = (AudioManager) weakContext.get().getSystemService(Context.AUDIO_SERVICE);
             ProgressBar volumeBar = weakRoot.get().findViewById(R.id.volume_bar);
+            //volumeBar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
             volumeBar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
         }
     }

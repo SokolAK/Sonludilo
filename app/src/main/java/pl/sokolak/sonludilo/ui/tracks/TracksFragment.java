@@ -36,6 +36,7 @@ public class TracksFragment extends Fragment {
         sharedModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         trackList.setOnItemClickListener((parent, view, position, id) -> {
             sharedModel.setCurrentTrackList(List.of(tracksViewModel.getTrackList().get(position)));
+            sharedModel.setCurrentTrackNo(0);
             NavHostFragment.findNavController(this).navigate(R.id.action_tracks_to_player);
         });
 

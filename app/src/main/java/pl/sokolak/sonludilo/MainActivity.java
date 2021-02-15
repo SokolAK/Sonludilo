@@ -2,6 +2,7 @@ package pl.sokolak.sonludilo;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.view.KeyEvent;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -35,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
-
-
 
     public void checkPermission(String permission, int requestCode) {
         ActivityCompat

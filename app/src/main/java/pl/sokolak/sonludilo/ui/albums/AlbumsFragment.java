@@ -38,6 +38,7 @@ public class AlbumsFragment extends Fragment {
         sharedModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         albumsList.setOnItemClickListener((parent, view, position, id) -> {
             sharedModel.setCurrentTrackList(albumsViewModel.getTrackListForAlbum(position));
+            sharedModel.setCurrentTrackNo(0);
             NavHostFragment.findNavController(this).navigate(R.id.action_albums_to_player);
         });
 

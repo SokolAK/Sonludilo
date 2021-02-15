@@ -48,10 +48,6 @@ public class TracksRepository {
                     cursor.getString(7)));
         }
 
-        //Uri contentUri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, 187537);
-        //MediaPlayer mediaPlayer = MediaPlayer.create(context, contentUri);
-        //mediaPlayer.start();
-
         cursor.close();
 
         return trackList;

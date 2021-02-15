@@ -18,8 +18,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 
+import java.util.List;
+
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
+import pl.sokolak.sonludilo.ui.tracks.Track;
 
 public class PlayerFragment extends Fragment {
     private SharedViewModel sharedViewModel;
@@ -28,15 +31,11 @@ public class PlayerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_player, container, false);
-        ImageView gifView = root.findViewById(R.id.image_view);
-        //Glide.with(this).load(R.raw.tape80).into(gifView);
+        //ImageView gifView = root.findViewById(R.id.image_view);
 
-        playerViewModel = new ViewModelProvider(this, new PlayerViewModelFactory(getContext(), gifView)).get(PlayerViewModel.class);
+        playerViewModel = new ViewModelProvider(this, new PlayerViewModelFactory(getContext(), root)).get(PlayerViewModel.class);
 
-        //final TextView textView = root.findViewById(R.id.text_player);
-        //playerViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-
-        ListView trackList = root.findViewById(R.id.track_list);
+        ListView trackListView = root.findViewById(R.id.track_list);
         ImageButton bPlay = root.findViewById(R.id.button_play);
         ImageButton bPause = root.findViewById(R.id.button_pause);
         ImageButton bStop = root.findViewById(R.id.button_stop);
@@ -46,23 +45,41 @@ public class PlayerFragment extends Fragment {
 
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         sharedViewModel.getCurrentTrackList().observe(getViewLifecycleOwner(), item -> {
-            //textView.setText(item.getTitle());
-            trackList.setAdapter(new ArrayAdapter<>(
+            trackListView.setAdapter(new ArrayAdapter<>(
                     getContext(),
-                    android.R.layout.simple_list_item_1,
+                    android.R.layout.simple_list_item_activated_1,
                     item));
-
-            //TextView currentTrack = root.findViewById(R.id.current_track);
-            //currentTrack.setText(item.get(0).toString());
-            //currentTrack.setSelected(true);
         });
 
-        trackList.setOnItemClickListener((parent, view, position, id) ->
-                playerViewModel.trackListItemClicked(position, sharedViewModel.getCurrentTrackList().getValue()));
+        sharedViewModel.getCurrentTrackUri().observe(getViewLifecycleOwner(), n -> {
+            //trackListView.setItemChecked(n, true);
+            List<Track> currentTrackList = sharedViewModel.getCurrentTrackList().getValue();
+            boolean isOnList = false;
+            for (int i = 0; i < currentTrackList.size(); ++i) {
+                System.out.println(currentTrackList.get(i).getUri() + " / " +n);
+                if (currentTrackList.get(i).getUri().equals(n)) {
+                    trackListView.setItemChecked(i, true);
+                    isOnList = true;
+                    break;
+                }
+            }
+            if (!isOnList) {
+                if (currentTrackList.size() > 0) {
+                    //trackListView.setItemChecked(0, true);
+                    trackListView.performItemClick(trackListView.getAdapter().getView(0, null, null),
+                            0,
+                            trackListView.getAdapter().getItemId(0));
+                }
+                bStop.performClick();
+            }
+        });
 
-        //System.out.println(">>>>> " + playerViewModel.getmCurrentTrackNumber().getValue());
-
-        //playerViewModel.getmCurrentTrackNumber().observe(getViewLifecycleOwner(), n -> System.out.println(">>>>> " + n));
+        trackListView.setOnItemClickListener((parent, view, position, id) -> {
+            playerViewModel.trackListItemClicked(position, sharedViewModel.getCurrentTrackList().getValue());
+            //sharedViewModel.setCurrentTrackNo(position);
+            Track currentTrack = sharedViewModel.getCurrentTrackList().getValue().get(position);
+            sharedViewModel.setCurrentTrackUri(currentTrack.getUri());
+        });
 
         bPlay.setOnClickListener(l -> playerViewModel.bPlayClicked());
         bPause.setOnClickListener(l -> playerViewModel.bPauseClicked());
@@ -70,15 +87,7 @@ public class PlayerFragment extends Fragment {
         bVolUp.setOnClickListener(l -> playerViewModel.bVolUpClicked());
         bVolDown.setOnClickListener(l -> playerViewModel.bVolDownClicked());
 
-//        Uri contentUri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, 187537);
-//        MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), contentUri);
-//        mediaPlayer.stop();
-//        try {
-//            mediaPlayer.prepare();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        mediaPlayer.start();
+
         return root;
     }
 

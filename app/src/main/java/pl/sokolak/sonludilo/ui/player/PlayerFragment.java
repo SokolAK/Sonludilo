@@ -1,5 +1,7 @@
 package pl.sokolak.sonludilo.ui.player;
 
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +27,12 @@ public class PlayerFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        playerViewModel = new ViewModelProvider(this, new PlayerViewModelFactory(getContext())).get(PlayerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_player, container, false);
+        ImageView gifView = root.findViewById(R.id.image_view);
+        //Glide.with(this).load(R.raw.tape80).into(gifView);
+
+        playerViewModel = new ViewModelProvider(this, new PlayerViewModelFactory(getContext(), gifView)).get(PlayerViewModel.class);
+
         //final TextView textView = root.findViewById(R.id.text_player);
         //playerViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
@@ -34,6 +40,8 @@ public class PlayerFragment extends Fragment {
         ImageButton bPlay = root.findViewById(R.id.button_play);
         ImageButton bPause = root.findViewById(R.id.button_pause);
         ImageButton bStop = root.findViewById(R.id.button_stop);
+        ImageButton bVolUp = root.findViewById(R.id.button_vol_up);
+        ImageButton bVolDown = root.findViewById(R.id.button_vol_down);
 
 
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
@@ -49,20 +57,18 @@ public class PlayerFragment extends Fragment {
             //currentTrack.setSelected(true);
         });
 
-        ImageView imageView = root.findViewById(R.id.image_view);
-        Glide.with(this).load(R.raw.tape80).into(imageView);
-
-
         trackList.setOnItemClickListener((parent, view, position, id) ->
                 playerViewModel.trackListItemClicked(position, sharedViewModel.getCurrentTrackList().getValue()));
 
         //System.out.println(">>>>> " + playerViewModel.getmCurrentTrackNumber().getValue());
 
-        playerViewModel.getmCurrentTrackNumber().observe(getViewLifecycleOwner(), n -> System.out.println(">>>>> " + n));
+        //playerViewModel.getmCurrentTrackNumber().observe(getViewLifecycleOwner(), n -> System.out.println(">>>>> " + n));
 
         bPlay.setOnClickListener(l -> playerViewModel.bPlayClicked());
         bPause.setOnClickListener(l -> playerViewModel.bPauseClicked());
         bStop.setOnClickListener(l -> playerViewModel.bStopClicked());
+        bVolUp.setOnClickListener(l -> playerViewModel.bVolUpClicked());
+        bVolDown.setOnClickListener(l -> playerViewModel.bVolDownClicked());
 
 //        Uri contentUri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, 187537);
 //        MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), contentUri);
@@ -73,8 +79,6 @@ public class PlayerFragment extends Fragment {
 //            e.printStackTrace();
 //        }
 //        mediaPlayer.start();
-
-
         return root;
     }
 

@@ -15,6 +15,7 @@ public enum PlayerModel {
     private MediaPlayer mediaPlayer;
     private Track currentTrack;
     private Context context;
+    private Status status = Status.STOPPED;
 
     PlayerModel() {
         this.mediaPlayer = new MediaPlayer();
@@ -25,20 +26,43 @@ public enum PlayerModel {
     }
 
     public void play() {
-        mediaPlayer.start();
+        if (currentTrack != null) {
+            mediaPlayer.start();
+            if (mediaPlayer.isPlaying()) {
+                status = Status.PLAYING;
+            }
+        }
     }
 
     public void pause() {
-        mediaPlayer.pause();
+        if (currentTrack != null) {
+            mediaPlayer.pause();
+            if (!mediaPlayer.isPlaying()) {
+                status = Status.PAUSED;
+            }
+        }
     }
 
     public void stop() {
-        mediaPlayer.pause();
-        mediaPlayer.seekTo(0);
+        if (currentTrack != null) {
+            mediaPlayer.pause();
+            mediaPlayer.seekTo(0);
+            if (!mediaPlayer.isPlaying()) {
+                status = Status.STOPPED;
+            }
+        }
     }
 
     public void setCurrentTrack(Track currentTrack) {
         this.currentTrack = currentTrack;
         mediaPlayer = MediaPlayer.create(context, currentTrack.getUri());
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public enum Status {
+        PLAYING, STOPPED, PAUSED;
     }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,12 +14,12 @@ import pl.sokolak.sonludilo.ui.tracks.Track;
 import pl.sokolak.sonludilo.ui.tracks.TracksRepository;
 
 public class AlbumsViewModel extends ViewModel {
-    private Context context;
+    private final WeakReference<Context> weakContext;
     private final MutableLiveData<List<String>> mAlbums = new MutableLiveData<>();
     private final List<Album> albumsList;
 
     public AlbumsViewModel(Context context) {
-        this.context = context;
+        weakContext = new WeakReference<>(context);
 
         AlbumsRepository albumsRepository = new AlbumsRepository(context);
         albumsList = albumsRepository.getAll();
@@ -41,6 +42,9 @@ public class AlbumsViewModel extends ViewModel {
 
     public List<Track> getTrackListForAlbum(int position) {
         String selection = "album_id = " + albumsList.get(position).getId();
-        return new TracksRepository(context).getAll(selection);
+        if (weakContext!=null) {
+            return new TracksRepository(weakContext.get()).getAll(selection);
+        }
+        return new ArrayList<>();
     }
 }

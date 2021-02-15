@@ -42,15 +42,14 @@
         android:id="@+id/volume_bar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:max="15"
-
-        android:progress="10"
+        android:progress="0"
+        android:padding="15dp"
         android:progressTint="@color/pink"
         app:layout_constraintBottom_toTopOf="@+id/player_section"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <LinearLayout
         android:id="@+id/player_section"
@@ -98,10 +97,7 @@
                     android:src="@drawable/ic_baseline_repeat_24"
                     android:tint="@color/pink" />
 
-
             </LinearLayout>
-
-
 <!--            <ImageView-->
 <!--                android:id="@+id/image_view"-->
 <!--                android:layout_width="0dp"-->
@@ -149,11 +145,8 @@
                     android:src="@drawable/ic_baseline_stop_24"
                     android:tint="@color/pink" />
 
-
             </LinearLayout>
-
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -162,7 +155,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/remaining_time"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -181,7 +174,6 @@
                 android:src="@drawable/ic_baseline_skip_previous_24"
                 android:tint="@color/pink" />
 
-
             <ImageButton
                 android:id="@+id/button_forw"
                 android:layout_width="0dp"
@@ -192,14 +184,13 @@
                 android:tint="@color/pink" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/elapsed_time"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="-04:21" />
-
 
         </LinearLayout>
     </LinearLayout>
@@ -212,6 +203,5 @@
         android:progressTint="@color/pink"
         android:thumbTint="@color/pink"
         app:layout_constraintBottom_toBottomOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

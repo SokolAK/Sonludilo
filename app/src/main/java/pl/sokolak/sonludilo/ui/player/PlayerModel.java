@@ -1,11 +1,10 @@
 package pl.sokolak.sonludilo.ui.player;
 
-import android.content.ContentUris;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.net.Uri;
-
-import java.io.IOException;
+import android.os.Handler;
+import android.os.Looper;
 
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
@@ -61,6 +60,22 @@ public enum PlayerModel {
     public Status getStatus() {
         return status;
     }
+
+
+    public int[] getTime() {
+        int[] time = new int[]{0,0};
+        if (mediaPlayer != null) {
+            time[0] = mediaPlayer.getCurrentPosition();
+            time[1] = mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition();
+            if (time[1] <= 10) {
+                mediaPlayer.seekTo(0);
+                mediaPlayer.start();
+            }
+        }
+        return time;
+    }
+
+
 
     public enum Status {
         PLAYING, STOPPED, PAUSED;

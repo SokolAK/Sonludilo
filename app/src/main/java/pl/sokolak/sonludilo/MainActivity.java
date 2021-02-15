@@ -24,7 +24,6 @@ import pl.sokolak.sonludilo.ui.player.PlayerFragment;
 public class MainActivity extends AppCompatActivity {
 
     private static final int STORAGE_PERMISSION_CODE = 101;
-    private SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +43,7 @@ public class MainActivity extends AppCompatActivity {
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-
+        SharedViewModel sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         getContentResolver().registerContentObserver(android.provider.Settings.System.CONTENT_URI, true, new VolumeObserver(this, sharedViewModel, null) );
     }
 

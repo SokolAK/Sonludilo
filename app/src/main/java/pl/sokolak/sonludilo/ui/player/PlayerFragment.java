@@ -51,6 +51,8 @@ public class PlayerFragment extends Fragment {
         ImageButton bStop = root.findViewById(R.id.button_stop);
         ImageButton bVolUp = root.findViewById(R.id.button_vol_up);
         ImageButton bVolDown = root.findViewById(R.id.button_vol_down);
+        ImageButton bPrev = root.findViewById(R.id.button_prev);
+        ImageButton bNext = root.findViewById(R.id.button_next);
         SeekBar seekBar = root.findViewById(R.id.seek_bar);
 
 
@@ -65,34 +67,44 @@ public class PlayerFragment extends Fragment {
             //trackListView.setItemChecked(n, true);
             List<Track> currentTrackList = sharedViewModel.getCurrentTrackList().getValue();
             boolean isOnList = false;
-            for (int i = 0; i < currentTrackList.size(); ++i) {
-                System.out.println(currentTrackList.get(i).getUri() + " / " + n.getUri());
-                if (currentTrackList.get(i).getUri().equals(n.getUri())) {
-                    trackListView.setItemChecked(i, true);
-                    isOnList = true;
-                    break;
+            if (currentTrackList != null) {
+                for (int i = 0; i < currentTrackList.size(); ++i) {
+                    if (currentTrackList.get(i).getUri().equals(n.getUri())) {
+                        trackListView.setItemChecked(i, true);
+                        trackListView.setSelection(i - 3);
+                        isOnList = true;
+                        break;
+                    }
                 }
-            }
-            if (!isOnList) {
-                if (currentTrackList.size() > 0) {
-                    //trackListView.setItemChecked(0, true);
-                    trackListView.performItemClick(trackListView.getAdapter().getView(0, null, null),
-                            0,
-                            trackListView.getAdapter().getItemId(0));
+                if (!isOnList) {
+                    if (currentTrackList.size() > 0) {
+                        //trackListView.setItemChecked(0, true);
+                        trackListView.performItemClick(trackListView.getAdapter().getView(0, null, null),
+                                0,
+                                trackListView.getAdapter().getItemId(0));
+                    }
+                    bStop.performClick();
                 }
-                bStop.performClick();
             }
         });
 
         trackListView.setOnItemClickListener((parent, view, position, id) -> {
-            playerViewModel.trackListItemClicked(position, sharedViewModel.getCurrentTrackList().getValue());
-            //sharedViewModel.setCurrentTrackNo(position);
-            //Track currentTrack = sharedViewModel.getCurrentTrackList().getValue().get(position);
-            Track currentTrack = sharedViewModel.getTrack(position).getValue();
+            List<Track> trackList = sharedViewModel.getCurrentTrackList().getValue();
+            if (trackList != null) {
+                if (position < trackList.size()) {
+                    playerViewModel.trackListItemClicked(position, trackList);
 
-            //sharedViewModel.getCurrentTrackUri(currentTrack.getUri());
-            seekBar.setMax(currentTrack.getDuration());
-            updateGif();
+                    //sharedViewModel.setCurrentTrackNo(position);
+                    //Track currentTrack = sharedViewModel.getCurrentTrackList().getValue().get(position);
+                    Track currentTrack = sharedViewModel.getTrack(position).getValue();
+
+                    //sharedViewModel.getCurrentTrackUri(currentTrack.getUri());
+                    if (currentTrack != null) {
+                        seekBar.setMax(currentTrack.getDuration());
+                    }
+                    updateGif();
+                }
+            }
         });
         bPlay.setOnClickListener(l -> {
             playerViewModel.bPlayClicked();
@@ -116,12 +128,36 @@ public class PlayerFragment extends Fragment {
                     updateVolume();
                 }
         );
+        bNext.setOnClickListener(l -> {
+                    List<Track> trackList = sharedViewModel.getCurrentTrackList().getValue();
+                    if (trackList != null) {
+                        int newPosition = trackListView.getCheckedItemPosition() + 1;
+                        if(newPosition < trackListView.getCount()) {
+                            trackListView.performItemClick(trackListView.getAdapter().getView(newPosition, null, null),
+                                    newPosition,
+                                    trackListView.getAdapter().getItemId(newPosition));
+                        }
+                    }
+                }
+        );
+        bPrev.setOnClickListener(l -> {
+                    List<Track> trackList = sharedViewModel.getCurrentTrackList().getValue();
+                    if (trackList != null) {
+                        int newPosition = trackListView.getCheckedItemPosition() - 1;
+                        if(newPosition >= 0) {
+                            trackListView.performItemClick(trackListView.getAdapter().getView(newPosition, null, null),
+                                    newPosition,
+                                    trackListView.getAdapter().getItemId(newPosition));
+                        }
+                    }
+                }
+        );
         seekBar.setOnSeekBarChangeListener(new SeekBarListener(playerViewModel));
 
 
         ProgressBar volumeBar = root.findViewById(R.id.volume_bar);
         sharedViewModel.getCurrentVolume().observe(getViewLifecycleOwner(), volumeBar::setProgress);
-        AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        AudioManager audioManager = (AudioManager) requireContext().getSystemService(Context.AUDIO_SERVICE);
         volumeBar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
 
         updateGif();
@@ -160,7 +196,7 @@ public class PlayerFragment extends Fragment {
     }
 
     private void updateVolume() {
-        AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        AudioManager audioManager = (AudioManager) requireContext().getSystemService(Context.AUDIO_SERVICE);
         sharedViewModel.setCurrentVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
     }
 

@@ -166,7 +166,7 @@
                 android:text="01:22" />
 
             <ImageButton
-                android:id="@+id/button_back"
+                android:id="@+id/button_prev"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -175,7 +175,7 @@
                 android:tint="@drawable/button_color_negative" />
 
             <ImageButton
-                android:id="@+id/button_forw"
+                android:id="@+id/button_next"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

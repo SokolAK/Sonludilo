@@ -19,14 +19,22 @@ public class SharedViewModel extends ViewModel {
 
 
     public void setCurrentTrackList(List<Track> currentTrackList) {
-        this.currentTrackList.setValue(currentTrackList);
+        if(currentTrackList != null && currentTrackList.size() > 0) {
+            this.currentTrackList.setValue(currentTrackList);
+        }
     }
+
     public LiveData<List<Track>> getCurrentTrackList() {
         return currentTrackList;
     }
+
     public LiveData<Track> getTrack(int id) {
-        Track track = currentTrackList.getValue().get(id);
-        currentTrack.setValue(track);
+        if (currentTrackList.getValue() != null) {
+            if (id < currentTrackList.getValue().size()) {
+                Track track = currentTrackList.getValue().get(id);
+                currentTrack.setValue(track);
+            }
+        }
         return currentTrack;
     }
 
@@ -38,15 +46,17 @@ public class SharedViewModel extends ViewModel {
 //    }
 
     public void setCurrentVolume(int currentVolume) {
-        this.currentVolume.postValue(currentVolume);
+        this.currentVolume.setValue(currentVolume);
     }
+
     public LiveData<Integer> getCurrentVolume() {
         return currentVolume;
     }
 
     public void setCurrentTrack(Track track) {
-        this.currentTrack.postValue(track);
+        this.currentTrack.setValue(track);
     }
+
     public LiveData<Track> getCurrentTrack() {
         return currentTrack;
     }

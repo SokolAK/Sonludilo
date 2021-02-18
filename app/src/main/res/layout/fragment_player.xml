@@ -11,7 +11,7 @@
         android:id="@+id/track_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:divider="@color/yellow"
+        android:divider="@color/white"
         android:dividerHeight="1dp"
         android:choiceMode="singleChoice"
         app:layout_constraintBottom_toTopOf="@+id/line"
@@ -23,7 +23,7 @@
         android:layout_height="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/volume_bar"
+        app:layout_constraintBottom_toTopOf="@+id/volume_bar_container"
         android:background="@color/yellow"/>
 
 <!--    <TextView-->
@@ -38,67 +38,107 @@
 <!--        app:layout_constraintBottom_toTopOf="@+id/player_section"-->
 <!--        tools:layout_editor_absoluteX="8dp" />-->
 
-    <ProgressBar
-        android:id="@+id/volume_bar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:max="15"
-        android:progress="0"
-        android:padding="15dp"
-        android:progressTint="@color/pink"
-        app:layout_constraintBottom_toTopOf="@+id/player_section"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/player_section"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/seek_bar">
+<!--    <ProgressBar-->
+<!--        android:id="@+id/volume_bar"-->
+<!--        style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:max="15"-->
+<!--        android:progress="0"-->
+<!--        android:padding="15dp"-->
+<!--        android:progressTint="@color/pink"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/player_section"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
         <LinearLayout
+            android:id="@+id/volume_bar_container"
+            app:layout_constraintBottom_toTopOf="@+id/player_section"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp">
+
+            <com.rachitgoyal.segmented.SegmentedProgressBar
+                android:id="@+id/volume_bar"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+
+                app:divisions="15"
+                app:progressBarBackgroundColor="@color/dark_gray"
+                app:progressBarColor="@color/pink"
+                app:dividerColor="@color/dark_gray"
+                app:dividerWidth="4dp"
+                app:isDividerEnabled="true"
+
+                app:layout_constraintBottom_toTopOf="@+id/player_section"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/player_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/seek_bar">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/button_vol_up"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:backgroundTint="@drawable/button_color"
-                    android:src="@drawable/ic_baseline_volume_up_24"
-                    android:tint="@drawable/button_color_negative" />
+                    android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/button_vol_down"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@drawable/button_color"
-                    android:src="@drawable/ic_baseline_volume_down_24"
-                    android:tint="@drawable/button_color_negative" />
+                    <ImageButton
+                        android:id="@+id/button_vol_up"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/button_margin_horizontal"
+                        android:layout_marginRight="@dimen/button_margin_horizontal"
+                        android:layout_marginVertical="@dimen/button_margin_vertical"
+                        android:layout_marginBottom="@dimen/button_margin_vertical"
+                        android:backgroundTint="@drawable/button_color"
+                        android:src="@drawable/ic_baseline_volume_up_24"
+                        android:scaleType="fitCenter"
+                        android:tint="@drawable/button_color_negative" />
 
-                <ImageButton
-                    android:id="@+id/button_repeat"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@drawable/button_color"
-                    android:src="@drawable/ic_baseline_repeat_24"
-                    android:tint="@drawable/button_color_negative" />
+                    <ImageButton
+                        android:id="@+id/button_vol_down"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/button_margin_horizontal"
+                        android:layout_marginRight="@dimen/button_margin_horizontal"
+                        android:layout_marginVertical="@dimen/button_margin_vertical"
+                        android:layout_marginBottom="@dimen/button_margin_vertical"
+                        android:backgroundTint="@drawable/button_color"
+                        android:src="@drawable/ic_baseline_volume_down_24"
+                        android:scaleType="fitCenter"
+                        android:tint="@drawable/button_color_negative" />
 
-            </LinearLayout>
-<!--            <ImageView-->
+                    <ImageButton
+                        android:id="@+id/button_repeat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/button_margin_horizontal"
+                        android:layout_marginRight="@dimen/button_margin_horizontal"
+                        android:layout_marginVertical="@dimen/button_margin_vertical"
+                        android:layout_marginBottom="@dimen/button_margin_vertical"
+                        android:backgroundTint="@drawable/button_color"
+                        android:src="@drawable/ic_baseline_repeat_24"
+                        android:scaleType="fitCenter"
+                        android:tint="@drawable/button_color_negative" />
+
+                </LinearLayout>
+    <!--            <ImageView-->
 <!--                android:id="@+id/image_view"-->
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_height="wrap_content"-->
@@ -123,8 +163,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/button_margin_horizontal"
+                    android:layout_marginRight="@dimen/button_margin_horizontal"
+                    android:layout_marginVertical="@dimen/button_margin_vertical"
+                    android:layout_marginBottom="@dimen/button_margin_vertical"
                     android:backgroundTint="@drawable/button_color"
                     android:src="@drawable/ic_baseline_play_arrow_24"
+                    android:scaleType="fitCenter"
                     android:tint="@drawable/button_color_negative" />
 
                 <ImageButton
@@ -132,8 +177,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/button_margin_horizontal"
+                    android:layout_marginRight="@dimen/button_margin_horizontal"
+                    android:layout_marginVertical="@dimen/button_margin_vertical"
+                    android:layout_marginBottom="@dimen/button_margin_vertical"
                     android:backgroundTint="@drawable/button_color"
                     android:src="@drawable/ic_baseline_pause_24"
+                    android:scaleType="fitCenter"
                     android:tint="@drawable/button_color_negative" />
 
                 <ImageButton
@@ -141,8 +191,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/button_margin_horizontal"
+                    android:layout_marginRight="@dimen/button_margin_horizontal"
+                    android:layout_marginVertical="@dimen/button_margin_vertical"
+                    android:layout_marginBottom="@dimen/button_margin_vertical"
                     android:backgroundTint="@drawable/button_color"
                     android:src="@drawable/ic_baseline_stop_24"
+                    android:scaleType="fitCenter"
                     android:tint="@drawable/button_color_negative" />
 
             </LinearLayout>
@@ -170,8 +225,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginLeft="@dimen/button_margin_horizontal"
+                android:layout_marginRight="@dimen/button_margin_horizontal"
+                android:layout_marginVertical="@dimen/button_margin_vertical"
+                android:layout_marginBottom="@dimen/button_margin_vertical"
                 android:backgroundTint="@drawable/button_color"
                 android:src="@drawable/ic_baseline_skip_previous_24"
+                android:scaleType="fitCenter"
                 android:tint="@drawable/button_color_negative" />
 
             <ImageButton
@@ -179,8 +239,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginLeft="@dimen/button_margin_horizontal"
+                android:layout_marginRight="@dimen/button_margin_horizontal"
+                android:layout_marginVertical="@dimen/button_margin_vertical"
+                android:layout_marginBottom="@dimen/button_margin_vertical"
                 android:backgroundTint="@drawable/button_color"
                 android:src="@drawable/ic_baseline_skip_next_24"
+                android:scaleType="fitCenter"
                 android:tint="@drawable/button_color_negative" />
 
             <TextView
@@ -190,18 +255,17 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="-04:21" />
+                android:text="-04:20" />
 
         </LinearLayout>
     </LinearLayout>
-
 
     <SeekBar
         android:id="@+id/seek_bar"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:progressTint="@color/pink"
-        android:thumbTint="@color/pink"
+        android:progressDrawable="@drawable/custom_seek_progress"
+        android:thumb="@drawable/custom_seek_thumb"
         android:min="0"
         app:layout_constraintBottom_toBottomOf="parent" />
 

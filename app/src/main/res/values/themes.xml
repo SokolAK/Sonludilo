@@ -27,11 +27,11 @@
 
 
     <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
-        <item name="android:fontFamily">@font/bit8</item>
+        <item name="android:fontFamily">@font/bitpusab</item>
     </style>
 
     <style name="RobotoButtonStyle" parent="android:Widget.Holo.Button">
-        <item name="android:fontFamily">@font/bit8</item>
+        <item name="android:fontFamily">@font/bitpusab</item>
     </style>
 
 </resources>

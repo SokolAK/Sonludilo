@@ -21,6 +21,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.rachitgoyal.segmented.SegmentedProgressBar;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -134,7 +137,7 @@ public class PlayerFragment extends Fragment {
                     List<Track> trackList = sharedViewModel.getCurrentTrackList().getValue();
                     if (trackListView.getCount() > 0) {
                         int newPosition = trackListView.getCheckedItemPosition() + 1;
-                        if(newPosition >= trackListView.getCount()) {
+                        if (newPosition >= trackListView.getCount()) {
                             newPosition = 0;
                         }
                         trackListView.performItemClick(trackListView.getAdapter().getView(newPosition, null, null),
@@ -147,7 +150,7 @@ public class PlayerFragment extends Fragment {
                     List<Track> trackList = sharedViewModel.getCurrentTrackList().getValue();
                     if (trackList != null) {
                         int newPosition = trackListView.getCheckedItemPosition() - 1;
-                        if(newPosition >= 0) {
+                        if (newPosition >= 0) {
                             trackListView.performItemClick(trackListView.getAdapter().getView(newPosition, null, null),
                                     newPosition,
                                     trackListView.getAdapter().getItemId(newPosition));
@@ -158,10 +161,18 @@ public class PlayerFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekBarListener(playerViewModel));
 
 
-        ProgressBar volumeBar = root.findViewById(R.id.volume_bar);
-        sharedViewModel.getCurrentVolume().observe(getViewLifecycleOwner(), volumeBar::setProgress);
+        //ProgressBar volumeBar = root.findViewById(R.id.volume_bar);
+        //sharedViewModel.getCurrentVolume().observe(getViewLifecycleOwner(), volumeBar::setProgress);
+        //AudioManager audioManager = (AudioManager) requireContext().getSystemService(Context.AUDIO_SERVICE);
+        //volumeBar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+
+        SegmentedProgressBar volumeBar = root.findViewById(R.id.volume_bar);
+        sharedViewModel.getCurrentVolume().observe(getViewLifecycleOwner(), v -> {
+            volumeBar.setEnabledDivisions(playerViewModel.getVolumeSegments(v));
+        });
         AudioManager audioManager = (AudioManager) requireContext().getSystemService(Context.AUDIO_SERVICE);
-        volumeBar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+        //volumeBar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+        volumeBar.setEnabledDivisions(playerViewModel.getVolumeSegments(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
 
         updateGif();
         controlTimeUpdate(true);

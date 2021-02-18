@@ -46,7 +46,7 @@ public class SharedViewModel extends ViewModel {
 //    }
 
     public void setCurrentVolume(int currentVolume) {
-        this.currentVolume.setValue(currentVolume);
+        this.currentVolume.postValue(currentVolume);
     }
 
     public LiveData<Integer> getCurrentVolume() {

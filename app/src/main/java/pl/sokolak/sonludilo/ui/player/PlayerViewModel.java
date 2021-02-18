@@ -8,6 +8,7 @@ import android.widget.SeekBar;
 import androidx.lifecycle.ViewModel;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.sokolak.sonludilo.ui.SharedViewModel;
@@ -101,5 +102,13 @@ public class PlayerViewModel extends ViewModel {
 
     public void touchSeekBarProgress() {
         isSeekBarProgressTouched = true;
+    }
+
+    public List<Integer> getVolumeSegments(int volume) {
+        List<Integer> volumeSegments = new ArrayList<>();
+        for (int i = 0; i < volume; ++i) {
+            volumeSegments.add(i);
+        }
+        return volumeSegments;
     }
 }

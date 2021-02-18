@@ -71,7 +71,9 @@ public class PlayerFragment extends Fragment {
                 for (int i = 0; i < currentTrackList.size(); ++i) {
                     if (currentTrackList.get(i).getUri().equals(n.getUri())) {
                         trackListView.setItemChecked(i, true);
-                        trackListView.setSelection(i - 3);
+
+                        int idSelected = Math.max(i - 3, 0);
+                        trackListView.setSelection(idSelected);
                         isOnList = true;
                         break;
                     }
@@ -130,13 +132,14 @@ public class PlayerFragment extends Fragment {
         );
         bNext.setOnClickListener(l -> {
                     List<Track> trackList = sharedViewModel.getCurrentTrackList().getValue();
-                    if (trackList != null) {
+                    if (trackListView.getCount() > 0) {
                         int newPosition = trackListView.getCheckedItemPosition() + 1;
-                        if(newPosition < trackListView.getCount()) {
-                            trackListView.performItemClick(trackListView.getAdapter().getView(newPosition, null, null),
-                                    newPosition,
-                                    trackListView.getAdapter().getItemId(newPosition));
+                        if(newPosition >= trackListView.getCount()) {
+                            newPosition = 0;
                         }
+                        trackListView.performItemClick(trackListView.getAdapter().getView(newPosition, null, null),
+                                newPosition,
+                                trackListView.getAdapter().getItemId(newPosition));
                     }
                 }
         );
@@ -220,10 +223,19 @@ public class PlayerFragment extends Fragment {
             TextView elapsedTime = root.findViewById(R.id.elapsed_time);
             SeekBar seekBar = root.findViewById(R.id.seek_bar);
 
-            remainingTime.setText(formatTime(time[0]));
-            elapsedTime.setText("-" + formatTime(time[1]));
+            elapsedTime.setText(formatTime(time[0]));
+            remainingTime.setText("-" + formatTime(time[1]));
             playerViewModel.setSeekBarProgress(seekBar, time[0]);
             //seekBar.setProgress(time[0]);
+
+            if (time[1] <= 10) {
+//                ImageButton bPause = root.findViewById(R.id.button_pause);
+//                bPause.performClick();
+                //ImageButton bPause = root.findViewById(R.id.button_stop);
+                //bPause.performClick();
+                ImageButton bNext = root.findViewById(R.id.button_next);
+                bNext.performClick();
+            }
 
             timeHandler.postDelayed(this, 200);
         }

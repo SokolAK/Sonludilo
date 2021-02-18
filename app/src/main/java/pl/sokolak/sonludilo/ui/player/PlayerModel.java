@@ -61,6 +61,7 @@ public enum PlayerModel {
         mediaPlayer.reset();
         mediaPlayer.release();
         mediaPlayer = MediaPlayer.create(context, currentTrack.getUri());
+        //mediaPlayer.setLooping(false);
     }
 
     public Status getStatus() {
@@ -73,10 +74,10 @@ public enum PlayerModel {
         if (mediaPlayer != null && currentTrack != null) {
             time[0] = mediaPlayer.getCurrentPosition();
             time[1] = mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition();
-            if (time[1] <= 10) {
-                mediaPlayer.seekTo(0);
-                mediaPlayer.start();
-            }
+//            if (time[1] <= 10) {
+//                mediaPlayer.seekTo(0);
+//                mediaPlayer.start();
+//            }
         }
         return time;
     }

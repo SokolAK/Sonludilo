@@ -239,7 +239,7 @@ public class PlayerFragment extends Fragment {
             playerViewModel.setSeekBarProgress(seekBar, time[0]);
             //seekBar.setProgress(time[0]);
 
-            if (time[1] <= 10) {
+            if (time[1] <= 200) {
 //                ImageButton bPause = root.findViewById(R.id.button_pause);
 //                bPause.performClick();
                 //ImageButton bPause = root.findViewById(R.id.button_stop);

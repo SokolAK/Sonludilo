@@ -8,6 +8,8 @@
 
     <ListView
         android:id="@+id/albums_list"
+        android:divider="@color/yellow"
+        android:dividerHeight="1dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

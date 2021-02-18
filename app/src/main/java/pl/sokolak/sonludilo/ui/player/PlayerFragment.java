@@ -2,8 +2,6 @@ package pl.sokolak.sonludilo.ui.player;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,24 +10,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.sokolak.sonludilo.R;
+import pl.sokolak.sonludilo.SeekBarListener;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
@@ -53,6 +51,7 @@ public class PlayerFragment extends Fragment {
         ImageButton bStop = root.findViewById(R.id.button_stop);
         ImageButton bVolUp = root.findViewById(R.id.button_vol_up);
         ImageButton bVolDown = root.findViewById(R.id.button_vol_down);
+        SeekBar seekBar = root.findViewById(R.id.seek_bar);
 
 
         sharedViewModel.getCurrentTrackList().observe(getViewLifecycleOwner(), item -> {
@@ -62,13 +61,13 @@ public class PlayerFragment extends Fragment {
                     item));
         });
 
-        sharedViewModel.getCurrentTrackUri().observe(getViewLifecycleOwner(), n -> {
+        sharedViewModel.getCurrentTrack().observe(getViewLifecycleOwner(), n -> {
             //trackListView.setItemChecked(n, true);
             List<Track> currentTrackList = sharedViewModel.getCurrentTrackList().getValue();
             boolean isOnList = false;
             for (int i = 0; i < currentTrackList.size(); ++i) {
-                System.out.println(currentTrackList.get(i).getUri() + " / " + n);
-                if (currentTrackList.get(i).getUri().equals(n)) {
+                System.out.println(currentTrackList.get(i).getUri() + " / " + n.getUri());
+                if (currentTrackList.get(i).getUri().equals(n.getUri())) {
                     trackListView.setItemChecked(i, true);
                     isOnList = true;
                     break;
@@ -88,11 +87,13 @@ public class PlayerFragment extends Fragment {
         trackListView.setOnItemClickListener((parent, view, position, id) -> {
             playerViewModel.trackListItemClicked(position, sharedViewModel.getCurrentTrackList().getValue());
             //sharedViewModel.setCurrentTrackNo(position);
-            Track currentTrack = sharedViewModel.getCurrentTrackList().getValue().get(position);
-            sharedViewModel.setCurrentTrackUri(currentTrack.getUri());
+            //Track currentTrack = sharedViewModel.getCurrentTrackList().getValue().get(position);
+            Track currentTrack = sharedViewModel.getTrack(position).getValue();
+
+            //sharedViewModel.getCurrentTrackUri(currentTrack.getUri());
+            seekBar.setMax(currentTrack.getDuration());
             updateGif();
         });
-
         bPlay.setOnClickListener(l -> {
             playerViewModel.bPlayClicked();
             updateGif();
@@ -115,6 +116,7 @@ public class PlayerFragment extends Fragment {
                     updateVolume();
                 }
         );
+        seekBar.setOnSeekBarChangeListener(new SeekBarListener(playerViewModel));
 
 
         ProgressBar volumeBar = root.findViewById(R.id.volume_bar);
@@ -124,9 +126,12 @@ public class PlayerFragment extends Fragment {
 
         updateGif();
         controlTimeUpdate(true);
+        Track track = sharedViewModel.getCurrentTrack().getValue();
+        if (track != null) {
+            seekBar.setMax(sharedViewModel.getCurrentTrack().getValue().getDuration());
+        }
         return root;
     }
-
 
     private void updateGif() {
         switch (playerViewModel.getPlayerStatus()) {
@@ -154,21 +159,18 @@ public class PlayerFragment extends Fragment {
         gif.stop();
     }
 
-
     private void updateVolume() {
         AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
         sharedViewModel.setCurrentVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
     }
 
-
     private void controlTimeUpdate(boolean run) {
-        if(!run) {
+        if (!run) {
             if (timeHandler != null) {
                 timeHandler.removeCallbacks(updateTime);
                 timeHandler = null;
             }
-        }
-        else {
+        } else {
             timeHandler = new Handler(Looper.getMainLooper());
             timeHandler.postDelayed(updateTime, 0);
         }
@@ -180,8 +182,13 @@ public class PlayerFragment extends Fragment {
             int[] time = playerViewModel.getPlayerTime();
             TextView remainingTime = root.findViewById(R.id.remaining_time);
             TextView elapsedTime = root.findViewById(R.id.elapsed_time);
+            SeekBar seekBar = root.findViewById(R.id.seek_bar);
+
             remainingTime.setText(formatTime(time[0]));
             elapsedTime.setText("-" + formatTime(time[1]));
+            playerViewModel.setSeekBarProgress(seekBar, time[0]);
+            //seekBar.setProgress(time[0]);
+
             timeHandler.postDelayed(this, 200);
         }
     };

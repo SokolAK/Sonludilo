@@ -35,7 +35,7 @@ public class TracksRepository {
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
         ContentResolver cr = context.getContentResolver();
-        final String[] columns = {track_id, track_no, artist, track_name, album, duration, path, year, composer};
+        final String[] columns = {track_id, track_no, artist, track_name, album, year, duration, path, composer};
         Cursor cursor = cr.query(uri, columns, selection, null, null);
 
         while (cursor.moveToNext()) {
@@ -45,7 +45,8 @@ public class TracksRepository {
                     cursor.getString(2),
                     cursor.getString(3),
                     cursor.getString(4),
-                    cursor.getString(7)));
+                    cursor.getString(5),
+                    cursor.getInt(6)));
         }
 
         cursor.close();

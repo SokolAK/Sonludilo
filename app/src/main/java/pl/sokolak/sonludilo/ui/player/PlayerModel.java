@@ -52,8 +52,14 @@ public enum PlayerModel {
         }
     }
 
+    public void setTime(int time) {
+        mediaPlayer.seekTo(time);
+    }
+
     public void setCurrentTrack(Track currentTrack) {
         this.currentTrack = currentTrack;
+        mediaPlayer.reset();
+        mediaPlayer.release();
         mediaPlayer = MediaPlayer.create(context, currentTrack.getUri());
     }
 

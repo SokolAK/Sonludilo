@@ -5,9 +5,6 @@ import android.net.Uri;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import pl.sokolak.sonludilo.R;
 
 public class Track {
@@ -17,14 +14,19 @@ public class Track {
     private String title;
     private String album;
     private String year;
+    private int duration;
 
-    public Track(Uri uri, int no, String artist, String title, String album, String year) {
+    public Track() {
+    }
+
+    public Track(Uri uri, int no, String artist, String title, String album, String year, int duration) {
         this.uri = uri;
         this.no = no;
         this.artist = artist;
         this.title = title;
         this.album = album;
         this.year = year;
+        this.duration = duration;
     }
 
     @NotNull
@@ -33,10 +35,11 @@ public class Track {
     }
 
     public String toMultiLineString(Context context) {
-        return addStringItem(context.getString(R.string.artist), artist) +
+        String string = addStringItem(context.getString(R.string.artist), artist) +
                 addStringItem(context.getString(R.string.title), title) +
                 addStringItem(context.getString(R.string.album), album) +
                 addStringItem(context.getString(R.string.year), year);
+        return string.trim();
     }
 
     private String addStringItem(String prefix, String item) {
@@ -48,5 +51,9 @@ public class Track {
 
     public Uri getUri() {
         return uri;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

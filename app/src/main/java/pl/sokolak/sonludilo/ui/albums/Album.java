@@ -38,14 +38,15 @@ public class Album {
     }
 
     public String toMultiLineString(Context context) {
-        return addStringItem(context.getString(R.string.artist), artist) +
+        String string = addStringItem(context.getString(R.string.artist), artist) +
                 addStringItem(context.getString(R.string.title), title) +
                 addStringItem(context.getString(R.string.number_of_tracks), noTracks) +
                 addStringItem(context.getString(R.string.year), year);
+        return string.trim();
     }
 
     private String addStringItem(String prefix, String item) {
-        if(item != null && !item.isEmpty()) {
+        if (item != null && !item.isEmpty()) {
             return prefix + ": " + item.trim() + "\n";
         }
         return "";

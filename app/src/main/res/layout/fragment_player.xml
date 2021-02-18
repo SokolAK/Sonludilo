@@ -202,6 +202,7 @@
         android:layout_height="40dp"
         android:progressTint="@color/pink"
         android:thumbTint="@color/pink"
+        android:min="0"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

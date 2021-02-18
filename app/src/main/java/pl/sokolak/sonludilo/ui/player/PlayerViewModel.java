@@ -1,22 +1,15 @@
 package pl.sokolak.sonludilo.ui.player;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.SeekBar;
 
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import pl.droidsonroids.gif.GifDrawable;
-import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
@@ -27,6 +20,7 @@ public class PlayerViewModel extends ViewModel {
     private final PlayerModel playerModel;
     private Track currentTrack;
     private SharedViewModel sharedViewModel;
+    private boolean isSeekBarProgressTouched = false;
     //private final MutableLiveData<Integer> mCurrentTrackNumber = new MutableLiveData<>();
 
     public PlayerViewModel(Context context, View root) {
@@ -39,9 +33,9 @@ public class PlayerViewModel extends ViewModel {
         //controlTimeUpdate(true);
     }
 
-    public void setCurrentTrack(int currentTrackNo, List<Track> trackList) {
-        currentTrack = trackList.get(currentTrackNo);
-    }
+//    public void setCurrentTrack(int currentTrackNo, List<Track> trackList) {
+//        currentTrack = trackList.get(currentTrackNo);
+//    }
 
     public void trackListItemClicked(int currentTrackNo, List<Track> trackList) {
         //mCurrentTrackNumber.setValue(position);
@@ -91,4 +85,21 @@ public class PlayerViewModel extends ViewModel {
         }
     }
 
+    public void seekBarChanged(int time) {
+        playerModel.setTime(time);
+    }
+
+    public void setSeekBarProgress(SeekBar seekBar, int time) {
+        if(!isSeekBarProgressTouched) {
+            seekBar.setProgress(time);
+        }
+    }
+
+    public void releaseSeekBarProgress() {
+        isSeekBarProgressTouched = false;
+    }
+
+    public void touchSeekBarProgress() {
+        isSeekBarProgressTouched = true;
+    }
 }

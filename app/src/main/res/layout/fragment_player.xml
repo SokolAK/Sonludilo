@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.notifications.NotificationsFragment">
+    android:orientation="vertical">
 
     <ListView
         android:id="@+id/track_list"
@@ -145,7 +144,7 @@
 <!--                android:layout_weight="2" />-->
 
             <pl.droidsonroids.gif.GifImageView
-                android:id="@+id/image_view"
+                android:id="@+id/tape_image"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"

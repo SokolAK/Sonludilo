@@ -56,6 +56,14 @@ public class PlayerViewModel extends ViewModel {
         return playerModel.getStatus();
     }
 
+    public boolean isRepeatEnabled() {
+        return playerModel.isRepeatEnabled();
+    }
+
+    public void setRepeatEnabled(boolean state) {
+        playerModel.setRepeatEnabled(state);
+    }
+
     public int[] getPlayerTime() {
         return playerModel.getTime();
     }

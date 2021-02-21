@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -23,9 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.rachitgoyal.segmented.SegmentedProgressBar;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import pl.droidsonroids.gif.GifDrawable;
@@ -56,7 +54,9 @@ public class PlayerFragment extends Fragment {
         ImageButton bVolDown = root.findViewById(R.id.button_vol_down);
         ImageButton bPrev = root.findViewById(R.id.button_prev);
         ImageButton bNext = root.findViewById(R.id.button_next);
+        ImageButton bRepeat = root.findViewById(R.id.button_repeat);
         SeekBar seekBar = root.findViewById(R.id.seek_bar);
+        View tapeImage = root.findViewById(R.id.tape_image);
 
 
         sharedViewModel.getCurrentTrackList().observe(getViewLifecycleOwner(), item -> {
@@ -134,7 +134,6 @@ public class PlayerFragment extends Fragment {
                 }
         );
         bNext.setOnClickListener(l -> {
-                    List<Track> trackList = sharedViewModel.getCurrentTrackList().getValue();
                     if (trackListView.getCount() > 0) {
                         int newPosition = trackListView.getCheckedItemPosition() + 1;
                         if (newPosition >= trackListView.getCount()) {
@@ -160,6 +159,20 @@ public class PlayerFragment extends Fragment {
         );
         seekBar.setOnSeekBarChangeListener(new SeekBarListener(playerViewModel));
 
+        tapeImage.setOnClickListener(v -> {
+            if (playerViewModel.getPlayerStatus() == PlayerModel.Status.STOPPED ||
+                    playerViewModel.getPlayerStatus() == PlayerModel.Status.PAUSED) {
+                bPlay.performClick();
+            } else if (playerViewModel.getPlayerStatus() == PlayerModel.Status.PLAYING) {
+                bPause.performClick();
+            }
+        });
+
+        bRepeat.setOnClickListener(v -> {
+            playerViewModel.setRepeatEnabled(!playerViewModel.isRepeatEnabled());
+            v.setSelected(playerViewModel.isRepeatEnabled());
+        });
+        bRepeat.setSelected(playerViewModel.isRepeatEnabled());
 
         //ProgressBar volumeBar = root.findViewById(R.id.volume_bar);
         //sharedViewModel.getCurrentVolume().observe(getViewLifecycleOwner(), volumeBar::setProgress);
@@ -198,13 +211,13 @@ public class PlayerFragment extends Fragment {
     }
 
     private void startGif() {
-        ImageView gifView = root.findViewById(R.id.image_view);
+        ImageView gifView = root.findViewById(R.id.tape_image);
         GifDrawable gif = (GifDrawable) gifView.getDrawable();
         gif.start();
     }
 
     private void stopGif() {
-        ImageView gifView = root.findViewById(R.id.image_view);
+        ImageView gifView = root.findViewById(R.id.tape_image);
         GifDrawable gif = (GifDrawable) gifView.getDrawable();
         gif.stop();
     }
@@ -244,8 +257,13 @@ public class PlayerFragment extends Fragment {
 //                bPause.performClick();
                 //ImageButton bPause = root.findViewById(R.id.button_stop);
                 //bPause.performClick();
-                ImageButton bNext = root.findViewById(R.id.button_next);
-                bNext.performClick();
+                if(playerViewModel.isRepeatEnabled()) {
+                    playerViewModel.bStopClicked();
+                    playerViewModel.bPlayClicked();
+                } else {
+                    ImageButton bNext = root.findViewById(R.id.button_next);
+                    bNext.performClick();
+                }
             }
 
             timeHandler.postDelayed(this, 200);

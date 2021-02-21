@@ -1,10 +1,7 @@
 package pl.sokolak.sonludilo.ui.player;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.os.Handler;
-import android.os.Looper;
 
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
@@ -13,6 +10,7 @@ public enum PlayerModel {
 
     private MediaPlayer mediaPlayer;
     private Track currentTrack;
+    private boolean repeatEnabled = false;
     private Context context;
     private Status status = Status.STOPPED;
 
@@ -82,7 +80,13 @@ public enum PlayerModel {
         return time;
     }
 
+    public boolean isRepeatEnabled() {
+        return repeatEnabled;
+    }
 
+    public void setRepeatEnabled(boolean repeatEnabled) {
+        this.repeatEnabled = repeatEnabled;
+    }
 
     public enum Status {
         PLAYING, STOPPED, PAUSED;

@@ -13,10 +13,8 @@ import pl.sokolak.sonludilo.ui.tracks.Track;
 
 public class SharedViewModel extends ViewModel {
     private final MutableLiveData<List<Track>> currentTrackList = new MutableLiveData<>(new ArrayList<>());
-    //private final MutableLiveData<Uri> currentTrackUri = new MutableLiveData<>();
     private final MutableLiveData<Integer> currentVolume = new MutableLiveData<>();
     private final MutableLiveData<Track> currentTrack = new MutableLiveData<>(new Track());
-
 
     public void setCurrentTrackList(List<Track> currentTrackList) {
         if(currentTrackList != null && currentTrackList.size() > 0) {

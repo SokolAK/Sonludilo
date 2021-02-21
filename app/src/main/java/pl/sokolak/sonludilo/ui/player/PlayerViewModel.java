@@ -20,7 +20,6 @@ public class PlayerViewModel extends ViewModel {
     private final WeakReference<View> weakRoot;
     private final PlayerModel playerModel;
     private Track currentTrack;
-    private SharedViewModel sharedViewModel;
     private boolean isSeekBarProgressTouched = false;
     //private final MutableLiveData<Integer> mCurrentTrackNumber = new MutableLiveData<>();
 

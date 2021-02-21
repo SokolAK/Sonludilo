@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.SeekBarListener;
+import pl.sokolak.sonludilo.Utils;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
@@ -247,12 +248,12 @@ public class PlayerFragment extends Fragment {
             TextView elapsedTime = root.findViewById(R.id.elapsed_time);
             SeekBar seekBar = root.findViewById(R.id.seek_bar);
 
-            elapsedTime.setText(formatTime(time[0]));
-            remainingTime.setText("-" + formatTime(time[1]));
+            elapsedTime.setText(Utils.formatTime(time[0]));
+            remainingTime.setText("-" + Utils.formatTime(time[1]));
             playerViewModel.setSeekBarProgress(seekBar, time[0]);
             //seekBar.setProgress(time[0]);
 
-            if (time[1] <= 200) {
+            if (time[1] <= 220) {
 //                ImageButton bPause = root.findViewById(R.id.button_pause);
 //                bPause.performClick();
                 //ImageButton bPause = root.findViewById(R.id.button_stop);
@@ -269,12 +270,4 @@ public class PlayerFragment extends Fragment {
             timeHandler.postDelayed(this, 200);
         }
     };
-
-    @SuppressLint("DefaultLocale")
-    private String formatTime(int time) {
-        return String.format("%02d:%02d",
-                TimeUnit.MILLISECONDS.toMinutes(time),
-                TimeUnit.MILLISECONDS.toSeconds(time) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
-    }
 }

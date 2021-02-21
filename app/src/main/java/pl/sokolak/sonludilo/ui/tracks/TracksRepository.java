@@ -5,7 +5,10 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ public class TracksRepository {
         this.context = context;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public List<Track> getAll(String selection) {
 
         List<Track> trackList = new ArrayList<>();
@@ -41,7 +45,7 @@ public class TracksRepository {
         while (cursor.moveToNext()) {
             Uri contentUri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, cursor.getInt(0));
             trackList.add(new Track(contentUri,
-                    cursor.getInt(1),
+                    cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3),
                     cursor.getString(4),

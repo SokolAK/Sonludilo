@@ -51,4 +51,20 @@ public class Album {
         }
         return "";
     }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public String getNoTracks() {
+        return noTracks;
+    }
 }

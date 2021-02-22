@@ -25,14 +25,14 @@ public class AlbumsRepository {
         List<Album> albumsList = new ArrayList<>();
         ContentResolver cr = context.getContentResolver();
         final Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
-//        final String _id = MediaStore.Audio.Albums._ID;
-        final String album_id = MediaStore.Audio.Albums.ALBUM_ID;
+        final String _id = MediaStore.Audio.Albums._ID;
+//        final String album_id = MediaStore.Audio.Albums.ALBUM_ID;
         final String album_name =MediaStore.Audio.Albums.ALBUM;
         final String artist = MediaStore.Audio.Albums.ARTIST;
         final String firstYear = MediaStore.Audio.Albums.FIRST_YEAR;
         final String lastYear = MediaStore.Audio.Albums.LAST_YEAR;
         final String no_tracks = MediaStore.Audio.Albums.NUMBER_OF_SONGS;
-        final String[] columns = {album_id, album_name, artist, firstYear, lastYear, no_tracks};
+        final String[] columns = {_id, album_name, artist, firstYear, lastYear, no_tracks};
         Cursor cursor = cr.query(uri, columns, null,null, null);
 
 

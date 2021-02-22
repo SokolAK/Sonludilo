@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.List;
 
+import pl.sokolak.sonludilo.ListTripleItemAdapter;
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
 
@@ -27,10 +27,11 @@ public class TracksFragment extends Fragment {
 
         ListView trackList = root.findViewById(R.id.track_list);
 
-        tracksViewModel.getList().observe(getViewLifecycleOwner(), list -> trackList.setAdapter(new ArrayAdapter<String>(
-                getContext(),
-                android.R.layout.simple_list_item_1,
-                list))
+        tracksViewModel.getList().observe(getViewLifecycleOwner(), list -> {
+            trackList.setAdapter(new ListTripleItemAdapter(
+                            getContext(),
+                            list));
+                }
         );
 
         sharedModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);

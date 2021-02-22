@@ -21,7 +21,6 @@ public class TracksRepository {
         this.context = context;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public List<Track> getAll(String selection) {
 
         List<Track> trackList = new ArrayList<>();

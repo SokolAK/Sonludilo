@@ -3,6 +3,7 @@ package pl.sokolak.sonludilo.ui.player;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,15 +19,19 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.rachitgoyal.segmented.SegmentedProgressBar;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import pl.droidsonroids.gif.GifDrawable;
+import pl.sokolak.sonludilo.ListSingleItemAdapter;
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.SeekBarListener;
 import pl.sokolak.sonludilo.Utils;
@@ -60,11 +65,10 @@ public class PlayerFragment extends Fragment {
         View tapeImage = root.findViewById(R.id.tape_image);
 
 
-        sharedViewModel.getCurrentTrackList().observe(getViewLifecycleOwner(), item -> {
-            trackListView.setAdapter(new ArrayAdapter<>(
+        sharedViewModel.getCurrentTrackList().observe(getViewLifecycleOwner(), list -> {
+            trackListView.setAdapter(new ListSingleItemAdapter(
                     getContext(),
-                    android.R.layout.simple_list_item_activated_1,
-                    item));
+                    list.stream().map(Track::toMultiLineStringShort).collect(Collectors.toList())));
         });
 
         sharedViewModel.getCurrentTrack().observe(getViewLifecycleOwner(), n -> {
@@ -258,7 +262,7 @@ public class PlayerFragment extends Fragment {
 //                bPause.performClick();
                 //ImageButton bPause = root.findViewById(R.id.button_stop);
                 //bPause.performClick();
-                if(playerViewModel.isRepeatEnabled()) {
+                if (playerViewModel.isRepeatEnabled()) {
                     playerViewModel.bStopClicked();
                     playerViewModel.bPlayClicked();
                 } else {

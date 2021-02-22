@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/activatedBackgroundIndicator"
     android:padding="@dimen/list_item_padding"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/text_view_1"
@@ -14,6 +14,24 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/list_item_text_size"
         android:gravity="center_vertical|start"
+        android:textColor="@color/pink"
         android:text="Text1" />
+
+    <TextView
+        android:id="@+id/text_view_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/list_item_text_size"
+        android:gravity="center_vertical|start"
+        android:textColor="@color/yellow"
+        android:text="Text2" />
+
+    <TextView
+        android:id="@+id/text_view_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/list_item_text_size"
+        android:gravity="center_vertical|start"
+        android:text="Text3" />
 
 </LinearLayout>

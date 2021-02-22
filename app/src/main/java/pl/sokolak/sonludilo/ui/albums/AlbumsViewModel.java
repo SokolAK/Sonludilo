@@ -10,12 +10,13 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.ui.tracks.Track;
 import pl.sokolak.sonludilo.ui.tracks.TracksRepository;
 
 public class AlbumsViewModel extends ViewModel {
     private final WeakReference<Context> weakContext;
-    private final MutableLiveData<List<String>> mAlbums = new MutableLiveData<>();
+    private final MutableLiveData<List<List<String>>> mAlbums = new MutableLiveData<>();
     private final List<Album> albumsList;
 
     public AlbumsViewModel(Context context) {
@@ -24,15 +25,21 @@ public class AlbumsViewModel extends ViewModel {
         AlbumsRepository albumsRepository = new AlbumsRepository(context);
         albumsList = albumsRepository.getAll();
 
-        List<String> list = new ArrayList<>();
+        List<List<String>> list = new ArrayList<>();
         for(Album album : albumsList) {
-            list.add(album.toMultiLineString(context));
+            //list.add(album.toMultiLineString(context));
+            //list.add(track.toMultiLineString(context));
+            String artist = context.getString(R.string.artist) + ": " + album.getArtist();
+            String title = context.getString(R.string.title) + ": " + album.getTitle();
+            String noTracks = context.getString(R.string.number_of_tracks) + ": " + album.getNoTracks();
+            String year = context.getString(R.string.year) + ": " + album.getYear();
+            list.add(List.of(artist, title, noTracks + "\n" + year));
         }
 
         mAlbums.setValue(list);
     }
 
-    public LiveData<List<String>> getList() {
+    public LiveData<List<List<String>>> getList() {
         return mAlbums;
     }
 

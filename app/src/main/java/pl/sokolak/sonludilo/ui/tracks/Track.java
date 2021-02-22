@@ -27,7 +27,6 @@ public class Track {
     public Track() {
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public Track(Uri uri, String no, String artist, String title, String album, String year, int duration) {
         this.uri = uri;
         this.no = Utils.notNull(no);
@@ -44,11 +43,18 @@ public class Track {
         return no + ". " + artist + " - " + title + " (" + Utils.formatTime(duration) + ")";
     }
 
+    public String toMultiLineStringShort() {
+        return no + ". " + title + " (" + Utils.formatTime(duration) + ")\n" +
+                artist +
+                (!album.isEmpty() ? " - " + album : "") +
+                (!year.isEmpty() ? " [" + year +"]" : "");
+    }
+
     public String toMultiLineString(Context context) {
         String string = addStringItem(context.getString(R.string.artist), artist) +
                 addStringItem(context.getString(R.string.title), title) +
                 addStringItem(context.getString(R.string.album), album) +
-                addStringItem(context.getString(R.string.year), year) +
+                //addStringItem(context.getString(R.string.year), year) +
                 addStringItem(context.getString(R.string.time), Utils.formatTime(duration));
         return string.trim();
     }
@@ -66,5 +72,21 @@ public class Track {
 
     public int getDuration() {
         return duration;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public String getYear() {
+        return year;
     }
 }

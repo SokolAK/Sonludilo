@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -12,12 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import java.util.List;
-
+import pl.sokolak.sonludilo.ListTripleItemAdapter;
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
-import pl.sokolak.sonludilo.ui.tracks.TracksViewModel;
-import pl.sokolak.sonludilo.ui.tracks.TracksViewModelFactory;
 
 public class AlbumsFragment extends Fragment {
     private AlbumsViewModel albumsViewModel;
@@ -29,9 +25,8 @@ public class AlbumsFragment extends Fragment {
 
         ListView albumsList = root.findViewById(R.id.albums_list);
 
-        albumsViewModel.getList().observe(getViewLifecycleOwner(), list -> albumsList.setAdapter(new ArrayAdapter<String>(
+        albumsViewModel.getList().observe(getViewLifecycleOwner(), list -> albumsList.setAdapter(new ListTripleItemAdapter(
                 getContext(),
-                android.R.layout.simple_list_item_1,
                 list))
         );
 

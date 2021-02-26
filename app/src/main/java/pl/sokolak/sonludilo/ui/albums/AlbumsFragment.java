@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -36,6 +37,8 @@ public class AlbumsFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.action_albums_to_player);
         });
 
+        TextView tipView = root.findViewById(R.id.tip);
+        tipView.setSelected(true);
 
         return root;
     }

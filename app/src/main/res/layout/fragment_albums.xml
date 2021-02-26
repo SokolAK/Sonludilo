@@ -5,6 +5,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/list_item_text_size"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:text="@string/tip_album_fragment"
+        android:textColor="@color/yellow"
+        android:freezesText="true"
+        android:singleLine="true" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@color/yellow"/>
+
     <ListView
         android:id="@+id/albums_list"
         android:divider="@color/white"

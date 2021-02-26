@@ -3,31 +3,38 @@ package pl.sokolak.sonludilo.ui.player;
 import android.content.Context;
 import android.media.AudioManager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 
 import androidx.lifecycle.ViewModel;
+
+import com.rachitgoyal.segmented.SegmentedProgressBar;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.droidsonroids.gif.GifDrawable;
+import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
 public class PlayerViewModel extends ViewModel {
     private final WeakReference<Context> weakContext;
-    //private final WeakReference<ImageView> weakGifView;
-    private final WeakReference<View> weakRoot;
     private final PlayerModel playerModel;
-    private Track currentTrack;
     private boolean isSeekBarProgressTouched = false;
+    //private WeakReference<ImageView> gifView;
+    private final GifDrawable gif;
     //private final MutableLiveData<Integer> mCurrentTrackNumber = new MutableLiveData<>();
 
     public PlayerViewModel(Context context, View root) {
         weakContext = new WeakReference<>(context);
-        this.weakRoot = new WeakReference<>(root);
+        //private final WeakReference<ImageView> weakGifView;
+        //WeakReference<View> weakRoot = new WeakReference<>(root);
         playerModel = PlayerModel.INSTANCE;
         playerModel.setContext(context);
+        ImageView gifView = root.findViewById(R.id.tape_image);
+        gif = (GifDrawable) gifView.getDrawable();
         //sharedViewModel = new ViewModelProvider(context).get(SharedViewModel.class);
         //mCurrentTrackNumber.setValue(0);
         //controlTimeUpdate(true);
@@ -42,10 +49,23 @@ public class PlayerViewModel extends ViewModel {
         //Track currentTrack = trackList.get(currentTrackNo);
 
         playerModel.stop();
-        currentTrack = trackList.get(currentTrackNo);
+        Track currentTrack = trackList.get(currentTrackNo);
         playerModel.setCurrentTrack(currentTrack);
         playerModel.play();
     }
+
+    public void trackListItemClicked(Track track, SeekBar seekBar) {
+        //mCurrentTrackNumber.setValue(position);
+        //Track currentTrack = trackList.get(currentTrackNo);
+        playerModel.stop();
+        playerModel.setCurrentTrack(track);
+        if(track != null) {
+            seekBar.setMax(track.getDuration());
+            playerModel.play();
+        }
+        updateGif();
+    }
+
 
 //    public MutableLiveData<Integer> getmCurrentTrackNumber() {
 //        return mCurrentTrackNumber;
@@ -69,14 +89,17 @@ public class PlayerViewModel extends ViewModel {
 
     public void bPlayClicked() {
         playerModel.play();
+        updateGif();
     }
 
     public void bPauseClicked() {
         playerModel.pause();
+        updateGif();
     }
 
     public void bStopClicked() {
         playerModel.stop();
+        updateGif();
     }
 
     public void bVolUpClicked() {
@@ -117,5 +140,36 @@ public class PlayerViewModel extends ViewModel {
             volumeSegments.add(i);
         }
         return volumeSegments;
+    }
+
+    public void updateGif() {
+        switch (getPlayerStatus()) {
+            case PLAYING:
+                startGif();
+                break;
+            case PAUSED:
+            case STOPPED:
+                stopGif();
+                break;
+        }
+    }
+
+    private void startGif() {
+        gif.start();
+    }
+
+    private void stopGif() {
+        gif.stop();
+    }
+
+    public void initSeekBarProgress(Track track, SeekBar seekBar) {
+        if (track != null) {
+            seekBar.setMax(track.getDuration());
+        }
+    }
+
+    public void initVolumeBarProgress(SegmentedProgressBar volumeBar) {
+        AudioManager audioManager = (AudioManager) weakContext.get().getSystemService(Context.AUDIO_SERVICE);
+        volumeBar.setEnabledDivisions(getVolumeSegments(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
     }
 }

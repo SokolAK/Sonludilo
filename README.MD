@@ -3,7 +3,7 @@ Simple 80s style music player for Android
 
 
 ## System requirements
-* Android 5.0+ (API level 21+)
+* Android 6.0+ (API level 23+)
 
 
 ## Technologies

@@ -13,8 +13,21 @@
         android:divider="@color/white"
         android:dividerHeight="1dp"
         android:choiceMode="singleChoice"
-        app:layout_constraintBottom_toTopOf="@+id/line"
+        app:layout_constraintBottom_toTopOf="@+id/button_clear"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/button_clear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/line"
+        android:text="@string/clear"
+        android:textColor="@color/yellow"
+        style="@style/RobotoButtonStyle"
+        android:textSize="@dimen/list_item_text_size"/>
 
     <View
         android:id="@+id/line"

@@ -39,7 +39,6 @@ public class AlbumsFragment extends Fragment {
 
         albumsList.setOnItemLongClickListener((parent, view, position, id) -> {
             sharedViewModel.setCurrentTrackList(albumsViewModel.getTrackListForAlbum(position));
-            sharedViewModel.setCurrentTrack(0);
             NavHostFragment.findNavController(this).navigate(R.id.action_albums_to_tracks);
             return true;
         });

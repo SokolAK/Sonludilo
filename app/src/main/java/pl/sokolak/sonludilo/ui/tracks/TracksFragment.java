@@ -16,6 +16,7 @@ import java.util.stream.IntStream;
 
 import pl.sokolak.sonludilo.ListTripleItemAdapter;
 import pl.sokolak.sonludilo.R;
+import pl.sokolak.sonludilo.Utils;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
 
 public class TracksFragment extends Fragment {
@@ -32,8 +33,11 @@ public class TracksFragment extends Fragment {
         tracksViewModel.getTrackList().observe(getViewLifecycleOwner(), list -> {
                     setListAdapter();
                     checkCurrentItems(list);
-                    int id = tracksViewModel.getTrackList().getValue().indexOf(sharedViewModel.getCurrentTrack().getValue());
-                    trackListView.setSelection(id);
+                    List<Track> sharedTrackList = sharedViewModel.getCurrentTrackList().getValue();
+                    if(Utils.isNotEmpty(sharedTrackList)) {
+                        int id = tracksViewModel.getTrackList().getValue().indexOf(sharedTrackList.get(0));
+                        trackListView.setSelection(id);
+                    }
                 }
         );
 
@@ -41,8 +45,6 @@ public class TracksFragment extends Fragment {
 
         TextView tipView = root.findViewById(R.id.tip);
         tipView.setSelected(true);
-
-
 
         return root;
     }

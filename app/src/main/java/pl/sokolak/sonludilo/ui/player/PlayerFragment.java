@@ -51,6 +51,8 @@ public class PlayerFragment extends Fragment {
     private View gifView;
     private SegmentedProgressBar volumeBar;
     private TextView tipView;
+    private TextView remainingTime;
+    private TextView elapsedTime;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,8 +75,9 @@ public class PlayerFragment extends Fragment {
         configureTrackListLongClickListener();
 
         configureVolumeBarObserver();
-        configureCurrentTrackObserver();
         configureCurrentTrackListObserver();
+        configureCurrentTrackObserver();
+
 
         initTipView();
         controlTimeUpdate(true);
@@ -86,14 +89,15 @@ public class PlayerFragment extends Fragment {
     }
 
     private void initTipView() {
-        if(sharedViewModel.isTrackListNotEmpty()) {
+        if (sharedViewModel.isTrackListNotEmpty()) {
+            tipView.setVisibility(View.VISIBLE);
             tipView.setSelected(true);
         } else {
-            tipView.setText("");
+            tipView.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void configureCurrentTrackObserver() {
+    private void configureCurrentTrackListObserver() {
         sharedViewModel.getCurrentTrackList().observe(getViewLifecycleOwner(), list -> {
             trackListView.setAdapter(new ListSingleItemAdapter(
                     getContext(),
@@ -101,16 +105,15 @@ public class PlayerFragment extends Fragment {
         });
     }
 
-    private void configureCurrentTrackListObserver() {
+    private void configureCurrentTrackObserver() {
         sharedViewModel.getCurrentTrack().observe(getViewLifecycleOwner(), n -> {
             List<Track> currentTrackList = sharedViewModel.getCurrentTrackList().getValue();
             boolean isOnList = false;
             if (currentTrackList != null) {
-                if(n != null) {
+                if (n != null) {
                     for (int i = 0; i < currentTrackList.size(); ++i) {
                         if (currentTrackList.get(i).getUri().equals(n.getUri())) {
                             trackListView.setItemChecked(i, true);
-
                             int idSelected = Math.max(i - 2, 0);
                             trackListView.setSelection(idSelected);
                             isOnList = true;
@@ -120,9 +123,14 @@ public class PlayerFragment extends Fragment {
                 }
                 if (!isOnList) {
                     if (currentTrackList.size() > 0) {
-                        trackListItemClick(0);
+                        trackListItemClick(0, false);
                     }
                     bStop.performClick();
+                }
+                if (currentTrackList.size() > 0) {
+                    bClear.setVisibility(View.VISIBLE);
+                } else {
+                    bClear.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -144,6 +152,8 @@ public class PlayerFragment extends Fragment {
         volumeBar = root.findViewById(R.id.volume_bar);
         bRepeat.setSelected(playerViewModel.isRepeatEnabled());
         tipView = root.findViewById(R.id.tip);
+        remainingTime = root.findViewById(R.id.remaining_time);
+        elapsedTime = root.findViewById(R.id.elapsed_time);
     }
 
     private void configureTrackListClickListener() {
@@ -151,7 +161,7 @@ public class PlayerFragment extends Fragment {
             List<Track> trackList = sharedViewModel.getCurrentTrackList().getValue();
             if (sharedViewModel.isTrackListNotEmpty()) {
                 if (position < trackList.size()) {
-                    if(!sharedViewModel.isCurrentTrackPosition(position)) {
+                    if (!sharedViewModel.isCurrentTrackPosition(position)) {
                         Track currentTrack = sharedViewModel.getTrack(position);
                         sharedViewModel.setCurrentTrack(currentTrack);
                         playerViewModel.trackListItemClicked(currentTrack, seekBar);
@@ -167,13 +177,18 @@ public class PlayerFragment extends Fragment {
             Track currentTrack = sharedViewModel.getCurrentTrack().getValue();
             sharedViewModel.removeTrack(position);
 
-            int currentPosition = sharedViewModel.getTrackPosition(currentTrack);
-            if (currentPosition >= 0) {
-                trackListItemClick(currentPosition);
+            if (sharedViewModel.isTrackListNotEmpty()) {
+                int currentPosition = sharedViewModel.getTrackPosition(currentTrack);
+                if(currentPosition >= 0) {
+                    trackListItemClick(currentPosition, false);
+                } else {
+                    position = Math.min(position, trackListView.getCount() - 1);
+                    boolean stop = playerViewModel.getPlayerStatus() != PlayerModel.Status.PLAYING;
+                    trackListItemClick(position, stop);
+                }
             } else {
-                playerViewModel.trackListItemClicked(null, seekBar);
+                bClear.performClick();
             }
-
             return true;
         });
     }
@@ -184,11 +199,14 @@ public class PlayerFragment extends Fragment {
         });
     }
 
-    private void trackListItemClick(int position) {
+    private void trackListItemClick(int position, boolean stop) {
         if (position >= 0 && position < trackListView.getCount()) {
             trackListView.performItemClick(trackListView.getAdapter().getView(position, null, null),
                     position,
                     trackListView.getAdapter().getItemId(position));
+            if(stop) {
+                bStop.performClick();
+            }
         }
     }
 
@@ -248,7 +266,7 @@ public class PlayerFragment extends Fragment {
                     if (trackList != null) {
                         int newPosition = trackListView.getCheckedItemPosition() - 1;
                         if (newPosition >= 0) {
-                            trackListItemClick(newPosition);
+                            trackListItemClick(newPosition, false);
                         }
                     }
                 }
@@ -267,6 +285,8 @@ public class PlayerFragment extends Fragment {
             sharedViewModel.clearTrackList();
             sharedViewModel.setCurrentTrack(null);
             playerViewModel.trackListItemClicked(null, seekBar);
+            initTipView();
+            bStop.performClick();
         });
     }
 
@@ -302,12 +322,9 @@ public class PlayerFragment extends Fragment {
     private final Runnable updateTime = new Runnable() {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
         public void run() {
-            if (sharedViewModel.getCurrentTrack().getValue() != null) {
+            //if (sharedViewModel.getCurrentTrack().getValue() != null) {
                 int[] time = playerViewModel.getPlayerTime();
-                TextView remainingTime = root.findViewById(R.id.remaining_time);
-                TextView elapsedTime = root.findViewById(R.id.elapsed_time);
                 SeekBar seekBar = root.findViewById(R.id.seek_bar);
-
                 elapsedTime.setText(Utils.formatTime(time[0]));
                 remainingTime.setText("-" + Utils.formatTime(time[1]));
                 playerViewModel.setSeekBarProgress(seekBar, time[0]);
@@ -324,14 +341,14 @@ public class PlayerFragment extends Fragment {
                     } else {
 //                        ImageButton bNext = root.findViewById(R.id.button_next);
 //                        bNext.performClick();
-                        if(trackListView.getCount() > 0) {
+                        if (trackListView.getCount() > 0) {
                             trackListView.performItemClick(trackListView.getAdapter().getView(0, null, null),
                                     0,
                                     trackListView.getAdapter().getItemId(0));
                         }
                     }
                 }
-            }
+            //}
 
             timeHandler.postDelayed(this, 100);
         }

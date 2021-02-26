@@ -179,11 +179,11 @@ public class PlayerFragment extends Fragment {
 
             if (sharedViewModel.isTrackListNotEmpty()) {
                 int currentPosition = sharedViewModel.getTrackPosition(currentTrack);
-                if(currentPosition >= 0) {
+                if (currentPosition >= 0) {
                     trackListItemClick(currentPosition, false);
                 } else {
                     position = Math.min(position, trackListView.getCount() - 1);
-                    boolean stop = playerViewModel.getPlayerStatus() != PlayerModel.Status.PLAYING;
+                    boolean stop = !playerViewModel.isPlaying();
                     trackListItemClick(position, stop);
                 }
             } else {
@@ -204,7 +204,7 @@ public class PlayerFragment extends Fragment {
             trackListView.performItemClick(trackListView.getAdapter().getView(position, null, null),
                     position,
                     trackListView.getAdapter().getItemId(position));
-            if(stop) {
+            if (stop) {
                 bStop.performClick();
             }
         }
@@ -249,12 +249,10 @@ public class PlayerFragment extends Fragment {
                     if (trackListView.getCount() > 0) {
                         int newPosition = trackListView.getCheckedItemPosition() + 1;
                         if (newPosition >= trackListView.getCount()) {
-                            //newPosition = 0;
-                            newPosition = trackListView.getCount() - 1;
+                            newPosition = 0;
+                            //newPosition = trackListView.getCount() - 1;
                         }
-                        trackListView.performItemClick(trackListView.getAdapter().getView(newPosition, null, null),
-                                newPosition,
-                                trackListView.getAdapter().getItemId(newPosition));
+                        trackListItemClick(newPosition, !playerViewModel.isPlaying());
                     }
                 }
         );
@@ -266,7 +264,7 @@ public class PlayerFragment extends Fragment {
                     if (trackList != null) {
                         int newPosition = trackListView.getCheckedItemPosition() - 1;
                         if (newPosition >= 0) {
-                            trackListItemClick(newPosition, false);
+                            trackListItemClick(newPosition, !playerViewModel.isPlaying());
                         }
                     }
                 }
@@ -286,7 +284,7 @@ public class PlayerFragment extends Fragment {
             sharedViewModel.setCurrentTrack(null);
             playerViewModel.trackListItemClicked(null, seekBar);
             initTipView();
-            bStop.performClick();
+            //bStop.performClick();
         });
     }
 
@@ -323,34 +321,24 @@ public class PlayerFragment extends Fragment {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
         public void run() {
             //if (sharedViewModel.getCurrentTrack().getValue() != null) {
-                int[] time = playerViewModel.getPlayerTime();
-                SeekBar seekBar = root.findViewById(R.id.seek_bar);
-                elapsedTime.setText(Utils.formatTime(time[0]));
-                remainingTime.setText("-" + Utils.formatTime(time[1]));
-                playerViewModel.setSeekBarProgress(seekBar, time[0]);
-                //seekBar.setProgress(time[0]);
+            int[] time = playerViewModel.getPlayerTime();
+            SeekBar seekBar = root.findViewById(R.id.seek_bar);
+            elapsedTime.setText(Utils.formatTime(time[0]));
+            remainingTime.setText("-" + Utils.formatTime(time[1]));
+            playerViewModel.setSeekBarProgress(seekBar, time[0]);
 
-                if (time[1] <= 200) {
-//                ImageButton bPause = root.findViewById(R.id.button_pause);
-//                bPause.performClick();
-                    //ImageButton bPause = root.findViewById(R.id.button_stop);
-                    //bPause.performClick();
-                    if (playerViewModel.isRepeatEnabled()) {
-                        playerViewModel.bStopClicked();
-                        playerViewModel.bPlayClicked();
-                    } else {
-//                        ImageButton bNext = root.findViewById(R.id.button_next);
-//                        bNext.performClick();
-                        if (trackListView.getCount() > 0) {
-                            trackListView.performItemClick(trackListView.getAdapter().getView(0, null, null),
-                                    0,
-                                    trackListView.getAdapter().getItemId(0));
-                        }
-                    }
+            if (time[1] <= 300 && playerViewModel.isPlaying()) {
+
+                if (playerViewModel.isRepeatEnabled()) {
+                    playerViewModel.bStopClicked();
+                    playerViewModel.bPlayClicked();
+                } else {
+                    bNext.performClick();
+
                 }
-            //}
+            }
 
-            timeHandler.postDelayed(this, 100);
+            timeHandler.postDelayed(this, 250);
         }
     };
 }

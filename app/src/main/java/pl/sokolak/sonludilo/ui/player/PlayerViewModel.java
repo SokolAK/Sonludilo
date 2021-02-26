@@ -75,6 +75,10 @@ public class PlayerViewModel extends ViewModel {
         return playerModel.getStatus();
     }
 
+    public boolean isPlaying() {
+        return playerModel.getStatus() == PlayerModel.Status.PLAYING;
+    }
+
     public boolean isRepeatEnabled() {
         return playerModel.isRepeatEnabled();
     }

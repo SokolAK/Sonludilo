@@ -36,22 +36,22 @@ public enum PlayerModel {
     }
 
     public void pause() {
-        if (currentTrack != null) {
+        //if (currentTrack != null) {
             mediaPlayer.pause();
             if (!mediaPlayer.isPlaying()) {
                 status = Status.PAUSED;
             }
-        }
+        //}
     }
 
     public void stop() {
-        if (currentTrack != null) {
+        //if (currentTrack != null) {
             mediaPlayer.pause();
             mediaPlayer.seekTo(0);
             if (!mediaPlayer.isPlaying()) {
                 status = Status.STOPPED;
             }
-        }
+        //}
     }
 
     public void setTime(int time) {

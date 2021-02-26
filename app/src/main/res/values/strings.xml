@@ -11,6 +11,7 @@
     <string name="number_of_tracks">Number of tracks</string>
     <string name="time">Time</string>
 
-    <string name="clear">Clear</string>
+    <string name="clear">Clear tracklist</string>
+    <string name="tip_player_fragment">Tap = play track, Press and hold = remove track</string>
 
 </resources>

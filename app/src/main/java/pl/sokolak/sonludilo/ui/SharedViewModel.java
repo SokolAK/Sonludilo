@@ -54,6 +54,10 @@ public class SharedViewModel extends ViewModel {
         return false;
     }
 
+    public boolean isTrackListNotEmpty() {
+        return currentTrackList.getValue() != null && currentTrackList.getValue().size() > 0;
+    }
+
     public boolean checkIfTrackOnList(Track track) {
         return currentTrackList.getValue().contains(track);
     }

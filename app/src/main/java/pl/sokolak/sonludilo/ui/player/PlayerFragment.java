@@ -50,6 +50,7 @@ public class PlayerFragment extends Fragment {
     private SeekBar seekBar;
     private View gifView;
     private SegmentedProgressBar volumeBar;
+    private TextView tipView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,12 +76,21 @@ public class PlayerFragment extends Fragment {
         configureCurrentTrackObserver();
         configureCurrentTrackListObserver();
 
-        //controlTimeUpdate(true);
+        initTipView();
+        controlTimeUpdate(true);
         seekBar.setOnSeekBarChangeListener(new SeekBarListener(playerViewModel));
         playerViewModel.initVolumeBarProgress(volumeBar);
         playerViewModel.initSeekBarProgress(sharedViewModel.getCurrentTrack().getValue(), seekBar);
         playerViewModel.updateGif();
         return root;
+    }
+
+    private void initTipView() {
+        if(sharedViewModel.isTrackListNotEmpty()) {
+            tipView.setSelected(true);
+        } else {
+            tipView.setText("");
+        }
     }
 
     private void configureCurrentTrackObserver() {
@@ -133,12 +143,13 @@ public class PlayerFragment extends Fragment {
         gifView = root.findViewById(R.id.tape_image);
         volumeBar = root.findViewById(R.id.volume_bar);
         bRepeat.setSelected(playerViewModel.isRepeatEnabled());
+        tipView = root.findViewById(R.id.tip);
     }
 
     private void configureTrackListClickListener() {
         trackListView.setOnItemClickListener((parent, view, position, id) -> {
             List<Track> trackList = sharedViewModel.getCurrentTrackList().getValue();
-            if (Utils.isNotEmpty(trackList)) {
+            if (sharedViewModel.isTrackListNotEmpty()) {
                 if (position < trackList.size()) {
                     if(!sharedViewModel.isCurrentTrackPosition(position)) {
                         Track currentTrack = sharedViewModel.getTrack(position);
@@ -313,9 +324,11 @@ public class PlayerFragment extends Fragment {
                     } else {
 //                        ImageButton bNext = root.findViewById(R.id.button_next);
 //                        bNext.performClick();
-                        trackListView.performItemClick(trackListView.getAdapter().getView(0, null, null),
-                                0,
-                                trackListView.getAdapter().getItemId(0));
+                        if(trackListView.getCount() > 0) {
+                            trackListView.performItemClick(trackListView.getAdapter().getView(0, null, null),
+                                    0,
+                                    trackListView.getAdapter().getItemId(0));
+                        }
                     }
                 }
             }

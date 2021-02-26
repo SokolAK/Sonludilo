@@ -39,7 +39,7 @@ public class TracksRepository {
 
         ContentResolver cr = context.getContentResolver();
         final String[] columns = {track_id, track_no, artist, track_name, album, year, duration, path, composer};
-        Cursor cursor = cr.query(uri, columns, selection, null, null);
+        Cursor cursor = cr.query(uri, columns, selection, null, album + ", " + track_no + ", " + artist);
 
         while (cursor.moveToNext()) {
             Uri contentUri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, cursor.getInt(0));

@@ -43,10 +43,6 @@ public class AlbumsViewModel extends ViewModel {
         return mAlbums;
     }
 
-    public List<Album> getAlbumsList() {
-        return albumsList;
-    }
-
     public List<Track> getTrackListForAlbum(int position) {
         String selection = "album_id = " + albumsList.get(position).getId();
         if (weakContext!=null) {

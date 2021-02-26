@@ -21,17 +21,19 @@ import pl.sokolak.sonludilo.ui.SharedViewModel;
 public class TracksFragment extends Fragment {
     private TracksViewModel tracksViewModel;
     private SharedViewModel sharedViewModel;
-    private ListView trackList;
+    private ListView trackListView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         tracksViewModel = new ViewModelProvider(this, new TracksViewModelFactory(getContext())).get(TracksViewModel.class);
         View root = inflater.inflate(R.layout.fragment_tracks, container, false);
 
-        trackList = root.findViewById(R.id.track_list);
+        trackListView = root.findViewById(R.id.track_list);
         tracksViewModel.getTrackList().observe(getViewLifecycleOwner(), list -> {
                     setListAdapter();
                     checkCurrentItems(list);
+                    int id = tracksViewModel.getTrackList().getValue().indexOf(sharedViewModel.getCurrentTrack().getValue());
+                    trackListView.setSelection(id);
                 }
         );
 
@@ -39,6 +41,8 @@ public class TracksFragment extends Fragment {
 
         TextView tipView = root.findViewById(R.id.tip);
         tipView.setSelected(true);
+
+
 
         return root;
     }
@@ -49,19 +53,19 @@ public class TracksFragment extends Fragment {
                 .forEach(i -> {
                             Track track = list.get(i);
                             boolean isOnList = sharedTrackList.contains(track);
-                            trackList.setItemChecked(i, isOnList);
+                            trackListView.setItemChecked(i, isOnList);
                         }
                 );
     }
 
     private void setListAdapter() {
-        trackList.setAdapter(new ListTripleItemAdapter(
+        trackListView.setAdapter(new ListTripleItemAdapter(
                 getContext(),
                 tracksViewModel.getTrackListString().getValue()));
     }
 
     private void setClickListener() {
-        trackList.setOnItemClickListener((parent, view, position, id) -> {
+        trackListView.setOnItemClickListener((parent, view, position, id) -> {
             Track track = tracksViewModel.getTrackList().getValue().get(position);
             if (!sharedViewModel.checkIfTrackOnList(track)) {
                 sharedViewModel.addTrack(track);

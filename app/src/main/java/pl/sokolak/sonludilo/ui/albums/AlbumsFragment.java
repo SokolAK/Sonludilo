@@ -18,7 +18,7 @@ import pl.sokolak.sonludilo.ui.SharedViewModel;
 
 public class AlbumsFragment extends Fragment {
     private AlbumsViewModel albumsViewModel;
-    private SharedViewModel sharedModel;
+    private SharedViewModel sharedViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         albumsViewModel = new ViewModelProvider(this, new AlbumsViewModelFactory(getContext())).get(AlbumsViewModel.class);
@@ -31,10 +31,17 @@ public class AlbumsFragment extends Fragment {
                 list))
         );
 
-        sharedModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         albumsList.setOnItemClickListener((parent, view, position, id) -> {
-            sharedModel.setCurrentTrackList(albumsViewModel.getTrackListForAlbum(position));
+            sharedViewModel.setCurrentTrackList(albumsViewModel.getTrackListForAlbum(position));
             NavHostFragment.findNavController(this).navigate(R.id.action_albums_to_player);
+        });
+
+        albumsList.setOnItemLongClickListener((parent, view, position, id) -> {
+            sharedViewModel.setCurrentTrackList(albumsViewModel.getTrackListForAlbum(position));
+            sharedViewModel.setCurrentTrack(0);
+            NavHostFragment.findNavController(this).navigate(R.id.action_albums_to_tracks);
+            return true;
         });
 
         TextView tipView = root.findViewById(R.id.tip);

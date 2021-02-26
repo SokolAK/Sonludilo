@@ -264,8 +264,8 @@ public class PlayerFragment extends Fragment {
 
     private void configureClearListener() {
         bClear.setOnClickListener(l -> {
-            sharedViewModel.setCurrentTrack(null);
             sharedViewModel.clearTrackList();
+            sharedViewModel.setCurrentTrack(null);
             playerViewModel.trackListItemClicked(null, seekBar);
         });
     }

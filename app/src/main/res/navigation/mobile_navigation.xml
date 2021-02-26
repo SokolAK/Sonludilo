@@ -15,10 +15,14 @@
         android:id="@+id/navigation_albums"
         android:name="pl.sokolak.sonludilo.ui.albums.AlbumsFragment"
         android:label="@string/title_albums"
-        tools:layout="@layout/fragment_albums"/>
+        tools:layout="@layout/fragment_albums">
         <action
             android:id="@+id/action_albums_to_player"
             app:destination="@id/navigation_player" />
+        <action
+            android:id="@+id/action_albums_to_tracks"
+            app:destination="@id/navigation_tracks" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_tracks"

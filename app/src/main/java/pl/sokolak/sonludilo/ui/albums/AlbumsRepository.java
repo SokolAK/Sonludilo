@@ -33,7 +33,7 @@ public class AlbumsRepository {
         final String lastYear = MediaStore.Audio.Albums.LAST_YEAR;
         final String no_tracks = MediaStore.Audio.Albums.NUMBER_OF_SONGS;
         final String[] columns = {_id, album_name, artist, firstYear, lastYear, no_tracks};
-        Cursor cursor = cr.query(uri, columns, null,null, null);
+        Cursor cursor = cr.query(uri, columns, null,null, artist);
 
 
         while (cursor.moveToNext()) {

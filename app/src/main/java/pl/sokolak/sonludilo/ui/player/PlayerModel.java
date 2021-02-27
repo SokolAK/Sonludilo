@@ -2,14 +2,9 @@ package pl.sokolak.sonludilo.ui.player;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.net.Uri;
-
-import androidx.lifecycle.MutableLiveData;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.List;
-import java.util.Optional;
 
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
@@ -81,12 +76,12 @@ public enum PlayerModel {
         this.currentTrack = currentTrack;
         mediaPlayer.reset();
         //mediaPlayer.release();
-        if(currentTrack != null) {
+        if (currentTrack != null) {
             //Optional<Uri> uri = Optional.ofNullable(currentTrack.getUri());
             //uri.ifPresent(u -> mediaPlayer = MediaPlayer.create(context, u));
             //mediaPlayer = MediaPlayer.create(context,currentTrack.getUri());
             try {
-                mediaPlayer.setDataSource(weakContext.get(),currentTrack.getUri());
+                mediaPlayer.setDataSource(weakContext.get(), currentTrack.getUri());
                 mediaPlayer.prepare();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -104,16 +99,11 @@ public enum PlayerModel {
         notifyViewModel();
     }
 
-
     public int[] getTime() {
         int[] time = new int[]{0, 0};
         if (mediaPlayer != null && currentTrack != null) {
             time[0] = mediaPlayer.getCurrentPosition();
             time[1] = mediaPlayer.getDuration() - time[0];
-//            if (time[1] <= 10) {
-//                mediaPlayer.seekTo(0);
-//                mediaPlayer.start();
-//            }
         }
         return time;
     }

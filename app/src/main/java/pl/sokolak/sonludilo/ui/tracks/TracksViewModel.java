@@ -13,7 +13,7 @@ import pl.sokolak.sonludilo.R;
 
 public class TracksViewModel extends ViewModel {
     private final MutableLiveData<List<List<String>>> trackListString = new MutableLiveData<>();
-    private final MutableLiveData<List<Track>> trackList = new MutableLiveData<>();;
+    private final MutableLiveData<List<Track>> trackList = new MutableLiveData<>();
 
     public TracksViewModel(Context context) {
         TracksRepository tracksRepository = new TracksRepository(context);
@@ -21,7 +21,6 @@ public class TracksViewModel extends ViewModel {
 
         List<List<String>> list = new ArrayList<>();
         for (Track track : trackList.getValue()) {
-            //list.add(track.toMultiLineString(context));
             String artist = context.getString(R.string.artist) + ": " + track.getArtist();
             String title = context.getString(R.string.title) + ": " + track.getTitle();
             String album = context.getString(R.string.album) + ": " + track.getAlbum() +

@@ -34,7 +34,7 @@ public class TracksFragment extends Fragment {
                     setListAdapter();
                     checkCurrentItems(list);
                     List<Track> sharedTrackList = sharedViewModel.getCurrentTrackList().getValue();
-                    if(Utils.isNotEmpty(sharedTrackList)) {
+                    if (Utils.isNotEmpty(sharedTrackList)) {
                         int id = tracksViewModel.getTrackList().getValue().indexOf(sharedTrackList.get(0));
                         trackListView.setSelection(id);
                     }

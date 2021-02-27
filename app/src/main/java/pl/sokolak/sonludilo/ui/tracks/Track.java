@@ -51,22 +51,6 @@ public class Track {
                 (!year.isEmpty() ? " [" + year +"]" : "");
     }
 
-    public String toMultiLineString(Context context) {
-        String string = addStringItem(context.getString(R.string.artist), artist) +
-                addStringItem(context.getString(R.string.title), title) +
-                addStringItem(context.getString(R.string.album), album) +
-                //addStringItem(context.getString(R.string.year), year) +
-                addStringItem(context.getString(R.string.time), Utils.formatTime(duration));
-        return string.trim();
-    }
-
-    private String addStringItem(String prefix, String item) {
-        if (item != null && !item.isEmpty() && !item.equals("<unknown>")) {
-            return prefix + ": " + item.trim() + "\n";
-        }
-        return "";
-    }
-
     public Uri getUri() {
         return uri;
     }

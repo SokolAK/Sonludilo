@@ -1,7 +1,5 @@
 package pl.sokolak.sonludilo.ui;
 
-import android.net.Uri;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.sokolak.sonludilo.ui.albums.Album;
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
 public class SharedViewModel extends ViewModel {
@@ -19,13 +16,13 @@ public class SharedViewModel extends ViewModel {
 
 
     public void setCurrentTrackList(List<Track> currentTrackList) {
-        if(currentTrackList != null) {
+        if (currentTrackList != null) {
             this.currentTrackList.setValue(currentTrackList);
         }
     }
 
     public void addTrack(Track track) {
-        if(!currentTrackList.getValue().contains(track)) {
+        if (!currentTrackList.getValue().contains(track)) {
             currentTrackList.getValue().add(track);
         }
     }
@@ -50,14 +47,10 @@ public class SharedViewModel extends ViewModel {
     }
 
     public boolean isCurrentTrackPosition(int id) {
-        if(currentTrack.getValue() != null) {
+        if (currentTrack.getValue() != null) {
             return currentTrack.getValue().equals(currentTrackList.getValue().get(id));
         }
         return false;
-    }
-
-    public void setCurrentTrack(int id) {
-        currentTrack.setValue(currentTrackList.getValue().get(id));
     }
 
     public boolean isTrackListNotEmpty() {

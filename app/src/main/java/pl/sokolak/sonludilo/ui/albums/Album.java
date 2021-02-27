@@ -1,14 +1,9 @@
 package pl.sokolak.sonludilo.ui.albums;
 
-import android.content.Context;
-import android.net.Uri;
-
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
 public class Album {
@@ -35,21 +30,6 @@ public class Album {
     @NotNull
     public String toString() {
         return artist + " - " + title + " [" + year + "]";
-    }
-
-    public String toMultiLineString(Context context) {
-        String string = addStringItem(context.getString(R.string.artist), artist) +
-                addStringItem(context.getString(R.string.title), title) +
-                addStringItem(context.getString(R.string.number_of_tracks), noTracks) +
-                addStringItem(context.getString(R.string.year), year);
-        return string.trim();
-    }
-
-    private String addStringItem(String prefix, String item) {
-        if (item != null && !item.isEmpty()) {
-            return prefix + ": " + item.trim() + "\n";
-        }
-        return "";
     }
 
     public String getArtist() {

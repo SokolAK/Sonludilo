@@ -26,9 +26,7 @@ public class AlbumsViewModel extends ViewModel {
         albumsList = albumsRepository.getAll();
 
         List<List<String>> list = new ArrayList<>();
-        for(Album album : albumsList) {
-            //list.add(album.toMultiLineString(context));
-            //list.add(track.toMultiLineString(context));
+        for (Album album : albumsList) {
             String artist = context.getString(R.string.artist) + ": " + album.getArtist();
             String title = context.getString(R.string.title) + ": " + album.getTitle();
             String noTracks = context.getString(R.string.number_of_tracks) + ": " + album.getNoTracks();
@@ -45,7 +43,7 @@ public class AlbumsViewModel extends ViewModel {
 
     public List<Track> getTrackListForAlbum(int position) {
         String selection = "album_id = " + albumsList.get(position).getId();
-        if (weakContext!=null) {
+        if (weakContext != null) {
             return new TracksRepository(weakContext.get()).getAll(selection);
         }
         return new ArrayList<>();

@@ -21,7 +21,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.rachitgoyal.segmented.SegmentedProgressBar;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,7 +79,6 @@ public class PlayerFragment extends Fragment {
         configureCurrentTrackObserver();
         configurePlayerStatusObserver();
 
-
         initTipView();
         //controlTimeUpdate(true);
         timeHandler = new Handler(Looper.getMainLooper());
@@ -90,6 +88,27 @@ public class PlayerFragment extends Fragment {
         playerViewModel.initSeekBarProgress(sharedViewModel.getCurrentTrack().getValue(), seekBar);
         playerViewModel.updateGif();
         return root;
+    }
+
+
+    private void initViews() {
+        trackListView = root.findViewById(R.id.track_list);
+        bClear = root.findViewById(R.id.button_clear);
+        bPlay = root.findViewById(R.id.button_play);
+        bPause = root.findViewById(R.id.button_pause);
+        bStop = root.findViewById(R.id.button_stop);
+        bVolUp = root.findViewById(R.id.button_vol_up);
+        bVolDown = root.findViewById(R.id.button_vol_down);
+        bPrev = root.findViewById(R.id.button_prev);
+        bNext = root.findViewById(R.id.button_next);
+        bRepeat = root.findViewById(R.id.button_repeat);
+        seekBar = root.findViewById(R.id.seek_bar);
+        gifView = root.findViewById(R.id.tape_image);
+        volumeBar = root.findViewById(R.id.volume_bar);
+        bRepeat.setSelected(playerViewModel.isRepeatEnabled());
+        tipView = root.findViewById(R.id.tip);
+        remainingTime = root.findViewById(R.id.remaining_time);
+        elapsedTime = root.findViewById(R.id.elapsed_time);
     }
 
     private void initTipView() {
@@ -156,26 +175,6 @@ public class PlayerFragment extends Fragment {
             }
         }
         return false;
-    }
-
-    private void initViews() {
-        trackListView = root.findViewById(R.id.track_list);
-        bClear = root.findViewById(R.id.button_clear);
-        bPlay = root.findViewById(R.id.button_play);
-        bPause = root.findViewById(R.id.button_pause);
-        bStop = root.findViewById(R.id.button_stop);
-        bVolUp = root.findViewById(R.id.button_vol_up);
-        bVolDown = root.findViewById(R.id.button_vol_down);
-        bPrev = root.findViewById(R.id.button_prev);
-        bNext = root.findViewById(R.id.button_next);
-        bRepeat = root.findViewById(R.id.button_repeat);
-        seekBar = root.findViewById(R.id.seek_bar);
-        gifView = root.findViewById(R.id.tape_image);
-        volumeBar = root.findViewById(R.id.volume_bar);
-        bRepeat.setSelected(playerViewModel.isRepeatEnabled());
-        tipView = root.findViewById(R.id.tip);
-        remainingTime = root.findViewById(R.id.remaining_time);
-        elapsedTime = root.findViewById(R.id.elapsed_time);
     }
 
     private void configureTrackListClickListener() {
@@ -272,9 +271,6 @@ public class PlayerFragment extends Fragment {
                     if (trackListView.getCount() > 0) {
                         int newPosition = trackListView.getCheckedItemPosition() + 1;
                         if (newPosition < trackListView.getCount()) {
-                            //newPosition = 0;
-                            //newPosition = trackListView.getCount() - 1;
-                            //bStop.performClick();
                             trackListItemClick(newPosition, !playerViewModel.isPlaying());
                         }
                     }
@@ -352,18 +348,7 @@ public class PlayerFragment extends Fragment {
     private final Runnable updateTime = new Runnable() {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
         public void run() {
-            //if (sharedViewModel.getCurrentTrack().getValue() != null) {
             updateTime();
-//            if (playerViewModel.getPlayerStatus() == PlayerModel.Status.COMPLETED) {
-//                int a = trackListView.getCount();
-//                if (playerViewModel.isRepeatEnabled()) {
-//                    bStop.performClick();
-//                } else {
-//                    bNext.performClick();
-//                }
-//                bPlay.performClick();
-//            }
-
             timeHandler.postDelayed(this, 200);
         }
     };

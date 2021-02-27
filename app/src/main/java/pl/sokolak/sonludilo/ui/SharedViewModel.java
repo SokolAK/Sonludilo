@@ -17,6 +17,7 @@ public class SharedViewModel extends ViewModel {
     private final MutableLiveData<Integer> currentVolume = new MutableLiveData<>();
     private final MutableLiveData<Track> currentTrack = new MutableLiveData<>(null);
 
+
     public void setCurrentTrackList(List<Track> currentTrackList) {
         if(currentTrackList != null) {
             this.currentTrackList.setValue(currentTrackList);

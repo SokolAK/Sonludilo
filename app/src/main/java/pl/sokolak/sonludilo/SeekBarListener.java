@@ -5,7 +5,7 @@ import android.widget.SeekBar;
 import pl.sokolak.sonludilo.ui.player.PlayerViewModel;
 
 public class SeekBarListener implements SeekBar.OnSeekBarChangeListener {
-    private PlayerViewModel playerViewModel;
+    private final PlayerViewModel playerViewModel;
 
     public SeekBarListener(PlayerViewModel playerViewModel) {
         this.playerViewModel = playerViewModel;
@@ -13,6 +13,10 @@ public class SeekBarListener implements SeekBar.OnSeekBarChangeListener {
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if(fromUser) {
+            playerViewModel.seekBarChanged(seekBar.getProgress());
+            //playerViewModel.bPauseClicked();
+        }
     }
 
     @Override
@@ -22,7 +26,7 @@ public class SeekBarListener implements SeekBar.OnSeekBarChangeListener {
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        playerViewModel.seekBarChanged(seekBar.getProgress());
+//        playerViewModel.seekBarChanged(seekBar.getProgress());
         playerViewModel.releaseSeekBarProgress();
     }
 }

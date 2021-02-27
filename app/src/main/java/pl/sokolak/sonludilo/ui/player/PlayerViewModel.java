@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.rachitgoyal.segmented.SegmentedProgressBar;
@@ -16,6 +18,7 @@ import java.util.List;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.sokolak.sonludilo.R;
+import pl.sokolak.sonludilo.Utils;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
@@ -25,14 +28,16 @@ public class PlayerViewModel extends ViewModel {
     private boolean isSeekBarProgressTouched = false;
     //private WeakReference<ImageView> gifView;
     private final GifDrawable gif;
+    private PlayerModel.Status prevStatus;
+    private final MutableLiveData<PlayerModel.Status> status = new MutableLiveData<>(PlayerModel.Status.STOPPED);
     //private final MutableLiveData<Integer> mCurrentTrackNumber = new MutableLiveData<>();
 
     public PlayerViewModel(Context context, View root) {
-        weakContext = new WeakReference<>(context);
-        //private final WeakReference<ImageView> weakGifView;
+        weakContext = new WeakReference<>(context);    //private final WeakReference<ImageView> weakGifView;
         //WeakReference<View> weakRoot = new WeakReference<>(root);
         playerModel = PlayerModel.INSTANCE;
         playerModel.setContext(context);
+        playerModel.setViewModel(this);
         ImageView gifView = root.findViewById(R.id.tape_image);
         gif = (GifDrawable) gifView.getDrawable();
         //sharedViewModel = new ViewModelProvider(context).get(SharedViewModel.class);
@@ -54,12 +59,14 @@ public class PlayerViewModel extends ViewModel {
         playerModel.play();
     }
 
+
+
     public void trackListItemClicked(Track track, SeekBar seekBar) {
         //mCurrentTrackNumber.setValue(position);
         //Track currentTrack = trackList.get(currentTrackNo);
         playerModel.stop();
         playerModel.setCurrentTrack(track);
-        if(track != null) {
+        if (track != null) {
             seekBar.setMax(track.getDuration());
             playerModel.play();
         }
@@ -76,7 +83,7 @@ public class PlayerViewModel extends ViewModel {
     }
 
     public boolean isPlaying() {
-        return playerModel.getStatus() == PlayerModel.Status.PLAYING;
+        return playerModel.getStatus() == PlayerModel.Status.PLAYING || playerModel.getStatus() == PlayerModel.Status.COMPLETED;
     }
 
     public boolean isRepeatEnabled() {
@@ -125,17 +132,32 @@ public class PlayerViewModel extends ViewModel {
     }
 
     public void setSeekBarProgress(SeekBar seekBar, int time) {
-        if(!isSeekBarProgressTouched) {
-            seekBar.setProgress(time);
-        }
+        //if(!isSeekBarProgressTouched) {
+        seekBar.setProgress(time);
+        //}
     }
 
     public void releaseSeekBarProgress() {
-        isSeekBarProgressTouched = false;
+        //isSeekBarProgressTouched = false;
+        switch (prevStatus) {
+            case PLAYING:
+                playerModel.play();
+                break;
+            case PAUSED:
+                playerModel.pause();
+                break;
+            case STOPPED:
+                playerModel.stop();
+                break;
+        }
+        updateGif();
     }
 
     public void touchSeekBarProgress() {
-        isSeekBarProgressTouched = true;
+        //isSeekBarProgressTouched = true;
+        prevStatus = getPlayerStatus();
+        playerModel.pause();
+        updateGif();
     }
 
     public List<Integer> getVolumeSegments(int volume) {
@@ -153,6 +175,7 @@ public class PlayerViewModel extends ViewModel {
                 break;
             case PAUSED:
             case STOPPED:
+            case COMPLETED:
                 stopGif();
                 break;
         }
@@ -172,8 +195,21 @@ public class PlayerViewModel extends ViewModel {
         }
     }
 
+
     public void initVolumeBarProgress(SegmentedProgressBar volumeBar) {
         AudioManager audioManager = (AudioManager) weakContext.get().getSystemService(Context.AUDIO_SERVICE);
         volumeBar.setEnabledDivisions(getVolumeSegments(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
     }
+
+
+    public void updateStatus(PlayerModel.Status status) {
+        this.status.setValue(status);
+        updateGif();
+    }
+
+    public LiveData<PlayerModel.Status> getStatus() {
+        return status;
+    }
+
+
 }

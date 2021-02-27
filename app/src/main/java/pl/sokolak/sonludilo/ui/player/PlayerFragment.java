@@ -53,6 +53,7 @@ public class PlayerFragment extends Fragment {
     private TextView tipView;
     private TextView remainingTime;
     private TextView elapsedTime;
+    private Thread thread = Thread.currentThread();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,10 +78,13 @@ public class PlayerFragment extends Fragment {
         configureVolumeBarObserver();
         configureCurrentTrackListObserver();
         configureCurrentTrackObserver();
+        configurePlayerStatusObserver();
 
 
         initTipView();
-        controlTimeUpdate(true);
+        //controlTimeUpdate(true);
+        timeHandler = new Handler(Looper.getMainLooper());
+        timeHandler.postDelayed(updateTime, 0);
         seekBar.setOnSeekBarChangeListener(new SeekBarListener(playerViewModel));
         playerViewModel.initVolumeBarProgress(volumeBar);
         playerViewModel.initSeekBarProgress(sharedViewModel.getCurrentTrack().getValue(), seekBar);
@@ -97,31 +101,33 @@ public class PlayerFragment extends Fragment {
         }
     }
 
+    private void configurePlayerStatusObserver() {
+        playerViewModel.getStatus().observe(getViewLifecycleOwner(), status -> {
+            if (status == PlayerModel.Status.COMPLETED) {
+                if (playerViewModel.isRepeatEnabled()) {
+                    bStop.performClick();
+                    bPlay.performClick();
+                } else {
+                    bNext.performClick();
+                }
+            }
+        });
+    }
+
     private void configureCurrentTrackListObserver() {
         sharedViewModel.getCurrentTrackList().observe(getViewLifecycleOwner(), list -> {
             trackListView.setAdapter(new ListSingleItemAdapter(
                     getContext(),
                     list.stream().map(Track::toMultiLineStringShort).collect(Collectors.toList())));
+            isCurrentTrackOnList();
         });
     }
 
     private void configureCurrentTrackObserver() {
         sharedViewModel.getCurrentTrack().observe(getViewLifecycleOwner(), n -> {
             List<Track> currentTrackList = sharedViewModel.getCurrentTrackList().getValue();
-            boolean isOnList = false;
             if (currentTrackList != null) {
-                if (n != null) {
-                    for (int i = 0; i < currentTrackList.size(); ++i) {
-                        if (currentTrackList.get(i).getUri().equals(n.getUri())) {
-                            trackListView.setItemChecked(i, true);
-                            int idSelected = Math.max(i - 2, 0);
-                            trackListView.setSelection(idSelected);
-                            isOnList = true;
-                            break;
-                        }
-                    }
-                }
-                if (!isOnList) {
+                if (!isCurrentTrackOnList()) {
                     if (currentTrackList.size() > 0) {
                         trackListItemClick(0, false);
                     }
@@ -134,6 +140,22 @@ public class PlayerFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private boolean isCurrentTrackOnList() {
+        List<Track> currentTrackList = sharedViewModel.getCurrentTrackList().getValue();
+        Track currentTrack = sharedViewModel.getCurrentTrack().getValue();
+        if (currentTrackList != null && currentTrack != null) {
+            for (int i = 0; i < currentTrackList.size(); ++i) {
+                if (currentTrackList.get(i).getUri().equals(currentTrack.getUri())) {
+                    trackListView.setItemChecked(i, true);
+                    int idSelected = Math.max(i - 2, 0);
+                    trackListView.setSelection(idSelected);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void initViews() {
@@ -165,6 +187,7 @@ public class PlayerFragment extends Fragment {
                         Track currentTrack = sharedViewModel.getTrack(position);
                         sharedViewModel.setCurrentTrack(currentTrack);
                         playerViewModel.trackListItemClicked(currentTrack, seekBar);
+                        updateTime();
                     }
                 }
             }
@@ -248,11 +271,12 @@ public class PlayerFragment extends Fragment {
         bNext.setOnClickListener(l -> {
                     if (trackListView.getCount() > 0) {
                         int newPosition = trackListView.getCheckedItemPosition() + 1;
-                        if (newPosition >= trackListView.getCount()) {
-                            newPosition = 0;
+                        if (newPosition < trackListView.getCount()) {
+                            //newPosition = 0;
                             //newPosition = trackListView.getCount() - 1;
+                            //bStop.performClick();
+                            trackListItemClick(newPosition, !playerViewModel.isPlaying());
                         }
-                        trackListItemClick(newPosition, !playerViewModel.isPlaying());
                     }
                 }
         );
@@ -291,11 +315,10 @@ public class PlayerFragment extends Fragment {
     private void configureGifListener() {
         gifView.setOnClickListener(v ->
         {
-            if (playerViewModel.getPlayerStatus() == PlayerModel.Status.STOPPED ||
-                    playerViewModel.getPlayerStatus() == PlayerModel.Status.PAUSED) {
-                bPlay.performClick();
-            } else if (playerViewModel.getPlayerStatus() == PlayerModel.Status.PLAYING) {
+            if (playerViewModel.isPlaying()) {
                 bPause.performClick();
+            } else {
+                bPlay.performClick();
             }
         });
     }
@@ -305,40 +328,43 @@ public class PlayerFragment extends Fragment {
         sharedViewModel.setCurrentVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
     }
 
-    private void controlTimeUpdate(boolean run) {
-        if (!run) {
-            if (timeHandler != null) {
-                timeHandler.removeCallbacks(updateTime);
-                timeHandler = null;
-            }
-        } else {
-            timeHandler = new Handler(Looper.getMainLooper());
-            timeHandler.postDelayed(updateTime, 0);
-        }
+//    private void controlTimeUpdate(boolean run) {
+//        if (!run) {
+//            if (timeHandler != null) {
+//                timeHandler.removeCallbacks(updateTime);
+//                timeHandler = null;
+//            }
+//        } else {
+//            timeHandler = new Handler(Looper.getMainLooper());
+//            timeHandler.postDelayed(updateTime, 0);
+//        }
+//    }
+
+    private int[] updateTime() {
+        int[] time = playerViewModel.getPlayerTime();
+        SeekBar seekBar = root.findViewById(R.id.seek_bar);
+        elapsedTime.setText(Utils.formatTime(time[0]));
+        remainingTime.setText("-" + Utils.formatTime(time[1]));
+        playerViewModel.setSeekBarProgress(seekBar, time[0]);
+        return time;
     }
 
     private final Runnable updateTime = new Runnable() {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
         public void run() {
             //if (sharedViewModel.getCurrentTrack().getValue() != null) {
-            int[] time = playerViewModel.getPlayerTime();
-            SeekBar seekBar = root.findViewById(R.id.seek_bar);
-            elapsedTime.setText(Utils.formatTime(time[0]));
-            remainingTime.setText("-" + Utils.formatTime(time[1]));
-            playerViewModel.setSeekBarProgress(seekBar, time[0]);
+            updateTime();
+//            if (playerViewModel.getPlayerStatus() == PlayerModel.Status.COMPLETED) {
+//                int a = trackListView.getCount();
+//                if (playerViewModel.isRepeatEnabled()) {
+//                    bStop.performClick();
+//                } else {
+//                    bNext.performClick();
+//                }
+//                bPlay.performClick();
+//            }
 
-            if (time[1] <= 300 && playerViewModel.isPlaying()) {
-
-                if (playerViewModel.isRepeatEnabled()) {
-                    playerViewModel.bStopClicked();
-                    playerViewModel.bPlayClicked();
-                } else {
-                    bNext.performClick();
-
-                }
-            }
-
-            timeHandler.postDelayed(this, 250);
+            timeHandler.postDelayed(this, 200);
         }
     };
 }

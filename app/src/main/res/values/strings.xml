@@ -10,10 +10,18 @@
     <string name="year">Year</string>
     <string name="number_of_tracks">Number of tracks</string>
     <string name="time">Time</string>
-
+    <string name="track">Track</string>
     <string name="clear">Clear</string>
-    <string name="tip_player_fragment">Tap = play track, Press and hold = remove track</string>
-    <string name="tip_track_fragment">Tap a track to add or remove it from the playlist</string>
-    <string name="tip_album_fragment">Tap = add an album to the playlist, Press and hold = show added tracks</string>
+
+    <string name="number_abb">No</string>
+    <string name="artist_abb">Ar</string>
+    <string name="track_abb">Tr</string>
+    <string name="title_abb">Ti</string>
+    <string name="album_abb">Al</string>
+    <string name="clear_abb">Cl</string>
+
+    <string name="tip_player_fragment">Tap = play track, Press and hold = remove track. Use the buttons at the bottom to sort the list by track no. (No), artist (Ar), track title (Ti) or album name (Al).</string>
+    <string name="tip_track_fragment">Tap a track to add or remove it from the playlist. Use the buttons at the bottom to sort the list.</string>
+    <string name="tip_album_fragment">Tap = add an album to the playlist, Press and hold = show added tracks. Use the buttons at the bottom to sort the list.</string>
 
 </resources>

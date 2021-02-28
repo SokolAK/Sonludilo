@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
@@ -20,7 +21,7 @@ public class AlbumsRepository {
         this.context = context;
     }
 
-    public List<Album> getAll() {
+    public List<Album> getAll(String selection, List<String> sort) {
 
         List<Album> albumsList = new ArrayList<>();
         ContentResolver cr = context.getContentResolver();
@@ -32,9 +33,25 @@ public class AlbumsRepository {
         final String firstYear = MediaStore.Audio.Albums.FIRST_YEAR;
         final String lastYear = MediaStore.Audio.Albums.LAST_YEAR;
         final String no_tracks = MediaStore.Audio.Albums.NUMBER_OF_SONGS;
-        final String[] columns = {_id, album_name, artist, firstYear, lastYear, no_tracks};
-        Cursor cursor = cr.query(uri, columns, null, null, artist);
 
+        String sortLine = sort.stream()
+                .map(p -> {
+                    switch (p) {
+                        case "artist":
+                            return artist;
+                        case "album":
+                            return album_name;
+                        case "year":
+                            return firstYear;
+                        default:
+                            return "";
+                    }
+                })
+                .filter(p -> !p.isEmpty())
+                .collect(Collectors.joining(", "));
+
+        final String[] columns = {_id, album_name, artist, firstYear, lastYear, no_tracks};
+        Cursor cursor = cr.query(uri, columns, selection, null, sortLine);
 
         while (cursor.moveToNext()) {
             String year = getYear(cursor.getInt(3), cursor.getInt(4));

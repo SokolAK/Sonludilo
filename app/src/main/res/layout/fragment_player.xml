@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,7 +9,7 @@
         android:id="@+id/tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/track_list"
+        app:layout_constraintBottom_toTopOf="@+id/line"
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="@dimen/list_item_text_size"
         android:ellipsize="marquee"
@@ -35,22 +34,89 @@
         android:divider="@color/white"
         android:dividerHeight="1dp"
         android:choiceMode="singleChoice"
-        app:layout_constraintBottom_toTopOf="@+id/line2"
+        app:layout_constraintBottom_toTopOf="@+id/list_buttons"
         app:layout_constraintTop_toBottomOf="@id/line" />
 
-
-    <Button
-        android:id="@+id/button_clear"
-        style="@style/RobotoButtonStyle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/list_buttons"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/clear"
-        android:textColor="@color/yellow"
-        android:textSize="@dimen/list_item_text_size"
         app:layout_constraintBottom_toTopOf="@+id/line2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_no"
+            style="@style/RobotoButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/number_abb"
+            android:minHeight="0dp"
+            android:textColor="@color/yellow"
+            android:layout_marginLeft="@dimen/button_margin_horizontal"
+            android:layout_marginRight="@dimen/button_margin_horizontal"
+            android:layout_marginVertical="@dimen/button_margin_vertical"
+            android:layout_marginBottom="@dimen/button_margin_vertical"
+            android:textSize="@dimen/list_item_text_size" />
+        <Button
+            android:id="@+id/button_artist"
+            style="@style/RobotoButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/artist_abb"
+            android:minHeight="0dp"
+            android:textColor="@color/yellow"
+            android:layout_marginLeft="@dimen/button_margin_horizontal"
+            android:layout_marginRight="@dimen/button_margin_horizontal"
+            android:layout_marginVertical="@dimen/button_margin_vertical"
+            android:layout_marginBottom="@dimen/button_margin_vertical"
+            android:textSize="@dimen/list_item_text_size" />
+        <Button
+            android:id="@+id/button_track"
+            style="@style/RobotoButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/title_abb"
+            android:minHeight="0dp"
+            android:textColor="@color/yellow"
+            android:layout_marginLeft="@dimen/button_margin_horizontal"
+            android:layout_marginRight="@dimen/button_margin_horizontal"
+            android:layout_marginVertical="@dimen/button_margin_vertical"
+            android:layout_marginBottom="@dimen/button_margin_vertical"
+            android:textSize="@dimen/list_item_text_size" />
+        <Button
+            android:id="@+id/button_album"
+            style="@style/RobotoButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/album_abb"
+            android:minHeight="0dp"
+            android:textColor="@color/yellow"
+            android:layout_marginLeft="@dimen/button_margin_horizontal"
+            android:layout_marginRight="@dimen/button_margin_horizontal"
+            android:layout_marginVertical="@dimen/button_margin_vertical"
+            android:layout_marginBottom="@dimen/button_margin_vertical"
+            android:textSize="@dimen/list_item_text_size" />
+        <Button
+            android:id="@+id/button_clear"
+            style="@style/RobotoButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
+            android:text="@string/clear"
+            android:minHeight="0dp"
+            android:textColor="@color/yellow"
+            android:layout_marginLeft="@dimen/button_margin_horizontal"
+            android:layout_marginRight="@dimen/button_margin_horizontal"
+            android:layout_marginVertical="@dimen/button_margin_vertical"
+            android:layout_marginBottom="@dimen/button_margin_vertical"
+            android:textSize="@dimen/list_item_text_size" />
+    </LinearLayout>
 
     <View
         android:id="@+id/line2"

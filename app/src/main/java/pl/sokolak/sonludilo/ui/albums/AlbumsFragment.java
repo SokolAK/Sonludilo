@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -12,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.util.List;
+
 import pl.sokolak.sonludilo.ListTripleItemAdapter;
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.ui.SharedViewModel;
@@ -19,33 +22,72 @@ import pl.sokolak.sonludilo.ui.SharedViewModel;
 public class AlbumsFragment extends Fragment {
     private AlbumsViewModel albumsViewModel;
     private SharedViewModel sharedViewModel;
+    private ListView albumsListView;
+    private View listButtons;
+    private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         albumsViewModel = new ViewModelProvider(this, new AlbumsViewModelFactory(getContext())).get(AlbumsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_albums, container, false);
+        albumsViewModel.readAlbumsList(null, List.of("artist", "album", "year"));
+        albumsViewModel.setAlbumsListString();
+        root = inflater.inflate(R.layout.fragment_albums, container, false);
 
-        ListView albumsList = root.findViewById(R.id.albums_list);
+        albumsListView = root.findViewById(R.id.albums_list);
 
-        albumsViewModel.getList().observe(getViewLifecycleOwner(), list -> albumsList.setAdapter(new ListTripleItemAdapter(
-                getContext(),
-                list))
+        albumsViewModel.getAlbumsList().observe(getViewLifecycleOwner(), list -> {
+                    albumsViewModel.setAlbumsListString();
+                    albumsListView.setAdapter(new ListTripleItemAdapter(
+                            getContext(),
+                            albumsViewModel.getAlbumsListString().getValue()));
+                    toggleListButtons(list.size() > 0);
+                }
         );
 
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        albumsList.setOnItemClickListener((parent, view, position, id) -> {
-            sharedViewModel.setCurrentTrackList(albumsViewModel.getTrackListForAlbum(position));
-            NavHostFragment.findNavController(this).navigate(R.id.action_albums_to_player);
-        });
-
-        albumsList.setOnItemLongClickListener((parent, view, position, id) -> {
-            sharedViewModel.setCurrentTrackList(albumsViewModel.getTrackListForAlbum(position));
-            NavHostFragment.findNavController(this).navigate(R.id.action_albums_to_tracks);
-            return true;
-        });
+        configureSortButtons();
+        configureListListeners();
 
         TextView tipView = root.findViewById(R.id.tip);
         tipView.setSelected(true);
 
         return root;
+    }
+
+    private void configureListListeners() {
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        albumsListView.setOnItemClickListener((parent, view, position, id) -> {
+            sharedViewModel.setCurrentTrackList(albumsViewModel.getTrackListForAlbum(position));
+            NavHostFragment.findNavController(this).navigate(R.id.action_albums_to_player);
+        });
+
+        albumsListView.setOnItemLongClickListener((parent, view, position, id) -> {
+            sharedViewModel.setCurrentTrackList(albumsViewModel.getTrackListForAlbum(position));
+            NavHostFragment.findNavController(this).navigate(R.id.action_albums_to_tracks);
+            return true;
+        });
+    }
+
+    private void configureSortButtons() {
+        listButtons = root.findViewById(R.id.list_buttons);
+
+        Button bArtist = root.findViewById(R.id.button_artist);
+        bArtist.setOnClickListener(l -> {
+            albumsViewModel.readAlbumsList(null, List.of("artist"));
+        });
+        Button bAlbum = root.findViewById(R.id.button_album);
+        bAlbum.setOnClickListener(l -> {
+            albumsViewModel.readAlbumsList(null, List.of("album"));
+        });
+        Button bYear = root.findViewById(R.id.button_year);
+        bYear.setOnClickListener(l -> {
+            albumsViewModel.readAlbumsList(null, List.of("year"));
+        });
+    }
+
+    private void toggleListButtons(boolean flag) {
+        if (flag) {
+            listButtons.setVisibility(View.VISIBLE);
+        } else {
+            listButtons.setVisibility(View.INVISIBLE);
+        }
     }
 }

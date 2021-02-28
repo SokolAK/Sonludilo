@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TracksRepository {
 
@@ -21,7 +22,7 @@ public class TracksRepository {
         this.context = context;
     }
 
-    public List<Track> getAll(String selection) {
+    public List<Track> getAll(String selection, List<String> sort) {
 
         List<Track> trackList = new ArrayList<>();
 //        String selection = "album_id = ?";
@@ -36,15 +37,33 @@ public class TracksRepository {
         final String year = MediaStore.Audio.Media.YEAR;
         final String path = MediaStore.Audio.Media.DATA;
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-
         ContentResolver cr = context.getContentResolver();
+
+        String sortLine = sort.stream()
+                .map(p -> {
+                    switch (p) {
+                        case "track_no":
+                            return track_no;
+                        case "artist":
+                            return artist;
+                        case "album":
+                            return album;
+                        case "track":
+                            return track_name;
+                        default:
+                            return "";
+                    }
+                })
+                .filter(p -> !p.isEmpty())
+                .collect(Collectors.joining(", "));
+
         final String[] columns = {track_id, track_no, artist, track_name, album, year, duration, path, composer};
-        Cursor cursor = cr.query(uri, columns, selection, null, album + ", " + track_no + ", " + artist);
+        Cursor cursor = cr.query(uri, columns, selection, null, sortLine);
 
         while (cursor.moveToNext()) {
             Uri contentUri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, cursor.getInt(0));
             trackList.add(new Track(contentUri,
-                    cursor.getString(1),
+                    cursor.getInt(1),
                     cursor.getString(2),
                     cursor.getString(3),
                     cursor.getString(4),

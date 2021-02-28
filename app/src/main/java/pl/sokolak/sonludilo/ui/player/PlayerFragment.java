@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.rachitgoyal.segmented.SegmentedProgressBar;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,21 +39,16 @@ public class PlayerFragment extends Fragment {
     private View root;
     private ListView trackListView;
     private Button bClear;
-    private ImageButton bPlay;
-    private ImageButton bPause;
-    private ImageButton bStop;
-    private ImageButton bVolUp;
-    private ImageButton bVolDown;
-    private ImageButton bPrev;
-    private ImageButton bNext;
-    private ImageButton bRepeat;
+    private ImageButton bPlay, bPause, bStop, bVolUp, bVolDown, bPrev, bNext, bRepeat;
     private SeekBar seekBar;
     private View gifView;
     private SegmentedProgressBar volumeBar;
     private TextView tipView;
     private TextView remainingTime;
     private TextView elapsedTime;
-    private Thread thread = Thread.currentThread();
+    private View listButtons;
+    private Button bNumber, bArtist, bTitle, bAlbum;
+    private final Thread thread = Thread.currentThread();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +69,7 @@ public class PlayerFragment extends Fragment {
         configureGifListener();
         configureTrackListClickListener();
         configureTrackListLongClickListener();
+        configureListButtonsListeners();
 
         configureVolumeBarObserver();
         configureCurrentTrackListObserver();
@@ -90,6 +87,27 @@ public class PlayerFragment extends Fragment {
         return root;
     }
 
+    private void configureListButtonsListeners() {
+        bNumber.setOnClickListener(l -> {
+            sortTrackList((o1, o2) -> o1.getNo() - o2.getNo());
+        });
+        bArtist.setOnClickListener(l -> {
+            sortTrackList((o1, o2) -> o1.getArtist().compareTo(o2.getArtist()));
+        });
+        bTitle.setOnClickListener(l -> {
+            sortTrackList((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
+        });
+        bAlbum.setOnClickListener(l -> {
+            sortTrackList((o1, o2) -> o1.getAlbum().compareTo(o2.getAlbum()));
+        });
+    }
+
+    private void sortTrackList(Comparator<Track> comparator) {
+        if(Utils.isNotEmpty(sharedViewModel.getCurrentTrackList().getValue())) {
+            sharedViewModel.getCurrentTrackList().getValue().sort(comparator);
+            sharedViewModel.setCurrentTrackList(sharedViewModel.getCurrentTrackList().getValue());
+        }
+    }
 
     private void initViews() {
         trackListView = root.findViewById(R.id.track_list);
@@ -109,6 +127,11 @@ public class PlayerFragment extends Fragment {
         tipView = root.findViewById(R.id.tip);
         remainingTime = root.findViewById(R.id.remaining_time);
         elapsedTime = root.findViewById(R.id.elapsed_time);
+        listButtons = root.findViewById(R.id.list_buttons);
+        bNumber = root.findViewById(R.id.button_no);
+        bArtist = root.findViewById(R.id.button_artist);
+        bTitle = root.findViewById(R.id.button_track);
+        bAlbum = root.findViewById(R.id.button_album);
     }
 
     private void initTipView() {
@@ -152,13 +175,17 @@ public class PlayerFragment extends Fragment {
                     }
                     bStop.performClick();
                 }
-                if (currentTrackList.size() > 0) {
-                    bClear.setVisibility(View.VISIBLE);
-                } else {
-                    bClear.setVisibility(View.INVISIBLE);
-                }
+                toggleListButtons(currentTrackList.size() > 0);
             }
         });
+    }
+
+    private void toggleListButtons(boolean flag) {
+        if (flag) {
+            listButtons.setVisibility(View.VISIBLE);
+        } else {
+            listButtons.setVisibility(View.INVISIBLE);
+        }
     }
 
     private boolean isCurrentTrackOnList() {

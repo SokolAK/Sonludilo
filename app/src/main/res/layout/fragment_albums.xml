@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,6 +9,8 @@
         android:id="@+id/tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/line"
+        app:layout_constraintTop_toTopOf="parent"
         android:textSize="@dimen/list_item_text_size"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
@@ -21,12 +23,53 @@
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="4dp"
+        app:layout_constraintTop_toBottomOf="@id/tip"
         android:background="@color/yellow"/>
 
     <ListView
         android:id="@+id/albums_list"
         android:divider="@color/white"
         android:dividerHeight="1dp"
+        android:choiceMode="multipleChoice"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/list_buttons"
+        app:layout_constraintTop_toBottomOf="@id/line"/>
+
+    <LinearLayout
+        android:id="@+id/list_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/button_artist"
+            style="@style/RobotoButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/artist"
+            android:textColor="@color/yellow"
+            android:textSize="@dimen/list_item_text_size" />
+        <Button
+            android:id="@+id/button_album"
+            style="@style/RobotoButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/album"
+            android:textColor="@color/yellow"
+            android:textSize="@dimen/list_item_text_size" />
+        <Button
+            android:id="@+id/button_year"
+            style="@style/RobotoButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/year"
+            android:textColor="@color/yellow"
+            android:textSize="@dimen/list_item_text_size" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

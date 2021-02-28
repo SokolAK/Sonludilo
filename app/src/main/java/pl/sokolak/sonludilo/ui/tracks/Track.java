@@ -18,7 +18,7 @@ import pl.sokolak.sonludilo.Utils;
 
 public class Track {
     private Uri uri;
-    private String no;
+    private int no;
     private String artist;
     private String title;
     private String album;
@@ -28,9 +28,9 @@ public class Track {
     public Track() {
     }
 
-    public Track(Uri uri, String no, String artist, String title, String album, String year, int duration) {
+    public Track(Uri uri, int no, String artist, String title, String album, String year, int duration) {
         this.uri = uri;
-        this.no = Utils.notNull(no);
+        this.no = no;
         this.artist = Utils.notNull(artist);
         this.title = Utils.notNull(title);
         this.album = Utils.notNull(album);
@@ -41,18 +41,23 @@ public class Track {
     @SuppressLint("DefaultLocale")
     @NotNull
     public String toString() {
-        return no + ". " + artist + " - " + title + " (" + Utils.formatTime(duration) + ")";
+        return (no > 0 ? no + ". " : "") + artist + " - " + title + " (" + Utils.formatTime(duration) + ")";
     }
 
     public String toMultiLineStringShort() {
-        return no + ". " + title + " (" + Utils.formatTime(duration) + ")\n" +
+        return (no > 0 ? no + ". " : "") +
+                title + " (" + Utils.formatTime(duration) + ")\n" +
                 artist +
                 (!album.isEmpty() ? " - " + album : "") +
-                (!year.isEmpty() ? " [" + year +"]" : "");
+                (!year.isEmpty() ? " [" + year + "]" : "");
     }
 
     public Uri getUri() {
         return uri;
+    }
+
+    public int getNo() {
+        return no;
     }
 
     public int getDuration() {

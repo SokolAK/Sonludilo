@@ -19,32 +19,32 @@ import java.util.stream.IntStream;
 import pl.sokolak.sonludilo.ListTripleItemAdapter;
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.Utils;
-import pl.sokolak.sonludilo.ui.SharedViewModel;
+import pl.sokolak.sonludilo.ui.albums.AlbumsViewModel;
+import pl.sokolak.sonludilo.ui.player.PlayerViewModel;
 
 public class TracksFragment extends Fragment {
     private TracksViewModel tracksViewModel;
-    private SharedViewModel sharedViewModel;
+    private PlayerViewModel playerViewModel;
     private ListView trackListView;
     private View listButtons;
     private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        tracksViewModel = new ViewModelProvider(this, new TracksViewModelFactory(getContext())).get(TracksViewModel.class);
+        root = inflater.inflate(R.layout.fragment_tracks, container, false);
+
+        playerViewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
+        tracksViewModel = new ViewModelProvider(requireActivity()).get(TracksViewModel.class);
+        tracksViewModel.setContext(getContext());
+
         tracksViewModel.readTrackList(null, List.of("album", "track_no", "artist", "track_name"));
         tracksViewModel.setTrackListString();
-        root = inflater.inflate(R.layout.fragment_tracks, container, false);
 
         trackListView = root.findViewById(R.id.track_list);
         tracksViewModel.getTrackList().observe(getViewLifecycleOwner(), list -> {
                     tracksViewModel.setTrackListString();
                     setListAdapter();
                     checkCurrentItems(list);
-                    List<Track> sharedTrackList = sharedViewModel.getCurrentTrackList().getValue();
-                    if (Utils.isNotEmpty(sharedTrackList)) {
-                        int id = tracksViewModel.getTrackList().getValue().indexOf(sharedTrackList.get(0));
-                        trackListView.setSelection(id);
-                    }
+                    setPosition();
                     toggleListButtons(list.size() > 0);
                 }
         );
@@ -56,6 +56,14 @@ public class TracksFragment extends Fragment {
         tipView.setSelected(true);
 
         return root;
+    }
+
+    private void setPosition() {
+        List<Track> sharedTrackList = playerViewModel.getTracks();
+        if (Utils.isNotEmpty(sharedTrackList)) {
+            int id = tracksViewModel.getTrackList().getValue().indexOf(sharedTrackList.get(0));
+            trackListView.setSelection(id);
+        }
     }
 
     private void configureSortButtons() {
@@ -84,7 +92,7 @@ public class TracksFragment extends Fragment {
     }
 
     private void checkCurrentItems(List<Track> list) {
-        List<Track> sharedTrackList = sharedViewModel.getCurrentTrackList().getValue();
+        List<Track> sharedTrackList = playerViewModel.getTracks();
         IntStream.range(0, list.size())
                 .forEach(i -> {
                             Track track = list.get(i);
@@ -102,11 +110,12 @@ public class TracksFragment extends Fragment {
 
     private void setClickListener() {
         trackListView.setOnItemClickListener((parent, view, position, id) -> {
-            Track track = tracksViewModel.getTrackList().getValue().get(position);
-            if (!sharedViewModel.checkIfTrackOnList(track)) {
-                sharedViewModel.addTrack(track);
+            List<Track> allTracks = tracksViewModel.getTrackList().getValue();
+            Track track = allTracks.get(position);
+            if (!playerViewModel.isTrackOnList(track)) {
+                playerViewModel.addTrack(track);
             } else {
-                sharedViewModel.removeTrack(track);
+                playerViewModel.removeTrack(track);
             }
             //NavHostFragment.findNavController(this).navigate(R.id.action_tracks_to_player);
         });

@@ -1,8 +1,6 @@
 package pl.sokolak.sonludilo.ui.player;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -22,18 +20,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.rachitgoyal.segmented.SegmentedProgressBar;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import pl.sokolak.sonludilo.ListSingleItemAdapter;
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.SeekBarListener;
 import pl.sokolak.sonludilo.Utils;
-import pl.sokolak.sonludilo.ui.SharedViewModel;
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
 public class PlayerFragment extends Fragment {
-    private SharedViewModel sharedViewModel;
     private PlayerViewModel playerViewModel;
     private Handler timeHandler;
     private View root;
@@ -48,13 +43,12 @@ public class PlayerFragment extends Fragment {
     private TextView elapsedTime;
     private View listButtons;
     private Button bNumber, bArtist, bTitle, bAlbum;
-    private final Thread thread = Thread.currentThread();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_player, container, false);
-        playerViewModel = new ViewModelProvider(this, new PlayerViewModelFactory(getContext(), root)).get(PlayerViewModel.class);
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        playerViewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
+        playerViewModel.init(getContext(), root);
         initViews();
 
         configurePlayListener();
@@ -68,22 +62,21 @@ public class PlayerFragment extends Fragment {
         configureClearListener();
         configureGifListener();
         configureTrackListClickListener();
-        configureTrackListLongClickListener();
+        //configureTrackListLongClickListener();
         configureListButtonsListeners();
 
         configureVolumeBarObserver();
         configureCurrentTrackListObserver();
-        configureCurrentTrackObserver();
-        configurePlayerStatusObserver();
 
         initTipView();
         //controlTimeUpdate(true);
+        playerViewModel.adjustSeekBar(seekBar);
         timeHandler = new Handler(Looper.getMainLooper());
         timeHandler.postDelayed(updateTime, 0);
         seekBar.setOnSeekBarChangeListener(new SeekBarListener(playerViewModel));
         playerViewModel.initVolumeBarProgress(volumeBar);
-        playerViewModel.initSeekBarProgress(sharedViewModel.getCurrentTrack().getValue(), seekBar);
         playerViewModel.updateGif();
+
         return root;
     }
 
@@ -103,10 +96,7 @@ public class PlayerFragment extends Fragment {
     }
 
     private void sortTrackList(Comparator<Track> comparator) {
-        if(Utils.isNotEmpty(sharedViewModel.getCurrentTrackList().getValue())) {
-            sharedViewModel.getCurrentTrackList().getValue().sort(comparator);
-            sharedViewModel.setCurrentTrackList(sharedViewModel.getCurrentTrackList().getValue());
-        }
+        playerViewModel.sortTrackList(comparator);
     }
 
     private void initViews() {
@@ -135,7 +125,7 @@ public class PlayerFragment extends Fragment {
     }
 
     private void initTipView() {
-        if (sharedViewModel.isTrackListNotEmpty()) {
+        if (Utils.isNotEmpty(playerViewModel.getTracks())) {
             tipView.setVisibility(View.VISIBLE);
             tipView.setSelected(true);
         } else {
@@ -143,42 +133,28 @@ public class PlayerFragment extends Fragment {
         }
     }
 
-    private void configurePlayerStatusObserver() {
-        playerViewModel.getStatus().observe(getViewLifecycleOwner(), status -> {
-            if (status == PlayerModel.Status.COMPLETED) {
-                if (playerViewModel.isRepeatEnabled()) {
-                    bStop.performClick();
-                    bPlay.performClick();
-                } else {
-                    bNext.performClick();
-                }
-            }
-        });
-    }
-
     private void configureCurrentTrackListObserver() {
-        sharedViewModel.getCurrentTrackList().observe(getViewLifecycleOwner(), list -> {
+        playerViewModel.getTrackList().observe(getViewLifecycleOwner(), list -> {
             trackListView.setAdapter(new ListSingleItemAdapter(
                     getContext(),
-                    list.stream().map(Track::toMultiLineStringShort).collect(Collectors.toList())));
-            isCurrentTrackOnList();
+                    list.getTracks().stream().map(Track::toMultiLineStringShort).collect(Collectors.toList())));
+            toggleListButtons(Utils.isNotEmpty(list.getTracks()));
+
+            trackListView.setItemChecked(list.getCurrentId(), true);
+            focusOnCurrentTrack();
+            playerViewModel.adjustSeekBar(seekBar);
         });
     }
 
-    private void configureCurrentTrackObserver() {
-        sharedViewModel.getCurrentTrack().observe(getViewLifecycleOwner(), n -> {
-            List<Track> currentTrackList = sharedViewModel.getCurrentTrackList().getValue();
-            if (currentTrackList != null) {
-                if (!isCurrentTrackOnList()) {
-                    if (currentTrackList.size() > 0) {
-                        trackListItemClick(0, false);
-                    }
-                    bStop.performClick();
-                }
-                toggleListButtons(currentTrackList.size() > 0);
-            }
-        });
-    }
+//    private void clickTrackListItem(int position) {
+//        if (position >= 0 && position < trackListView.getCount()) {
+//            trackListView.performItemClick(trackListView.getAdapter().getView(position, null, null),
+//                    position,
+//                    trackListView.getAdapter().getItemId(position));
+//        }
+//        //bStop.performClick();
+//    }
+
 
     private void toggleListButtons(boolean flag) {
         if (flag) {
@@ -188,76 +164,26 @@ public class PlayerFragment extends Fragment {
         }
     }
 
-    private boolean isCurrentTrackOnList() {
-        List<Track> currentTrackList = sharedViewModel.getCurrentTrackList().getValue();
-        Track currentTrack = sharedViewModel.getCurrentTrack().getValue();
-        if (currentTrackList != null && currentTrack != null) {
-            for (int i = 0; i < currentTrackList.size(); ++i) {
-                if (currentTrackList.get(i).getUri().equals(currentTrack.getUri())) {
-                    trackListView.setItemChecked(i, true);
-                    int idSelected = Math.max(i - 2, 0);
-                    trackListView.setSelection(idSelected);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     private void configureTrackListClickListener() {
         trackListView.setOnItemClickListener((parent, view, position, id) -> {
-            List<Track> trackList = sharedViewModel.getCurrentTrackList().getValue();
-            if (sharedViewModel.isTrackListNotEmpty()) {
-                if (position < trackList.size()) {
-                    if (!sharedViewModel.isCurrentTrackPosition(position)) {
-                        Track currentTrack = sharedViewModel.getTrack(position);
-                        sharedViewModel.setCurrentTrack(currentTrack);
-                        playerViewModel.trackListItemClicked(currentTrack, seekBar);
-                        updateTime();
-                    }
-                }
-            }
+            playerViewModel.clickTrackListItem(position);
+            focusOnCurrentTrack();
         });
     }
 
-    private void configureTrackListLongClickListener() {
-        trackListView.setOnItemLongClickListener((parent, view, position, id) -> {
-            //int currentPosition = trackListView.getCheckedItemPosition();
-            Track currentTrack = sharedViewModel.getCurrentTrack().getValue();
-            sharedViewModel.removeTrack(position);
-
-            if (sharedViewModel.isTrackListNotEmpty()) {
-                int currentPosition = sharedViewModel.getTrackPosition(currentTrack);
-                if (currentPosition >= 0) {
-                    trackListItemClick(currentPosition, false);
-                } else {
-                    position = Math.min(position, trackListView.getCount() - 1);
-                    boolean stop = !playerViewModel.isPlaying();
-                    trackListItemClick(position, stop);
-                }
-            } else {
-                bClear.performClick();
-            }
-            return true;
-        });
+    private void focusOnCurrentTrack() {
+        int idSelected = Math.max(playerViewModel.getCurrentId() - 2, 0);
+        trackListView.setSelection(idSelected);
     }
+
 
     private void configureVolumeBarObserver() {
-        sharedViewModel.getCurrentVolume().observe(getViewLifecycleOwner(), v -> {
+        playerViewModel.getCurrentVolume().observe(getViewLifecycleOwner(), v -> {
             volumeBar.setEnabledDivisions(playerViewModel.getVolumeSegments(v));
         });
     }
 
-    private void trackListItemClick(int position, boolean stop) {
-        if (position >= 0 && position < trackListView.getCount()) {
-            trackListView.performItemClick(trackListView.getAdapter().getView(position, null, null),
-                    position,
-                    trackListView.getAdapter().getItemId(position));
-            if (stop) {
-                bStop.performClick();
-            }
-        }
-    }
 
     private void configurePlayListener() {
         bPlay.setOnClickListener(l -> {
@@ -280,7 +206,6 @@ public class PlayerFragment extends Fragment {
     private void configureVolUpListener() {
         bVolUp.setOnClickListener(l -> {
                     playerViewModel.bVolUpClicked();
-                    updateVolume();
                 }
         );
     }
@@ -288,33 +213,19 @@ public class PlayerFragment extends Fragment {
     private void configureVolDownListener() {
         bVolDown.setOnClickListener(l -> {
                     playerViewModel.bVolDownClicked();
-                    updateVolume();
                 }
         );
     }
 
     private void configureNextListener() {
-        bNext.setOnClickListener(l -> {
-                    if (trackListView.getCount() > 0) {
-                        int newPosition = trackListView.getCheckedItemPosition() + 1;
-                        if (newPosition < trackListView.getCount()) {
-                            trackListItemClick(newPosition, !playerViewModel.isPlaying());
-                        }
-                    }
-                }
+        bNext.setOnClickListener(l ->
+                playerViewModel.setNextTrack()
         );
     }
 
     private void configurePrevListener() {
-        bPrev.setOnClickListener(l -> {
-                    List<Track> trackList = sharedViewModel.getCurrentTrackList().getValue();
-                    if (trackList != null) {
-                        int newPosition = trackListView.getCheckedItemPosition() - 1;
-                        if (newPosition >= 0) {
-                            trackListItemClick(newPosition, !playerViewModel.isPlaying());
-                        }
-                    }
-                }
+        bPrev.setOnClickListener(l ->
+                playerViewModel.setPrevTrack()
         );
     }
 
@@ -327,9 +238,8 @@ public class PlayerFragment extends Fragment {
 
     private void configureClearListener() {
         bClear.setOnClickListener(l -> {
-            sharedViewModel.clearTrackList();
-            sharedViewModel.setCurrentTrack(null);
-            playerViewModel.trackListItemClicked(null, seekBar);
+            playerViewModel.clearTrackList();
+            playerViewModel.clickTrackListItem(-1);
             initTipView();
             //bStop.performClick();
         });
@@ -337,19 +247,9 @@ public class PlayerFragment extends Fragment {
 
     private void configureGifListener() {
         gifView.setOnClickListener(v ->
-        {
-            if (playerViewModel.isPlaying()) {
-                bPause.performClick();
-            } else {
-                bPlay.performClick();
-            }
-        });
+            playerViewModel.gifClicked());
     }
 
-    private void updateVolume() {
-        AudioManager audioManager = (AudioManager) requireContext().getSystemService(Context.AUDIO_SERVICE);
-        sharedViewModel.setCurrentVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
-    }
 
 //    private void controlTimeUpdate(boolean run) {
 //        if (!run) {
@@ -363,15 +263,6 @@ public class PlayerFragment extends Fragment {
 //        }
 //    }
 
-    private int[] updateTime() {
-        int[] time = playerViewModel.getPlayerTime();
-        SeekBar seekBar = root.findViewById(R.id.seek_bar);
-        elapsedTime.setText(Utils.formatTime(time[0]));
-        remainingTime.setText("-" + Utils.formatTime(time[1]));
-        playerViewModel.setSeekBarProgress(seekBar, time[0]);
-        return time;
-    }
-
     private final Runnable updateTime = new Runnable() {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
         public void run() {
@@ -379,4 +270,12 @@ public class PlayerFragment extends Fragment {
             timeHandler.postDelayed(this, 200);
         }
     };
+
+    private void updateTime() {
+        int[] time = playerViewModel.getPlayerTime();
+        SeekBar seekBar = root.findViewById(R.id.seek_bar);
+        elapsedTime.setText(Utils.formatTime(time[0]));
+        remainingTime.setText("-" + Utils.formatTime(time[1]));
+        playerViewModel.setSeekBarProgress(seekBar, time[0]);
+    }
 }

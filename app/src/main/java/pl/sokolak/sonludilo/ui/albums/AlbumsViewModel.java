@@ -18,9 +18,9 @@ import pl.sokolak.sonludilo.ui.tracks.TracksRepository;
 public class AlbumsViewModel extends ViewModel {
     private final MutableLiveData<List<List<String>>> albumsListString = new MutableLiveData<>();
     private final MutableLiveData<List<Album>> albumsList = new MutableLiveData<>();
-    private final WeakReference<Context> weakContext;
+    private WeakReference<Context> weakContext;
 
-    public AlbumsViewModel(Context context) {
+    public void setContext(Context context) {
         weakContext = new WeakReference<>(context);
     }
 

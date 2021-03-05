@@ -7,16 +7,17 @@ import android.os.Handler;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import pl.sokolak.sonludilo.ui.SharedViewModel;
+import pl.sokolak.sonludilo.ui.player.PlayerViewModel;
+
 
 public class VolumeObserver extends ContentObserver {
     private final AudioManager audioManager;
-    private final SharedViewModel sharedViewModel;
+    private final PlayerViewModel playerViewModel;
 
-    public VolumeObserver(Context context, SharedViewModel sharedViewModel, Handler handler) {
+    public VolumeObserver(Context context, PlayerViewModel playerViewModel, Handler handler) {
         super(handler);
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        this.sharedViewModel = sharedViewModel;
+        this.playerViewModel = playerViewModel;
     }
 
     @Override
@@ -26,6 +27,6 @@ public class VolumeObserver extends ContentObserver {
 
     @Override
     public void onChange(boolean selfChange) {
-        sharedViewModel.setCurrentVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+        playerViewModel.setCurrentVolume(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
     }
 }

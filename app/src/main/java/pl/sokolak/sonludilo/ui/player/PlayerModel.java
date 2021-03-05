@@ -5,28 +5,34 @@ import android.media.MediaPlayer;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
+import pl.sokolak.sonludilo.Utils;
 import pl.sokolak.sonludilo.ui.tracks.Track;
 
 public enum PlayerModel {
     INSTANCE;
 
-    private final MediaPlayer mediaPlayer;
-    private Track currentTrack;
-    private boolean repeatEnabled = false;
     private WeakReference<Context> weakContext;
-    private Status status = Status.STOPPED;
     private PlayerViewModel playerViewModel;
+    private final MediaPlayer mediaPlayer;
+    private boolean repeatEnabled = false;
+    private Status status = Status.STOPPED;
+
 
     PlayerModel() {
-        this.mediaPlayer = new MediaPlayer();
+        mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(l -> {
-            setStatus(Status.COMPLETED);
+            if(status == Status.PLAYING)
+                setStatus(Status.COMPLETED);
+            //notifyViewModel();
         });
     }
 
+
     private void notifyViewModel() {
         playerViewModel.updateStatus(status);
+        //playerViewModel.updateCurrentTrack(currentTrack);
     }
 
     public void setViewModel(PlayerViewModel playerViewModel) {
@@ -38,33 +44,24 @@ public enum PlayerModel {
     }
 
     public void play() {
-        if (currentTrack != null) {
+        if (playerViewModel.getCurrentTrack() != null) {
             mediaPlayer.start();
-            if (mediaPlayer.isPlaying()) {
-                setStatus(Status.PLAYING);
-                notifyViewModel();
-            }
+            setStatus(Status.PLAYING);
         }
     }
 
     public void pause() {
-        if (currentTrack != null) {
+        if (playerViewModel.getCurrentTrack() != null) {
             mediaPlayer.pause();
-            if (!mediaPlayer.isPlaying()) {
-                setStatus(Status.PAUSED);
-                notifyViewModel();
-            }
+            setStatus(Status.PAUSED);
         }
     }
 
     public void stop() {
-        if (currentTrack != null) {
+        if (playerViewModel.getCurrentTrack() != null) {
             mediaPlayer.pause();
             mediaPlayer.seekTo(0);
-            if (!mediaPlayer.isPlaying()) {
-                setStatus(Status.STOPPED);
-                notifyViewModel();
-            }
+            setStatus(Status.STOPPED);
         }
     }
 
@@ -73,7 +70,6 @@ public enum PlayerModel {
     }
 
     public void setCurrentTrack(Track currentTrack) {
-        this.currentTrack = currentTrack;
         mediaPlayer.reset();
         //mediaPlayer.release();
         if (currentTrack != null) {
@@ -101,7 +97,7 @@ public enum PlayerModel {
 
     public int[] getTime() {
         int[] time = new int[]{0, 0};
-        if (mediaPlayer != null && currentTrack != null) {
+        if (mediaPlayer != null && playerViewModel.getCurrentTrack() != null) {
             time[0] = mediaPlayer.getCurrentPosition();
             time[1] = mediaPlayer.getDuration() - time[0];
         }

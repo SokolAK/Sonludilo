@@ -17,17 +17,19 @@ import java.util.List;
 
 import pl.sokolak.sonludilo.ListTripleItemAdapter;
 import pl.sokolak.sonludilo.R;
-import pl.sokolak.sonludilo.ui.SharedViewModel;
+import pl.sokolak.sonludilo.ui.player.PlayerViewModel;
+
 
 public class AlbumsFragment extends Fragment {
     private AlbumsViewModel albumsViewModel;
-    private SharedViewModel sharedViewModel;
+    private PlayerViewModel playerViewModel;
     private ListView albumsListView;
     private View listButtons;
     private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        albumsViewModel = new ViewModelProvider(this, new AlbumsViewModelFactory(getContext())).get(AlbumsViewModel.class);
+        albumsViewModel = new ViewModelProvider(requireActivity()).get(AlbumsViewModel.class);
+        albumsViewModel.setContext(getContext());
         albumsViewModel.readAlbumsList(null, List.of("artist", "album", "year"));
         albumsViewModel.setAlbumsListString();
         root = inflater.inflate(R.layout.fragment_albums, container, false);
@@ -53,14 +55,14 @@ public class AlbumsFragment extends Fragment {
     }
 
     private void configureListListeners() {
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        playerViewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
         albumsListView.setOnItemClickListener((parent, view, position, id) -> {
-            sharedViewModel.setCurrentTrackList(albumsViewModel.getTrackListForAlbum(position));
+            playerViewModel.updateTrackList(albumsViewModel.getTrackListForAlbum(position));
             NavHostFragment.findNavController(this).navigate(R.id.action_albums_to_player);
         });
 
         albumsListView.setOnItemLongClickListener((parent, view, position, id) -> {
-            sharedViewModel.setCurrentTrackList(albumsViewModel.getTrackListForAlbum(position));
+            playerViewModel.updateTrackList(albumsViewModel.getTrackListForAlbum(position));
             NavHostFragment.findNavController(this).navigate(R.id.action_albums_to_tracks);
             return true;
         });

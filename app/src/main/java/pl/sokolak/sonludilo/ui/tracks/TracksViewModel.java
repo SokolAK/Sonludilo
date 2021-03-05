@@ -16,9 +16,9 @@ import pl.sokolak.sonludilo.Utils;
 public class TracksViewModel extends ViewModel {
     private final MutableLiveData<List<List<String>>> trackListString = new MutableLiveData<>();
     private final MutableLiveData<List<Track>> trackList = new MutableLiveData<>();
-    private final WeakReference<Context> weakContext;
+    private WeakReference<Context> weakContext;
 
-    public TracksViewModel(Context context) {
+    public void setContext(Context context) {
         weakContext = new WeakReference<>(context);
     }
 

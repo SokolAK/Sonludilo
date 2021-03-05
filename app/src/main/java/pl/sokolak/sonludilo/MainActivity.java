@@ -1,14 +1,9 @@
 package pl.sokolak.sonludilo;
 
 import android.Manifest;
-import android.content.Context;
-import android.database.ContentObserver;
-import android.media.AudioManager;
 import android.os.Bundle;
-import android.view.KeyEvent;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -18,8 +13,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import pl.sokolak.sonludilo.ui.SharedViewModel;
-import pl.sokolak.sonludilo.ui.player.PlayerFragment;
+import pl.sokolak.sonludilo.ui.player.PlayerViewModel;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        SharedViewModel sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        getContentResolver().registerContentObserver(android.provider.Settings.System.CONTENT_URI, true, new VolumeObserver(this, sharedViewModel, null) );
+        PlayerViewModel playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
+        getContentResolver().registerContentObserver(android.provider.Settings.System.CONTENT_URI, true, new VolumeObserver(this, playerViewModel, null) );
     }
 
 

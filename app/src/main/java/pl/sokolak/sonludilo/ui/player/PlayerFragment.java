@@ -62,7 +62,7 @@ public class PlayerFragment extends Fragment {
         configureClearListener();
         configureGifListener();
         configureTrackListClickListener();
-        //configureTrackListLongClickListener();
+        configureTrackListLongClickListener();
         configureListButtonsListeners();
 
         configureVolumeBarObserver();
@@ -141,8 +141,8 @@ public class PlayerFragment extends Fragment {
             toggleListButtons(Utils.isNotEmpty(list.getTracks()));
 
             trackListView.setItemChecked(list.getCurrentId(), true);
-            focusOnCurrentTrack();
             playerViewModel.adjustSeekBar(seekBar);
+            focusOnCurrentTrack();
         });
     }
 
@@ -169,6 +169,14 @@ public class PlayerFragment extends Fragment {
         trackListView.setOnItemClickListener((parent, view, position, id) -> {
             playerViewModel.clickTrackListItem(position);
             focusOnCurrentTrack();
+        });
+    }
+
+    private void configureTrackListLongClickListener() {
+        trackListView.setOnItemLongClickListener((parent, view, position, id) -> {
+            playerViewModel.removeTrack(position);
+            focusOnCurrentTrack();
+            return true;
         });
     }
 
@@ -239,7 +247,7 @@ public class PlayerFragment extends Fragment {
     private void configureClearListener() {
         bClear.setOnClickListener(l -> {
             playerViewModel.clearTrackList();
-            playerViewModel.clickTrackListItem(-1);
+            //playerViewModel.clickTrackListItem(-1);
             initTipView();
             //bStop.performClick();
         });
@@ -266,16 +274,22 @@ public class PlayerFragment extends Fragment {
     private final Runnable updateTime = new Runnable() {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
         public void run() {
-            updateTime();
-            timeHandler.postDelayed(this, 200);
+            timeHandler.postDelayed(this, 50);
         }
     };
 
-    private void updateTime() {
+    private int updateTime() {
         int[] time = playerViewModel.getPlayerTime();
+        System.out.println(time[0] + " " +time[1]);
         SeekBar seekBar = root.findViewById(R.id.seek_bar);
         elapsedTime.setText(Utils.formatTime(time[0]));
         remainingTime.setText("-" + Utils.formatTime(time[1]));
         playerViewModel.setSeekBarProgress(seekBar, time[0]);
+        if(time[1] <= 100 && time[0] > 0) {
+            if(playerViewModel.getPlayerStatus() != PlayerModel.Status.COMPLETED)
+                playerViewModel.updateStatus(PlayerModel.Status.COMPLETED);
+            //notifyViewModel();
+        }
+        return time[1];
     }
 }

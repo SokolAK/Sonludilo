@@ -1,5 +1,6 @@
 package pl.sokolak.sonludilo.ui.albums;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -27,6 +29,7 @@ public class AlbumsFragment extends Fragment {
     private View listButtons;
     private View root;
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         albumsViewModel = new ViewModelProvider(requireActivity()).get(AlbumsViewModel.class);
         albumsViewModel.setContext(getContext());
@@ -68,6 +71,7 @@ public class AlbumsFragment extends Fragment {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void configureSortButtons() {
         listButtons = root.findViewById(R.id.list_buttons);
 

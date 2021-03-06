@@ -2,10 +2,12 @@ package pl.sokolak.sonludilo.ui.player;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Build;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -56,22 +58,21 @@ public class PlayerViewModel extends ViewModel {
 //    }
 
     public void clickTrackListItem(int id) {
-        setCurrentId(id);
-        //playerModel.setCurrentTrack(getCurrentTrack());
-        //seekBar.setMax(getCurrentTrack().getDuration());
-
-
-
-
-        updateGif();
-//        trackList.getValue().setCurrentTrack(track);
-//        playerModel.stop();
-//        playerModel.setCurrentTrack(track);
-//        if (track != null) {
-//            seekBar.setMax(track.getDuration());
-//            playerModel.play();
-//        }
-//        updateGif();
+        if(id != getCurrentId() && id >= 0) {
+            updateTrackList(id);
+            switch(status.getValue()) {
+                case PLAYING:
+                case COMPLETED:
+                    playerModel.play();
+                    break;
+                case PAUSED:
+                    playerModel.pause();
+                    break;
+                case STOPPED:
+                    playerModel.stop();
+                    break;
+            }
+        }
     }
 
 
@@ -89,6 +90,9 @@ public class PlayerViewModel extends ViewModel {
         if(status == PlayerModel.Status.COMPLETED) {
             if (!isRepeatEnabled()) {
                 setNextTrack();
+            } else {
+                playerModel.stop();
+                playerModel.play();
             }
         }
 
@@ -171,14 +175,14 @@ public class PlayerViewModel extends ViewModel {
     public void setNextTrack() {
         int id = getCurrentId();
         id = Math.min(id + 1, getTracks().size() - 1);
-        updateTrackList(id);
         clickTrackListItem(id);
+        //updateTrackList();
     }
 
     public void setPrevTrack() {
         int id = getCurrentId();
         id = Math.max(id - 1, 0);
-        updateTrackList(id);
+        //updateTrackList(id);
         clickTrackListItem(id);
     }
 
@@ -187,24 +191,36 @@ public class PlayerViewModel extends ViewModel {
     }
 
     public void addTrack(Track track) {
-        getTracks().add(track);
-        updateTrackList();
+        List<Track> newTracks = new ArrayList<>(getTracks());
+        newTracks.add(track);
+        updateTrackList(newTracks);
     }
 
     public void removeTrack(Track track) {
-        getTracks().remove(track);
-        if (getTracks().size() > 0) {
-            if (getCurrentTrack().equals(track)) {
-                setCurrentId(0);
-            }
+        List<Track> newTracks = new ArrayList<>(getTracks());
+        newTracks.remove(track);
+
+        Track currentTrack = getCurrentTrack();
+        if(!currentTrack.equals(track)) {
+            updateTrackList(newTracks, newTracks.indexOf(currentTrack));
         } else {
-            setCurrentId(-1);
+            int id = getTracks().indexOf(currentTrack);
+            id = id >= newTracks.size() ? newTracks.size() - 1 : id;
+            setTracks(newTracks);
+            updateTrackList(newTracks, id);
         }
-        updateTrackList();
+        if(getTracks().size() == 0) {
+            clearTrackList();
+        }
+    }
+
+    public void removeTrack(int id) {
+        removeTrack(getTrack(id));
     }
 
 
     public void clearTrackList() {
+        bStopClicked();
         getTracks().clear();
         updateTrackList();
     }
@@ -221,16 +237,36 @@ public class PlayerViewModel extends ViewModel {
         updateTrackList(getTracks(), currentId);
     }
 
+
     private void updateTrackList(List<Track> tracks, int currentId) {
-        currentId = tracks.contains(getCurrentTrack()) ? currentId : 0;
+        if(tracks.contains(getCurrentTrack())) {
+            if(currentId == getCurrentId()) {
+                currentId = tracks.indexOf(getCurrentTrack());
+            }
+        } else {
+            currentId = 0;
+        }
+
         TrackList newTrackList = new TrackList(tracks, currentId);
+        boolean reload = getCurrentTrack() == null ||
+                !getCurrentTrack().equals(newTrackList.getCurrentTrack()) ||
+                getTracks().size() == 0;
+
         trackList.setValue(newTrackList);
-        playerModel.setCurrentTrack(getCurrentTrack());
+        if (reload) {
+            playerModel.setCurrentTrack(getCurrentTrack());
+            if(status.getValue() == PlayerModel.Status.PLAYING) {
+                playerModel.play();
+            }
+        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void sortTrackList(Comparator<Track> comp) {
-        getTracks().sort(comp);
-        updateTrackList();
+        List<Track> newTracks = new ArrayList<>(getTracks());
+        newTracks.sort(comp);
+        int newId = newTracks.indexOf(getCurrentTrack());
+        updateTrackList(newTracks, newId);
     }
 
     public boolean isTrackOnList(Track track) {
@@ -303,7 +339,7 @@ public class PlayerViewModel extends ViewModel {
     // gif control
     //==============================================================================================
     public void updateGif() {
-        switch (getPlayerStatus()) {
+        switch (status.getValue()) {
             case PLAYING:
                 startGif();
                 break;

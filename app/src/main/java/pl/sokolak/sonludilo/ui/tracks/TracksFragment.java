@@ -1,5 +1,6 @@
 package pl.sokolak.sonludilo.ui.tracks;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -66,6 +68,7 @@ public class TracksFragment extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void configureSortButtons() {
         listButtons = root.findViewById(R.id.list_buttons);
 

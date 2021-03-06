@@ -22,11 +22,11 @@ public enum PlayerModel {
 
     PlayerModel() {
         mediaPlayer = new MediaPlayer();
-        mediaPlayer.setOnCompletionListener(l -> {
-            if(status == Status.PLAYING)
-                setStatus(Status.COMPLETED);
-            //notifyViewModel();
-        });
+//        mediaPlayer.setOnCompletionListener(l -> {
+//            if(status == Status.PLAYING)
+//                setStatus(Status.COMPLETED);
+//            //notifyViewModel();
+//        });
     }
 
 
@@ -58,11 +58,11 @@ public enum PlayerModel {
     }
 
     public void stop() {
-        if (playerViewModel.getCurrentTrack() != null) {
-            mediaPlayer.pause();
-            mediaPlayer.seekTo(0);
-            setStatus(Status.STOPPED);
-        }
+        //if (playerViewModel.getCurrentTrack() != null) {
+        mediaPlayer.pause();
+        mediaPlayer.seekTo(0);
+        setStatus(Status.STOPPED);
+        //}
     }
 
     public void setTime(int time) {
@@ -79,11 +79,14 @@ public enum PlayerModel {
             try {
                 mediaPlayer.setDataSource(weakContext.get(), currentTrack.getUri());
                 mediaPlayer.prepare();
+                mediaPlayer.start();
+                mediaPlayer.pause();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             //mediaPlayer.setLooping(false);
         }
+        //notifyViewModel();
     }
 
     public Status getStatus() {

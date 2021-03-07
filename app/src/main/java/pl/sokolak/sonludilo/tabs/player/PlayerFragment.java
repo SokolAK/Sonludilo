@@ -274,11 +274,12 @@ public class PlayerFragment extends Fragment {
     private final Runnable updateTime = new Runnable() {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
         public void run() {
-            timeHandler.postDelayed(this, 50);
+            updateTime();
+            timeHandler.postDelayed(this, 500);
         }
     };
 
-    private int updateTime() {
+    private void updateTime() {
         int[] time = playerViewModel.getPlayerTime();
         System.out.println(time[0] + " " + time[1]);
         SeekBar seekBar = root.findViewById(R.id.seek_bar);
@@ -290,6 +291,5 @@ public class PlayerFragment extends Fragment {
                 playerViewModel.updateStatus(PlayerModel.Status.COMPLETED);
             //notifyViewModel();
         }
-        return time[1];
     }
 }

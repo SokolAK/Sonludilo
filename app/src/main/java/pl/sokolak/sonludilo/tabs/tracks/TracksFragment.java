@@ -1,4 +1,4 @@
-package pl.sokolak.sonludilo.ui.tracks;
+package pl.sokolak.sonludilo.tabs.tracks;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -10,19 +10,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.Comparator;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import pl.sokolak.sonludilo.ListTripleItemAdapter;
+import pl.sokolak.sonludilo.adapters.ListTripleItemAdapter;
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.Utils;
-import pl.sokolak.sonludilo.ui.albums.AlbumsViewModel;
-import pl.sokolak.sonludilo.ui.player.PlayerViewModel;
+import pl.sokolak.sonludilo.tabs.player.PlayerViewModel;
 
 public class TracksFragment extends Fragment {
     private TracksViewModel tracksViewModel;
@@ -38,7 +37,7 @@ public class TracksFragment extends Fragment {
         tracksViewModel = new ViewModelProvider(requireActivity()).get(TracksViewModel.class);
         tracksViewModel.setContext(getContext());
 
-        tracksViewModel.readTrackList(null, List.of("album", "track_no", "artist", "track_name"));
+        tracksViewModel.readTrackList(null, Arrays.asList("album", "track_no", "artist", "track_name"));
         tracksViewModel.setTrackListString();
 
         trackListView = root.findViewById(R.id.track_list);
@@ -68,21 +67,20 @@ public class TracksFragment extends Fragment {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
     private void configureSortButtons() {
         listButtons = root.findViewById(R.id.list_buttons);
 
         Button bArtist = root.findViewById(R.id.button_artist);
         bArtist.setOnClickListener(l -> {
-            tracksViewModel.readTrackList(null, List.of("artist"));
+            tracksViewModel.readTrackList(null, Collections.singletonList("artist"));
         });
         Button bTitle = root.findViewById(R.id.button_track);
         bTitle.setOnClickListener(l -> {
-            tracksViewModel.readTrackList(null, List.of("track"));
+            tracksViewModel.readTrackList(null, Collections.singletonList("track"));
         });
         Button bAlbum = root.findViewById(R.id.button_album);
         bAlbum.setOnClickListener(l -> {
-            tracksViewModel.readTrackList(null, List.of("album"));
+            tracksViewModel.readTrackList(null, Collections.singletonList("album"));
         });
     }
 
@@ -115,7 +113,7 @@ public class TracksFragment extends Fragment {
         trackListView.setOnItemClickListener((parent, view, position, id) -> {
             List<Track> allTracks = tracksViewModel.getTrackList().getValue();
             Track track = allTracks.get(position);
-            if (!playerViewModel.isTrackOnList(track)) {
+            if (!playerViewModel.isTrackOnCurrentList(track)) {
                 playerViewModel.addTrack(track);
             } else {
                 playerViewModel.removeTrack(track);

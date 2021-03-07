@@ -1,6 +1,5 @@
-package pl.sokolak.sonludilo.ui.albums;
+package pl.sokolak.sonludilo.tabs.albums;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,16 +9,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
 
-import pl.sokolak.sonludilo.ListTripleItemAdapter;
 import pl.sokolak.sonludilo.R;
-import pl.sokolak.sonludilo.ui.player.PlayerViewModel;
+import pl.sokolak.sonludilo.adapters.ListTripleItemAdapter;
+import pl.sokolak.sonludilo.tabs.player.PlayerViewModel;
 
 
 public class AlbumsFragment extends Fragment {
@@ -29,11 +28,11 @@ public class AlbumsFragment extends Fragment {
     private View listButtons;
     private View root;
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         albumsViewModel = new ViewModelProvider(requireActivity()).get(AlbumsViewModel.class);
         albumsViewModel.setContext(getContext());
-        albumsViewModel.readAlbumsList(null, List.of("artist", "album", "year"));
+        albumsViewModel.readAlbumsList(null, Arrays.asList("artist", "album", "year"));
         albumsViewModel.setAlbumsListString();
         root = inflater.inflate(R.layout.fragment_albums, container, false);
 
@@ -71,21 +70,20 @@ public class AlbumsFragment extends Fragment {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
     private void configureSortButtons() {
         listButtons = root.findViewById(R.id.list_buttons);
 
         Button bArtist = root.findViewById(R.id.button_artist);
         bArtist.setOnClickListener(l -> {
-            albumsViewModel.readAlbumsList(null, List.of("artist"));
+            albumsViewModel.readAlbumsList(null, Collections.singletonList("artist"));
         });
         Button bAlbum = root.findViewById(R.id.button_album);
         bAlbum.setOnClickListener(l -> {
-            albumsViewModel.readAlbumsList(null, List.of("album"));
+            albumsViewModel.readAlbumsList(null, Collections.singletonList("album"));
         });
         Button bYear = root.findViewById(R.id.button_year);
         bYear.setOnClickListener(l -> {
-            albumsViewModel.readAlbumsList(null, List.of("year"));
+            albumsViewModel.readAlbumsList(null, Collections.singletonList("year"));
         });
     }
 

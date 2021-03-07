@@ -1,19 +1,12 @@
-package pl.sokolak.sonludilo.ui.tracks;
+package pl.sokolak.sonludilo.tabs.tracks;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
-import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.Utils;
 
 public class Track {

@@ -1,7 +1,6 @@
-package pl.sokolak.sonludilo;
+package pl.sokolak.sonludilo.adapters;
 
 import android.content.Context;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
+
+import pl.sokolak.sonludilo.R;
 
 
 public class ListSingleItemAdapter extends ArrayAdapter<String> {

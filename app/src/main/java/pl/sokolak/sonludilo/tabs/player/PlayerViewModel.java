@@ -1,4 +1,4 @@
-package pl.sokolak.sonludilo.ui.player;
+package pl.sokolak.sonludilo.tabs.player;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -17,13 +16,12 @@ import com.rachitgoyal.segmented.SegmentedProgressBar;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.TrackList;
-import pl.sokolak.sonludilo.ui.tracks.Track;
+import pl.sokolak.sonludilo.tabs.tracks.Track;
 
 public class PlayerViewModel extends ViewModel {
     private WeakReference<Context> weakContext;
@@ -31,8 +29,6 @@ public class PlayerViewModel extends ViewModel {
     private GifDrawable gif;
     private PlayerModel.Status prevStatus;
     private final MutableLiveData<PlayerModel.Status> status = new MutableLiveData<>(PlayerModel.Status.STOPPED);
-    //private final MutableLiveData<Track> currentTrack = new MutableLiveData<>();
-    //private final MutableLiveData<List<Track>> currentTrackList = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<Integer> currentVolume = new MutableLiveData<>();
     private final MutableLiveData<TrackList> trackList = new MutableLiveData<>(new TrackList());
 
@@ -58,9 +54,9 @@ public class PlayerViewModel extends ViewModel {
 //    }
 
     public void clickTrackListItem(int id) {
-        if(id != getCurrentId() && id >= 0) {
+        if (id != getCurrentId() && id >= 0) {
             updateTrackList(id);
-            switch(status.getValue()) {
+            switch (status.getValue()) {
                 case PLAYING:
                 case COMPLETED:
                     playerModel.play();
@@ -87,7 +83,7 @@ public class PlayerViewModel extends ViewModel {
     public void updateStatus(PlayerModel.Status status) {
         this.status.setValue(status);
 
-        if(status == PlayerModel.Status.COMPLETED) {
+        if (status == PlayerModel.Status.COMPLETED) {
             if (!isRepeatEnabled()) {
                 setNextTrack();
             } else {
@@ -201,7 +197,7 @@ public class PlayerViewModel extends ViewModel {
         newTracks.remove(track);
 
         Track currentTrack = getCurrentTrack();
-        if(!currentTrack.equals(track)) {
+        if (!currentTrack.equals(track)) {
             updateTrackList(newTracks, newTracks.indexOf(currentTrack));
         } else {
             int id = getTracks().indexOf(currentTrack);
@@ -209,7 +205,7 @@ public class PlayerViewModel extends ViewModel {
             setTracks(newTracks);
             updateTrackList(newTracks, id);
         }
-        if(getTracks().size() == 0) {
+        if (getTracks().size() == 0) {
             clearTrackList();
         }
     }
@@ -237,31 +233,41 @@ public class PlayerViewModel extends ViewModel {
         updateTrackList(getTracks(), currentId);
     }
 
-
     private void updateTrackList(List<Track> tracks, int currentId) {
-        if(tracks.contains(getCurrentTrack())) {
-            if(currentId == getCurrentId()) {
-                currentId = tracks.indexOf(getCurrentTrack());
-            }
-        } else {
-            currentId = 0;
-        }
-
+        currentId = determineCurrentId(tracks, currentId);
         TrackList newTrackList = new TrackList(tracks, currentId);
-        boolean reload = getCurrentTrack() == null ||
-                !getCurrentTrack().equals(newTrackList.getCurrentTrack()) ||
-                getTracks().size() == 0;
-
+        boolean reload = shouldReload(newTrackList);
         trackList.setValue(newTrackList);
         if (reload) {
-            playerModel.setCurrentTrack(getCurrentTrack());
-            if(status.getValue() == PlayerModel.Status.PLAYING) {
-                playerModel.play();
-            }
+            reload();
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    private int determineCurrentId(List<Track> tracks, int currentId) {
+        if (tracks.contains(getCurrentTrack())) {
+            if (currentId == getCurrentId()) {
+                return tracks.indexOf(getCurrentTrack());
+            } else {
+                return currentId;
+            }
+        } else {
+            return 0;
+        }
+    }
+
+    private boolean shouldReload(TrackList newTrackList) {
+        return getCurrentTrack() == null ||
+                !getCurrentTrack().equals(newTrackList.getCurrentTrack()) ||
+                getTracks().size() == 0;
+    }
+
+    private void reload() {
+        playerModel.setCurrentTrack(getCurrentTrack());
+        if (status.getValue() == PlayerModel.Status.PLAYING) {
+            playerModel.play();
+        }
+    }
+
     public void sortTrackList(Comparator<Track> comp) {
         List<Track> newTracks = new ArrayList<>(getTracks());
         newTracks.sort(comp);
@@ -269,7 +275,7 @@ public class PlayerViewModel extends ViewModel {
         updateTrackList(newTracks, newId);
     }
 
-    public boolean isTrackOnList(Track track) {
+    public boolean isTrackOnCurrentList(Track track) {
         return trackList.getValue().isTrackOnList(track);
     }
 
@@ -277,7 +283,7 @@ public class PlayerViewModel extends ViewModel {
     // seekBar control
     //==============================================================================================
     public void adjustSeekBar(SeekBar seekBar) {
-        if (getCurrentTrack()!= null) {
+        if (getCurrentTrack() != null) {
             seekBar.setMax(getCurrentTrack().getDuration());
         }
     }
@@ -339,15 +345,10 @@ public class PlayerViewModel extends ViewModel {
     // gif control
     //==============================================================================================
     public void updateGif() {
-        switch (status.getValue()) {
-            case PLAYING:
-                startGif();
-                break;
-            case PAUSED:
-            case STOPPED:
-            case COMPLETED:
-                stopGif();
-                break;
+        if (status.getValue() == PlayerModel.Status.PLAYING) {
+            startGif();
+        } else {
+            stopGif();
         }
     }
 

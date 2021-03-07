@@ -1,14 +1,12 @@
-package pl.sokolak.sonludilo.ui.player;
+package pl.sokolak.sonludilo.tabs.player;
 
 import android.content.Context;
 import android.media.MediaPlayer;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.List;
 
-import pl.sokolak.sonludilo.Utils;
-import pl.sokolak.sonludilo.ui.tracks.Track;
+import pl.sokolak.sonludilo.tabs.tracks.Track;
 
 public enum PlayerModel {
     INSTANCE;

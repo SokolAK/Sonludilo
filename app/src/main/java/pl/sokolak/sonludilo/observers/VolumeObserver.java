@@ -1,13 +1,11 @@
-package pl.sokolak.sonludilo;
+package pl.sokolak.sonludilo.observers;
 
 import android.content.Context;
 import android.database.ContentObserver;
 import android.media.AudioManager;
 import android.os.Handler;
 
-import androidx.lifecycle.ViewModelProvider;
-
-import pl.sokolak.sonludilo.ui.player.PlayerViewModel;
+import pl.sokolak.sonludilo.tabs.player.PlayerViewModel;
 
 
 public class VolumeObserver extends ContentObserver {

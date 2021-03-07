@@ -3,7 +3,7 @@ package pl.sokolak.sonludilo;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.sokolak.sonludilo.ui.tracks.Track;
+import pl.sokolak.sonludilo.tabs.tracks.Track;
 
 
 public class TrackList {
@@ -30,7 +30,6 @@ public class TrackList {
         return getTrack(currentId);
     }
 
-
     public int getCurrentId() {
         return currentId;
     }
@@ -40,7 +39,7 @@ public class TrackList {
     }
 
     public Track getTrack(int id) {
-        if(id < 0 || id >= tracks.size()) {
+        if (id < 0 || id >= tracks.size()) {
             return null;
         } else {
             return tracks.get(id);
@@ -48,10 +47,9 @@ public class TrackList {
     }
 
     public boolean isTrackOnList(Track track) {
+        if (tracks == null) {
+            return false;
+        }
         return tracks.contains(track);
-    }
-
-    public void setCurrentTrack(Track track) {
-        currentId = tracks.indexOf(track);
     }
 }

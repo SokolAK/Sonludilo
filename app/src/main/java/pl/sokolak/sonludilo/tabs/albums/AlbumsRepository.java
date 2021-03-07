@@ -1,7 +1,6 @@
-package pl.sokolak.sonludilo.ui.albums;
+package pl.sokolak.sonludilo.tabs.albums;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,8 +9,6 @@ import android.provider.MediaStore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import pl.sokolak.sonludilo.ui.tracks.Track;
 
 public class AlbumsRepository {
 

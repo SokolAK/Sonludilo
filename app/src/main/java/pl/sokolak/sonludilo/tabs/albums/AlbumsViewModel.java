@@ -1,4 +1,4 @@
-package pl.sokolak.sonludilo.ui.albums;
+package pl.sokolak.sonludilo.tabs.albums;
 
 import android.content.Context;
 
@@ -12,8 +12,8 @@ import java.util.List;
 
 import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.Utils;
-import pl.sokolak.sonludilo.ui.tracks.Track;
-import pl.sokolak.sonludilo.ui.tracks.TracksRepository;
+import pl.sokolak.sonludilo.tabs.tracks.Track;
+import pl.sokolak.sonludilo.tabs.tracks.TracksRepository;
 
 public class AlbumsViewModel extends ViewModel {
     private final MutableLiveData<List<List<String>>> albumsListString = new MutableLiveData<>();
@@ -32,7 +32,7 @@ public class AlbumsViewModel extends ViewModel {
 
     public void setAlbumsListString() {
         List<List<String>> list = new ArrayList<>();
-        if(Utils.isNotEmpty(albumsList.getValue())) {
+        if (Utils.isNotEmpty(albumsList.getValue())) {
             Context context = weakContext.get();
             for (Album album : albumsList.getValue()) {
                 String artist = context.getString(R.string.artist) + ": " + album.getArtist();

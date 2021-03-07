@@ -1,4 +1,4 @@
-package pl.sokolak.sonludilo.ui.tracks;
+package pl.sokolak.sonludilo.tabs.tracks;
 
 import android.content.Context;
 
@@ -30,7 +30,7 @@ public class TracksViewModel extends ViewModel {
 
     public void setTrackListString() {
         List<List<String>> list = new ArrayList<>();
-        if(Utils.isNotEmpty(trackList.getValue())) {
+        if (Utils.isNotEmpty(trackList.getValue())) {
             Context context = weakContext.get();
             for (Track track : trackList.getValue()) {
                 String artist = context.getString(R.string.artist) + ": " + track.getArtist();

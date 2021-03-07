@@ -1,4 +1,4 @@
-package pl.sokolak.sonludilo;
+package pl.sokolak.sonludilo.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
+
+import pl.sokolak.sonludilo.R;
 
 
 public class ListTripleItemAdapter extends ArrayAdapter<List<String>> {

@@ -1,14 +1,11 @@
-package pl.sokolak.sonludilo.ui.tracks;
+package pl.sokolak.sonludilo.tabs.tracks;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
-
-import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +22,6 @@ public class TracksRepository {
     public List<Track> getAll(String selection, List<String> sort) {
 
         List<Track> trackList = new ArrayList<>();
-//        String selection = "album_id = ?";
-//        String[] selectionArgs = new String[] {"12"};
         final String track_id = MediaStore.Audio.Media._ID;
         final String track_no = MediaStore.Audio.Media.TRACK;
         final String track_name = MediaStore.Audio.Media.TITLE;

@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_player"
-        android:name="pl.sokolak.sonludilo.ui.player.PlayerFragment"
+        android:name="pl.sokolak.sonludilo.tabs.player.PlayerFragment"
         android:label="@string/title_player"
         tools:layout="@layout/fragment_player" />
 
     <fragment
         android:id="@+id/navigation_albums"
-        android:name="pl.sokolak.sonludilo.ui.albums.AlbumsFragment"
+        android:name="pl.sokolak.sonludilo.tabs.albums.AlbumsFragment"
         android:label="@string/title_albums"
         tools:layout="@layout/fragment_albums">
         <action
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/navigation_tracks"
-        android:name="pl.sokolak.sonludilo.ui.tracks.TracksFragment"
+        android:name="pl.sokolak.sonludilo.tabs.tracks.TracksFragment"
         android:label="@string/title_tracks"
         tools:layout="@layout/fragment_tracks" >
         <action

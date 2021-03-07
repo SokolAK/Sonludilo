@@ -1,18 +1,18 @@
-package pl.sokolak.sonludilo.ui.albums;
+package pl.sokolak.sonludilo.tabs.albums;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import pl.sokolak.sonludilo.ui.tracks.Track;
+import pl.sokolak.sonludilo.tabs.tracks.Track;
 
 public class Album {
-    private String id;
-    private String artist;
-    private String title;
-    private String year;
-    private String noTracks;
-    private List<Track> tracks;
+    private final String id;
+    private final String artist;
+    private final String title;
+    private final String year;
+    private final String noTracks;
+    //private final List<Track> tracks;
 
     public Album(String id, String title, String artist, String year, String noTracks, List<Track> tracks) {
         this.id = id;
@@ -20,7 +20,7 @@ public class Album {
         this.artist = artist;
         this.year = year;
         this.noTracks = noTracks;
-        this.tracks = tracks;
+        //this.tracks = tracks;
     }
 
     public String getId() {

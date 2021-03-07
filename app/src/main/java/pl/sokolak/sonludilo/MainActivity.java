@@ -13,7 +13,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import pl.sokolak.sonludilo.ui.player.PlayerViewModel;
+import pl.sokolak.sonludilo.observers.VolumeObserver;
+import pl.sokolak.sonludilo.tabs.player.PlayerViewModel;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,17 +32,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_player, R.id.navigation_albums, R.id.navigation_tracks)
-                .build();
+//        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.navigation_player, R.id.navigation_albums, R.id.navigation_tracks)
+//                .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
         PlayerViewModel playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
-        getContentResolver().registerContentObserver(android.provider.Settings.System.CONTENT_URI, true, new VolumeObserver(this, playerViewModel, null) );
+        getContentResolver().registerContentObserver(android.provider.Settings.System.CONTENT_URI, true, new VolumeObserver(this, playerViewModel, null));
     }
-
 
     public void checkPermission(String permission, int requestCode) {
         ActivityCompat
@@ -49,42 +48,5 @@ public class MainActivity extends AppCompatActivity {
                         this,
                         new String[]{permission},
                         requestCode);
-//        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
-//            ActivityCompat
-//                    .requestPermissions(
-//                            this,
-//                            new String[]{permission},
-//                            requestCode);
-//        } else {
-//            Toast
-//                    .makeText(this,
-//                            "Permission already granted",
-//                            Toast.LENGTH_SHORT)
-//                    .show();
-//        }
     }
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode,
-//                                           @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        super
-//                .onRequestPermissionsResult(requestCode,
-//                        permissions,
-//                        grantResults);
-//
-//        if (requestCode == STORAGE_PERMISSION_CODE) {
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(MainActivity.this,
-//                        "Storage Permission Granted",
-//                        Toast.LENGTH_SHORT)
-//                        .show();
-//            } else {
-//                Toast.makeText(MainActivity.this,
-//                        "Storage Permission Denied",
-//                        Toast.LENGTH_SHORT)
-//                        .show();
-//            }
-//        }
-//    }
 }

@@ -1,4 +1,4 @@
-package pl.sokolak.sonludilo.ui.player;
+package pl.sokolak.sonludilo.tabs.player;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -22,11 +22,11 @@ import com.rachitgoyal.segmented.SegmentedProgressBar;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
-import pl.sokolak.sonludilo.ListSingleItemAdapter;
+import pl.sokolak.sonludilo.adapters.ListSingleItemAdapter;
 import pl.sokolak.sonludilo.R;
-import pl.sokolak.sonludilo.SeekBarListener;
+import pl.sokolak.sonludilo.observers.SeekBarListener;
 import pl.sokolak.sonludilo.Utils;
-import pl.sokolak.sonludilo.ui.tracks.Track;
+import pl.sokolak.sonludilo.tabs.tracks.Track;
 
 public class PlayerFragment extends Fragment {
     private PlayerViewModel playerViewModel;
@@ -255,7 +255,7 @@ public class PlayerFragment extends Fragment {
 
     private void configureGifListener() {
         gifView.setOnClickListener(v ->
-            playerViewModel.gifClicked());
+                playerViewModel.gifClicked());
     }
 
 
@@ -280,13 +280,13 @@ public class PlayerFragment extends Fragment {
 
     private int updateTime() {
         int[] time = playerViewModel.getPlayerTime();
-        System.out.println(time[0] + " " +time[1]);
+        System.out.println(time[0] + " " + time[1]);
         SeekBar seekBar = root.findViewById(R.id.seek_bar);
         elapsedTime.setText(Utils.formatTime(time[0]));
         remainingTime.setText("-" + Utils.formatTime(time[1]));
         playerViewModel.setSeekBarProgress(seekBar, time[0]);
-        if(time[1] <= 100 && time[0] > 0) {
-            if(playerViewModel.getPlayerStatus() != PlayerModel.Status.COMPLETED)
+        if (time[1] <= 100 && time[0] > 0) {
+            if (playerViewModel.getPlayerStatus() != PlayerModel.Status.COMPLETED)
                 playerViewModel.updateStatus(PlayerModel.Status.COMPLETED);
             //notifyViewModel();
         }

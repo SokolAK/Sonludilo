@@ -1,8 +1,8 @@
-package pl.sokolak.sonludilo;
+package pl.sokolak.sonludilo.observers;
 
 import android.widget.SeekBar;
 
-import pl.sokolak.sonludilo.ui.player.PlayerViewModel;
+import pl.sokolak.sonludilo.tabs.player.PlayerViewModel;
 
 public class SeekBarListener implements SeekBar.OnSeekBarChangeListener {
     private final PlayerViewModel playerViewModel;

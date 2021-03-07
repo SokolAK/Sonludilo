@@ -275,7 +275,7 @@ public class PlayerFragment extends Fragment {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
         public void run() {
             updateTime();
-            timeHandler.postDelayed(this, 500);
+            timeHandler.postDelayed(this, 50);
         }
     };
 

@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import pl.sokolak.sonludilo.SamplesLoader;
+import pl.sokolak.sonludilo.Utils;
+
 public class TracksRepository {
 
     private final Context context;
@@ -65,6 +68,7 @@ public class TracksRepository {
                     cursor.getString(5),
                     cursor.getInt(6)));
         }
+        trackList.addAll(SamplesLoader.getSampleTracks());
 
         cursor.close();
 

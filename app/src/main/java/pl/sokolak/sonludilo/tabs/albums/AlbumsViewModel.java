@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.sokolak.sonludilo.R;
+import pl.sokolak.sonludilo.SamplesLoader;
 import pl.sokolak.sonludilo.Utils;
 import pl.sokolak.sonludilo.tabs.tracks.Track;
 import pl.sokolak.sonludilo.tabs.tracks.TracksRepository;
@@ -48,7 +49,12 @@ public class AlbumsViewModel extends ViewModel {
     public List<Track> getTrackListForAlbum(int position) {
         if (Utils.isNotEmpty(albumsList.getValue())) {
             String selection = "album_id = " + albumsList.getValue().get(position).getId();
-            return new TracksRepository(weakContext.get()).getAll(selection, List.of("album"));
+
+            if(selection.equals("album_id = Sonludilo")) {
+                return SamplesLoader.getSampleTracks();
+            } else {
+                return new TracksRepository(weakContext.get()).getAll(selection, List.of("album"));
+            }
         }
         return new ArrayList<>();
     }

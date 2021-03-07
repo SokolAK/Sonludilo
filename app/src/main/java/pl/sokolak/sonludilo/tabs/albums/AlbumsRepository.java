@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import pl.sokolak.sonludilo.SamplesLoader;
+import pl.sokolak.sonludilo.Utils;
+
 public class AlbumsRepository {
 
     private final Context context;
@@ -56,12 +59,13 @@ public class AlbumsRepository {
                     cursor.getString(1),
                     cursor.getString(2),
                     year,
-                    cursor.getString(5),
-                    new ArrayList<>()));
+                    cursor.getString(5)
+            ));
         }
 
         cursor.close();
 
+        albumsList.add(SamplesLoader.getSampleAlbum());
         return albumsList;
     }
 

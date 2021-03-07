@@ -14,7 +14,7 @@ public class Album {
     private final String noTracks;
     //private final List<Track> tracks;
 
-    public Album(String id, String title, String artist, String year, String noTracks, List<Track> tracks) {
+    public Album(String id, String title, String artist, String year, String noTracks) {
         this.id = id;
         this.title = title;
         this.artist = artist;

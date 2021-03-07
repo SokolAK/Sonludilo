@@ -1,9 +1,14 @@
 package pl.sokolak.sonludilo;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import pl.sokolak.sonludilo.tabs.albums.Album;
+import pl.sokolak.sonludilo.tabs.tracks.Track;
 
 public class Utils {
     @SuppressLint("DefaultLocale")

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/line"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="@dimen/list_item_text_size"
+        android:textSize="@dimen/tips_text_size"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
         android:text="@string/tip_track_fragment"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:text="@string/artist"
             android:textColor="@color/yellow"
-            android:textSize="@dimen/list_item_text_size" />
+            android:textSize="@dimen/buttons_text_size" />
         <Button
             android:id="@+id/button_track"
             style="@style/RobotoButtonStyle"
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:text="@string/title"
             android:textColor="@color/yellow"
-            android:textSize="@dimen/list_item_text_size" />
+            android:textSize="@dimen/buttons_text_size" />
         <Button
             android:id="@+id/button_album"
             style="@style/RobotoButtonStyle"
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:text="@string/album"
             android:textColor="@color/yellow"
-            android:textSize="@dimen/list_item_text_size" />
+            android:textSize="@dimen/buttons_text_size" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

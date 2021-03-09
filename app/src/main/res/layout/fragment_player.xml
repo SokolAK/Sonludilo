@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/line"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="@dimen/list_item_text_size"
+        android:textSize="@dimen/tips_text_size"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
         android:text="@string/tip_player_fragment"
@@ -61,7 +61,7 @@
             android:layout_marginRight="@dimen/button_margin_horizontal"
             android:layout_marginVertical="@dimen/button_margin_vertical"
             android:layout_marginBottom="@dimen/button_margin_vertical"
-            android:textSize="@dimen/list_item_text_size" />
+            android:textSize="@dimen/buttons_text_size" />
         <Button
             android:id="@+id/button_artist"
             style="@style/RobotoButtonStyle"
@@ -75,7 +75,7 @@
             android:layout_marginRight="@dimen/button_margin_horizontal"
             android:layout_marginVertical="@dimen/button_margin_vertical"
             android:layout_marginBottom="@dimen/button_margin_vertical"
-            android:textSize="@dimen/list_item_text_size" />
+            android:textSize="@dimen/buttons_text_size" />
         <Button
             android:id="@+id/button_track"
             style="@style/RobotoButtonStyle"
@@ -89,7 +89,7 @@
             android:layout_marginRight="@dimen/button_margin_horizontal"
             android:layout_marginVertical="@dimen/button_margin_vertical"
             android:layout_marginBottom="@dimen/button_margin_vertical"
-            android:textSize="@dimen/list_item_text_size" />
+            android:textSize="@dimen/buttons_text_size" />
         <Button
             android:id="@+id/button_album"
             style="@style/RobotoButtonStyle"
@@ -103,7 +103,7 @@
             android:layout_marginRight="@dimen/button_margin_horizontal"
             android:layout_marginVertical="@dimen/button_margin_vertical"
             android:layout_marginBottom="@dimen/button_margin_vertical"
-            android:textSize="@dimen/list_item_text_size" />
+            android:textSize="@dimen/buttons_text_size" />
         <Button
             android:id="@+id/button_clear"
             style="@style/RobotoButtonStyle"
@@ -117,7 +117,7 @@
             android:layout_marginRight="@dimen/button_margin_horizontal"
             android:layout_marginVertical="@dimen/button_margin_vertical"
             android:layout_marginBottom="@dimen/button_margin_vertical"
-            android:textSize="@dimen/list_item_text_size" />
+            android:textSize="@dimen/buttons_text_size" />
     </LinearLayout>
 
     <View
@@ -199,6 +199,7 @@
 
                     <ImageButton
                         android:id="@+id/button_vol_up"
+                        android:contentDescription="@string/volume_up"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -213,6 +214,7 @@
 
                     <ImageButton
                         android:id="@+id/button_vol_down"
+                        android:contentDescription="@string/volume_down"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -227,6 +229,7 @@
 
                     <ImageButton
                         android:id="@+id/button_repeat"
+                        android:contentDescription="@string/repeat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -248,6 +251,7 @@
 
                 <pl.droidsonroids.gif.GifImageView
                     android:id="@+id/tape_image"
+                    android:contentDescription="@string/tape"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
@@ -263,6 +267,7 @@
 
                 <ImageButton
                     android:id="@+id/button_play"
+                    android:contentDescription="@string/play"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -277,6 +282,7 @@
 
                 <ImageButton
                     android:id="@+id/button_pause"
+                    android:contentDescription="@string/pause"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -291,6 +297,7 @@
 
                 <ImageButton
                     android:id="@+id/button_stop"
+                    android:contentDescription="@string/stop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -320,10 +327,12 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/yellow"
+                android:textSize="@dimen/time_text_size"
                 android:text="01:22" />
 
             <ImageButton
                 android:id="@+id/button_prev"
+                android:contentDescription="@string/prev"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -338,6 +347,7 @@
 
             <ImageButton
                 android:id="@+id/button_next"
+                android:contentDescription="@string/next"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -358,6 +368,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/yellow"
+                android:textSize="@dimen/time_text_size"
                 android:text="-04:20" />
 
         </LinearLayout>
@@ -365,6 +376,7 @@
 
     <SeekBar
         android:id="@+id/seek_bar"
+        android:contentDescription="@string/seek_bar"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:progressDrawable="@drawable/custom_seek_progress"

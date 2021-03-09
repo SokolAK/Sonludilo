@@ -284,7 +284,7 @@ public class PlayerFragment extends Fragment {
         System.out.println(time[0] + " " + time[1]);
         SeekBar seekBar = root.findViewById(R.id.seek_bar);
         elapsedTime.setText(Utils.formatTime(time[0]));
-        remainingTime.setText("-" + Utils.formatTime(time[1]));
+        remainingTime.setText(Utils.formatTime(time[1]));
         playerViewModel.setSeekBarProgress(seekBar, time[0]);
         if (time[1] <= 100 && time[0] > 0) {
             if (playerViewModel.getPlayerStatus() != PlayerModel.Status.COMPLETED)

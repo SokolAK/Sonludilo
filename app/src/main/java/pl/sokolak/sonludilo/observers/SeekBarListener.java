@@ -15,7 +15,6 @@ public class SeekBarListener implements SeekBar.OnSeekBarChangeListener {
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if(fromUser) {
             playerViewModel.seekBarChanged(seekBar.getProgress());
-            //playerViewModel.bPauseClicked();
         }
     }
 
@@ -26,7 +25,6 @@ public class SeekBarListener implements SeekBar.OnSeekBarChangeListener {
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-//        playerViewModel.seekBarChanged(seekBar.getProgress());
         playerViewModel.releaseSeekBarProgress();
     }
 }

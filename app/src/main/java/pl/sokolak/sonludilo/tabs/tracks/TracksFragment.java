@@ -118,7 +118,6 @@ public class TracksFragment extends Fragment {
             } else {
                 playerViewModel.removeTrack(track);
             }
-            //NavHostFragment.findNavController(this).navigate(R.id.action_tracks_to_player);
         });
     }
 }

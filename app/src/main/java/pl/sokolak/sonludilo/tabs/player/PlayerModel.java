@@ -20,17 +20,11 @@ public enum PlayerModel {
 
     PlayerModel() {
         mediaPlayer = new MediaPlayer();
-//        mediaPlayer.setOnCompletionListener(l -> {
-//            if(status == Status.PLAYING)
-//                setStatus(Status.COMPLETED);
-//            //notifyViewModel();
-//        });
     }
 
 
     private void notifyViewModel() {
         playerViewModel.updateStatus(status);
-        //playerViewModel.updateCurrentTrack(currentTrack);
     }
 
     public void setViewModel(PlayerViewModel playerViewModel) {
@@ -69,11 +63,7 @@ public enum PlayerModel {
 
     public void setCurrentTrack(Track currentTrack) {
         mediaPlayer.reset();
-        //mediaPlayer.release();
         if (currentTrack != null) {
-            //Optional<Uri> uri = Optional.ofNullable(currentTrack.getUri());
-            //uri.ifPresent(u -> mediaPlayer = MediaPlayer.create(context, u));
-            //mediaPlayer = MediaPlayer.create(context,currentTrack.getUri());
             try {
                 mediaPlayer.setDataSource(weakContext.get(), currentTrack.getUri());
                 mediaPlayer.prepare();
@@ -82,9 +72,7 @@ public enum PlayerModel {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //mediaPlayer.setLooping(false);
         }
-        //notifyViewModel();
     }
 
     public Status getStatus() {

@@ -146,16 +146,6 @@ public class PlayerFragment extends Fragment {
         });
     }
 
-//    private void clickTrackListItem(int position) {
-//        if (position >= 0 && position < trackListView.getCount()) {
-//            trackListView.performItemClick(trackListView.getAdapter().getView(position, null, null),
-//                    position,
-//                    trackListView.getAdapter().getItemId(position));
-//        }
-//        //bStop.performClick();
-//    }
-
-
     private void toggleListButtons(boolean flag) {
         if (flag) {
             listButtons.setVisibility(View.VISIBLE);
@@ -247,9 +237,7 @@ public class PlayerFragment extends Fragment {
     private void configureClearListener() {
         bClear.setOnClickListener(l -> {
             playerViewModel.clearTrackList();
-            //playerViewModel.clickTrackListItem(-1);
             initTipView();
-            //bStop.performClick();
         });
     }
 
@@ -257,19 +245,6 @@ public class PlayerFragment extends Fragment {
         gifView.setOnClickListener(v ->
                 playerViewModel.gifClicked());
     }
-
-
-//    private void controlTimeUpdate(boolean run) {
-//        if (!run) {
-//            if (timeHandler != null) {
-//                timeHandler.removeCallbacks(updateTime);
-//                timeHandler = null;
-//            }
-//        } else {
-//            timeHandler = new Handler(Looper.getMainLooper());
-//            timeHandler.postDelayed(updateTime, 0);
-//        }
-//    }
 
     private final Runnable updateTime = new Runnable() {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
@@ -289,7 +264,6 @@ public class PlayerFragment extends Fragment {
         if (time[1] <= 100 && time[0] > 0) {
             if (playerViewModel.getPlayerStatus() != PlayerModel.Status.COMPLETED)
                 playerViewModel.updateStatus(PlayerModel.Status.COMPLETED);
-            //notifyViewModel();
         }
     }
 }

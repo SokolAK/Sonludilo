@@ -12,7 +12,6 @@ public class Album {
     private final String title;
     private final String year;
     private final String noTracks;
-    //private final List<Track> tracks;
 
     public Album(String id, String title, String artist, String year, String noTracks) {
         this.id = id;
@@ -20,7 +19,6 @@ public class Album {
         this.artist = artist;
         this.year = year;
         this.noTracks = noTracks;
-        //this.tracks = tracks;
     }
 
     public String getId() {

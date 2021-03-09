@@ -156,17 +156,13 @@ public class PlayerViewModel extends ViewModel {
 
     public void setNextTrack() {
         int id = getCurrentId() + 1;
-        //id = Math.min(id + 1, getTracks().size() - 1);
         id = id < getTracks().size() ? id : 0;
         clickTrackListItem(id);
-        //updateTrackList();
     }
 
     public void setPrevTrack() {
         int id = getCurrentId() - 1;
-        //id = Math.max(id - 1, 0);
         id = id >= 0 ? id : getTracks().size() - 1;
-        //updateTrackList(id);
         clickTrackListItem(id);
     }
 

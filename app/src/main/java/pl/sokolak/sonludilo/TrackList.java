@@ -34,10 +34,6 @@ public class TrackList {
         return currentId;
     }
 
-    public void setCurrentId(int currentId) {
-        this.currentId = currentId;
-    }
-
     public Track getTrack(int id) {
         if (id < 0 || id >= tracks.size()) {
             return null;

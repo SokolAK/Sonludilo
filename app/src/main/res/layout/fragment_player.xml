@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -34,6 +34,7 @@
         android:layout_height="0dp"
         android:divider="@color/white"
         android:dividerHeight="1dp"
+        android:layout_weight="5"
         android:choiceMode="singleChoice"
         app:layout_constraintBottom_toTopOf="@+id/list_buttons"
         app:layout_constraintTop_toBottomOf="@id/line" />
@@ -179,7 +180,8 @@
         <LinearLayout
             android:id="@+id/player_section"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/seek_bar">
 
@@ -205,7 +207,7 @@
                         android:layout_marginVertical="@dimen/button_margin_vertical"
                         android:layout_marginBottom="@dimen/button_margin_vertical"
                         android:backgroundTint="@drawable/button_color"
-                        android:src="@drawable/ic_baseline_volume_up_24"
+                        android:src="@drawable/volup"
                         android:scaleType="fitCenter"
                         android:tint="@drawable/button_color_negative" />
 
@@ -219,7 +221,7 @@
                         android:layout_marginVertical="@dimen/button_margin_vertical"
                         android:layout_marginBottom="@dimen/button_margin_vertical"
                         android:backgroundTint="@drawable/button_color"
-                        android:src="@drawable/ic_baseline_volume_down_24"
+                        android:src="@drawable/voldown"
                         android:scaleType="fitCenter"
                         android:tint="@drawable/button_color_negative" />
 
@@ -233,7 +235,7 @@
                         android:layout_marginVertical="@dimen/button_margin_vertical"
                         android:layout_marginBottom="@dimen/button_margin_vertical"
                         android:backgroundTint="@drawable/button_color"
-                        android:src="@drawable/ic_baseline_repeat_24"
+                        android:src="@drawable/repeat"
                         android:scaleType="fitCenter"
                         android:tint="@drawable/button_color_negative" />
 
@@ -244,15 +246,16 @@
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_weight="2" />-->
 
-            <pl.droidsonroids.gif.GifImageView
-                android:id="@+id/tape_image"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:adjustViewBounds="true"
-                android:src="@drawable/tape80" />
+                <pl.droidsonroids.gif.GifImageView
+                    android:id="@+id/tape_image"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/tape80" />
 
-            <LinearLayout
+                <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -268,7 +271,7 @@
                     android:layout_marginVertical="@dimen/button_margin_vertical"
                     android:layout_marginBottom="@dimen/button_margin_vertical"
                     android:backgroundTint="@drawable/button_color"
-                    android:src="@drawable/ic_baseline_play_arrow_24"
+                    android:src="@drawable/play"
                     android:scaleType="fitCenter"
                     android:tint="@drawable/button_color_negative" />
 
@@ -282,7 +285,7 @@
                     android:layout_marginVertical="@dimen/button_margin_vertical"
                     android:layout_marginBottom="@dimen/button_margin_vertical"
                     android:backgroundTint="@drawable/button_color"
-                    android:src="@drawable/ic_baseline_pause_24"
+                    android:src="@drawable/pause"
                     android:scaleType="fitCenter"
                     android:tint="@drawable/button_color_negative" />
 
@@ -296,7 +299,7 @@
                     android:layout_marginVertical="@dimen/button_margin_vertical"
                     android:layout_marginBottom="@dimen/button_margin_vertical"
                     android:backgroundTint="@drawable/button_color"
-                    android:src="@drawable/ic_baseline_stop_24"
+                    android:src="@drawable/stop"
                     android:scaleType="fitCenter"
                     android:tint="@drawable/button_color_negative" />
 
@@ -322,28 +325,28 @@
             <ImageButton
                 android:id="@+id/button_prev"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="@dimen/button_margin_horizontal"
                 android:layout_marginRight="@dimen/button_margin_horizontal"
                 android:layout_marginVertical="@dimen/button_margin_vertical"
                 android:layout_marginBottom="@dimen/button_margin_vertical"
                 android:backgroundTint="@drawable/button_color"
-                android:src="@drawable/ic_baseline_skip_previous_24"
+                android:src="@drawable/prev"
                 android:scaleType="fitCenter"
                 android:tint="@drawable/button_color_negative" />
 
             <ImageButton
                 android:id="@+id/button_next"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="@dimen/button_margin_horizontal"
                 android:layout_marginRight="@dimen/button_margin_horizontal"
                 android:layout_marginVertical="@dimen/button_margin_vertical"
                 android:layout_marginBottom="@dimen/button_margin_vertical"
                 android:backgroundTint="@drawable/button_color"
-                android:src="@drawable/ic_baseline_skip_next_24"
+                android:src="@drawable/next"
                 android:scaleType="fitCenter"
                 android:tint="@drawable/button_color_negative" />
 
@@ -369,4 +372,4 @@
         android:min="0"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -44,15 +44,6 @@ public class PlayerViewModel extends ViewModel {
         gif = (GifDrawable) gifView.getDrawable();
     }
 
-//    public PlayerViewModel(Context context, View root) {
-//        weakContext = new WeakReference<>(context);
-//        playerModel = PlayerModel.INSTANCE;
-//        playerModel.setContext(context);
-//        playerModel.setViewModel(this);
-//        ImageView gifView = root.findViewById(R.id.tape_image);
-//        gif = (GifDrawable) gifView.getDrawable();
-//    }
-
     public void clickTrackListItem(int id) {
         if (id != getCurrentId() && id >= 0) {
             updateTrackList(id);
@@ -70,7 +61,6 @@ public class PlayerViewModel extends ViewModel {
             }
         }
     }
-
 
     public int[] getPlayerTime() {
         return playerModel.getTime();
@@ -155,10 +145,6 @@ public class PlayerViewModel extends ViewModel {
         return trackList.getValue().getCurrentId();
     }
 
-    private void setCurrentId(int id) {
-        trackList.getValue().setCurrentId(id);
-    }
-
     public List<Track> getTracks() {
         return trackList.getValue().getTracks();
     }
@@ -169,15 +155,17 @@ public class PlayerViewModel extends ViewModel {
 
 
     public void setNextTrack() {
-        int id = getCurrentId();
-        id = Math.min(id + 1, getTracks().size() - 1);
+        int id = getCurrentId() + 1;
+        //id = Math.min(id + 1, getTracks().size() - 1);
+        id = id < getTracks().size() ? id : 0;
         clickTrackListItem(id);
         //updateTrackList();
     }
 
     public void setPrevTrack() {
-        int id = getCurrentId();
-        id = Math.max(id - 1, 0);
+        int id = getCurrentId() - 1;
+        //id = Math.max(id - 1, 0);
+        id = id >= 0 ? id : getTracks().size() - 1;
         //updateTrackList(id);
         clickTrackListItem(id);
     }

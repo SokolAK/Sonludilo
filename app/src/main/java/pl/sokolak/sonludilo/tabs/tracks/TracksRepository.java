@@ -68,7 +68,10 @@ public class TracksRepository {
                     cursor.getString(5),
                     cursor.getInt(6)));
         }
-        trackList.addAll(SamplesLoader.getSampleTracks());
+
+        if(selection == null) {
+            trackList.addAll(SamplesLoader.getSampleTracks());
+        }
 
         cursor.close();
 

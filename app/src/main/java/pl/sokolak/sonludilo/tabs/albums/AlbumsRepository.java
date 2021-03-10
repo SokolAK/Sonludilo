@@ -7,11 +7,16 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import pl.sokolak.sonludilo.R;
 import pl.sokolak.sonludilo.SamplesLoader;
 import pl.sokolak.sonludilo.Utils;
+import pl.sokolak.sonludilo.tabs.tracks.Track;
+import pl.sokolak.sonludilo.tabs.tracks.TracksRepository;
 
 public class AlbumsRepository {
 
@@ -57,7 +62,7 @@ public class AlbumsRepository {
             String year = getYear(cursor.getInt(3), cursor.getInt(4));
             albumsList.add(new Album(cursor.getString(0),
                     cursor.getString(1),
-                    cursor.getString(2),
+                    getArtist(cursor.getString(0)),
                     year,
                     cursor.getString(5)
             ));
@@ -82,4 +87,17 @@ public class AlbumsRepository {
         return year;
     }
 
+    private String getArtist(String albumId) {
+        TracksRepository tracksRepository = new TracksRepository(context);
+        List<Track> tracks = tracksRepository.getAll("album_id = " + albumId, List.of(""));
+        Set<String> artists = tracks.stream()
+                .map(Track::getArtist)
+                .collect(Collectors.toSet());
+
+        if(artists.size() > 1) {
+            return context.getString(R.string.various_artists);
+        } else {
+            return artists.iterator().next();
+        }
+    }
 }

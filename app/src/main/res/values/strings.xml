@@ -5,6 +5,7 @@
     <string name="title_tracks">Tracks</string>
 
     <string name="artist">Artist</string>
+    <string name="various_artists">Various Artists</string>
     <string name="title">Title</string>
     <string name="album">Album</string>
     <string name="year">Year</string>

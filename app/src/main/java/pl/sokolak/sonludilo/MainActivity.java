@@ -46,4 +46,8 @@ public class MainActivity extends AppCompatActivity {
                         new String[]{permission},
                         requestCode);
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

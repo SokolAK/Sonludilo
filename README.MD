@@ -12,7 +12,7 @@ Simple 80s style music player for Android
 
 
 ## Status
-Project is: _in progress_
+Project is: _finished_
 
 
 ## Snapshots
